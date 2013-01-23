@@ -1,8 +1,9 @@
-<!DOCTYPE HTML>
-<html>
 
-<title></title>
+{% extends "layout.html" %}
+
+{% block body %}
 <p>Welcome {{user}}</p>
+
 
 <p>Choose your OpenId Affiliate</p>
 <div class="providers">
@@ -12,53 +13,6 @@
 	{% endfor %}
 </div>
 
-<style type="text/css">
-	body {background-color: #F0F8FF;}
-	#parent {
-		width: 1150px;
-		position: absolute;
-		top: 37%;
-		text-align: center;
-		font-size: 20px;
-		/*letter-spacing: 35px;*/
-		white-space: nowrap;
-		line-height: 12px;
-		overflow: hidden;
-	}
-
-	.stylish{
-		
-	        display: inline-block;
-		
-		width:300px;
-		height:300px;
-		border-radius:198px;
-		border:4px double #ccc;
-		font-size:20px;
-		color:#666;
-		line-height:300px;
-		text-align:center;
-		text-decoration:none;
-		text-shadow:0 1px 0 #fff;
-		background:#ddd
-	}
-	.stylish:hover{
-		
-		border:4px double #bbb;
-		color:#aaa;
-		text-decoration:none;
-		background:#e6e6e6
-	}
-	
-</style>
-
-<!--
-<div id="parent">
-<a href="/updates" class="stylish" name="riding">Riding</a> 
-<a href="/updates" class="stylish" name="waiting">Waiting</a>
-</div>
-
-/!-->
 
 <div id="parent">
 	<form action="/updates">
@@ -68,5 +22,5 @@
 </div>
 
 
-
+{% endblock %}
 

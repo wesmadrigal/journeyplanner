@@ -1,28 +1,6 @@
-<!DOCTYPE HTML>
-<html>
+{% extends "layout.html" %}
 
-<head>
-	<title>We hope you we can be of assistance during your journey</title>
-
-	<style type="text/css">
-		body {background-color: #F0F8FF;}
-		#welcome   {
-			font-weight: bold;
-			font-size: 200%;
-			}
-
-		.bus_stuff {
-			text-align: center;
-			}
-		#bus_user {
-			font-weight: bold;
-			font-family: "Monospace";
-			}
-	</style>
-
-
-</head>
-
+{% block body %}
 <body>
 
 <p id="welcome">Welcome to the {{update_type}} updates page</p>
@@ -56,13 +34,6 @@
 
 	{% endfor %}
 
-
-<div id="footer">
-
-    &copy; Copyright 2012 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
-
-</div>
-
 </body>
 
-</html>
+{% endblock %}
