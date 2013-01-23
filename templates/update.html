@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>We hope you we can be of assistance during your journey</title>
+
+	<style type="text/css">
+		body {background-color: #F0F8FF;}
+		#welcome   {
+			font-weight: bold;
+			font-size: 200%;
+			}
+
+		.bus_stuff {
+			text-align: center;
+			}
+		#bus_user {
+			font-weight: bold;
+			font-family: "Monospace";
+			}
+	</style>
+
+
+</head>
+
+<body>
+
+<p id="welcome">Welcome to the {{update_type}} updates page</p>
+
+<p>In case you picked the wrong status:  <a href="/">switch status</a></p>
+<br>
+
+	<form method="POST">
+		<label>Bus #: <input type="text" name="bus"></label>
+		<br>
+		<label>Courtesy Information (optional): <input type="text" name"entry"></label>
+		<br>
+		<div class="error" style="color: red">{{error}}</div>
+		<input type="submit" value="Update">
+	</form>
+	
+	<br>
+	<br>
+	<br>
+
+
+	{% for b in bus_info %}
+	<div class="bus_stuff">
+		<div class="bus-user">{{b.user}}</div>
+		<div class="bus-num">{{b.bus}}</div>
+		<pre class="bus-court">{{b.entry}}</pre> <pre>{{b.created}}</pre>
+	</div>
+	<br>
+	<hr>
+	<br>
+
+	{% endfor %}
+
+
+<div id="footer">
+
+    &copy; Copyright 2012 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html>
+
+<title></title>
+<p>Welcome {{user}}</p>
+
+<p>Choose your OpenId Affiliate</p>
+<div class="providers">
+	{% for i in new_providers.keys() %}
+		<a href="{{new_providers[i]}}">{{i}}</a>
+		<br>
+	{% endfor %}
+</div>
+
+<style type="text/css">
+	body {background-color: #F0F8FF;}
+	#parent {
+		width: 1150px;
+		position: absolute;
+		top: 37%;
+		text-align: center;
+		font-size: 20px;
+		/*letter-spacing: 35px;*/
+		white-space: nowrap;
+		line-height: 12px;
+		overflow: hidden;
+	}
+
+	.stylish{
+		
+	        display: inline-block;
+		
+		width:300px;
+		height:300px;
+		border-radius:198px;
+		border:4px double #ccc;
+		font-size:20px;
+		color:#666;
+		line-height:300px;
+		text-align:center;
+		text-decoration:none;
+		text-shadow:0 1px 0 #fff;
+		background:#ddd
+	}
+	.stylish:hover{
+		
+		border:4px double #bbb;
+		color:#aaa;
+		text-decoration:none;
+		background:#e6e6e6
+	}
+	
+</style>
+
+<!--
+<div id="parent">
+<a href="/updates" class="stylish" name="riding">Riding</a> 
+<a href="/updates" class="stylish" name="waiting">Waiting</a>
+</div>
+
+/!-->
+
+<div id="parent">
+	<form action="/updates">
+		<input type="submit" class="stylish" name="riding" value="Riding">
+		<input type="submit" class="stylish" name="waiting" value="Waiting">
+	</form>
+</div>
+
+
+
+
