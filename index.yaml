@@ -15,3 +15,9 @@ indexes:
   - name: bus
   - name: created
     direction: desc
+
+- kind: User
+  properties:
+  - name: userid
+  - name: created
+    direction: desc

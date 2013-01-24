@@ -11,7 +11,22 @@
 	<form method="POST">
 		<label>Bus #: <input type="text" name="bus"></label>
 		<br>
-		<label>Courtesy Information (optional): <input type="text" name"entry"></label>
+		<label>Courtesy Information:
+		{% if update_type == "riding" or None %}
+		<select name="entry">
+			<option value="15 minutes late">15 minutes late</option>
+			<option value="30 minutes late">30 minutes late</option>
+			<option value="45 minutes late">45 minutes late</option>
+			<option value="1 hour late">1 hour late</option>
+			<option value="1 hour + late">1 hour +</option>
+		</select>
+		{% else %}
+		<select name="entry">
+			<option value="Delay Info Request">Delay Info Request</option>
+		</select>
+		{% endif %}
+		</label>
+
 		<br>
 		<div class="error" style="color: red">{{error}}</div>
 		<input type="submit" value="Update">
@@ -25,7 +40,7 @@
 	{% for b in bus_info %}
 	<div class="bus_stuff">
 		<div class="bus-user">{{b.user}}</div>
-		<div class="bus-num">{{b.bus}}</div>
+		<div class="bus-num"><a href={{url}}{{b.bus}}>{{b.bus}}</a></div>
 		<pre class="bus-court">{{b.entry}}</pre> <pre>{{b.created}}</pre>
 	</div>
 	<br>

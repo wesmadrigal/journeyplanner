@@ -34,12 +34,17 @@ class Handler(webapp2.RequestHandler):
 
 
 
+class User(db.Model):
+	update_state = db.StringProperty()
+	userid = db.UserProperty(required=True)
+	created = db.DateTimeProperty(auto_now_add=True)
+
 # DOM
 
 class BusUpdates(db.Model):
 	user = db.StringProperty()
 	bus = db.StringProperty(required=True)
-	entry = db.StringProperty()
+	entry = db.TextProperty()
 	created = db.DateTimeProperty(auto_now_add=True)
 
 	def as_dict(self):
@@ -76,31 +81,45 @@ update_type = None
 current_bus = None
 
 class UpdatesPage(Handler):
-	def render_all(self, update_type="", bus="", entry="", error=""):
+	def render_all(self, update_type="", bus="", entry="", url="",error=""):
 		bus_info = BusUpdates.all().order('-created')
-		self.render("update.html", update_type=update_type, bus=bus, entry=entry, error=error, bus_info=bus_info)
+		
+		self.render("update.html", update_type=update_type, bus=bus, entry=entry, error=error, bus_info=bus_info, url=url)
 		
 	update_type = None
 	def get_update(self):
 		riders = self.request.get("riding")
 		waiters = self.request.get("waiting")
 		if riders:
-			self.update_type = riders
+			self.update_type = "riding"
 		if waiters:
-			self.update_type = waiters
+			self.update_type = "waiting"
 	
 
 	def get(self):
 		self.get_update()
 		update_type = self.update_type
-		self.render_all(update_type=update_type)
+		user = users.get_current_user()
+		tmp = self.request.url
+		#url = tmp + '/'
+		posit = tmp.find('updates')
+		url = tmp[0: posit+ 7] + '/'
+		self.render_all(update_type=update_type, url=url)
 
 	def post(self):
+		# use the current_user to get status from User model
+		#u = User.all()
+		#person = u.filter('userid =', users.get_current_user()).order('-created')
+		#for i in person.run(limit=1):
+		#	status = i.update_state
+		
 		self.get_update()
 		update_type = self.update_type
 		user = 'guest'
 		if users.get_current_user():
 			user = users.get_current_user().nickname()
+				
+		
 		bus = self.request.get("bus")
 		entry = self.request.get("entry")
 		if bus:
@@ -109,6 +128,7 @@ class UpdatesPage(Handler):
 			b.entry = entry
 			b.put()
 			current_bus = b.bus
+	
 			self.redirect('/updates/%s' % str(b.bus))
 		
 			#self.render_all(update_type=update_type)
@@ -122,10 +142,12 @@ class IndividualBus(Handler):
 	def get(self, bus_id):
 		url_u = str(self.request.url)
 		length = len(url_u)
-		bus = url_u[length-2:]
+		posit = url_u.find('updates')
+		bus = url_u[posit+8:]
+		
 		b = BusUpdates.all()
 		this_bus = b.filter('bus =', bus).order('-created')
-		
+			
 		if this_bus:
 			self.render("individual_bus.html", bus=bus, this_bus=this_bus)
 		else:
@@ -138,7 +160,10 @@ class IndividualBus(Handler):
 
 
 
-app = webapp2.WSGIApplication([('/', ChoicePage), ('/updates', UpdatesPage), ('/updates/([a-zA-Z]{1}[0-9]{1})', IndividualBus)], debug=True)
+app = webapp2.WSGIApplication([('/', ChoicePage),
+			       ('/updates', UpdatesPage), 
+			       ('/updates/([a-zA-Z]{1}[0-9]+)', IndividualBus)],
+			       debug=True)
 
 
 
