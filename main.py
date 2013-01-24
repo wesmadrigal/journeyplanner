@@ -67,14 +67,13 @@ for i in federated.keys():
 
 class ChoicePage(Handler):
 	def get(self):
-		user = users.get_current_user().nickname()
-		if user:
-			self.render("choicepage.html", user=user, new_providers=new_providers)
-		else:
-			self.render("choicepage.html", new_providers=new_providers)
+		user = users.get_current_user()
+		logout_url = users.create_logout_url(self.request.uri)
+		self.render("choicepage.html", user=user, new_providers=new_providers, logout_url=logout_url)
 
 update_type = None
 
+current_bus = None
 
 class UpdatesPage(Handler):
 	def render_all(self, update_type="", bus="", entry="", error=""):
@@ -99,9 +98,9 @@ class UpdatesPage(Handler):
 	def post(self):
 		self.get_update()
 		update_type = self.update_type
-		user = users.get_current_user().nickname()
-		if not user:
-			user = "guest"
+		user = 'guest'
+		if users.get_current_user():
+			user = users.get_current_user().nickname()
 		bus = self.request.get("bus")
 		entry = self.request.get("entry")
 		if bus:
@@ -109,16 +108,37 @@ class UpdatesPage(Handler):
 			b.user = user
 			b.entry = entry
 			b.put()
-			self.render_all(update_type=update_type)
+			current_bus = b.bus
+			self.redirect('/updates/%s' % str(b.bus))
+		
+			#self.render_all(update_type=update_type)
 	
 		else:
 			error = "We need a bus number to proceed."
 			self.render_all(update_type=update_type, error=error, bus=bus, entry=entry)
 
 
+class IndividualBus(Handler):
+	def get(self, bus_id):
+		url_u = str(self.request.url)
+		length = len(url_u)
+		bus = url_u[length-2:]
+		b = BusUpdates.all()
+		this_bus = b.filter('bus =', bus).order('-created')
+		
+		if this_bus:
+			self.render("individual_bus.html", bus=bus, this_bus=this_bus)
+		else:
+			self.write("There is a freaking error dog!")		
 
 
-app = webapp2.WSGIApplication([('/', ChoicePage), ('/updates', UpdatesPage)], debug=True)
+		#bus = BusUpdates.all()
+		#this_bus = bus.filter('bus')
+
+
+
+
+app = webapp2.WSGIApplication([('/', ChoicePage), ('/updates', UpdatesPage), ('/updates/([a-zA-Z]{1}[0-9]{1})', IndividualBus)], debug=True)
 
 
 

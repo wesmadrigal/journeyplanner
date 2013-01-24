@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<p><h2><b>Bus {{bus}} updates</b></h2> <a href='/updates'>Updates Page</a></p>
+<br>
+<br>
+
+<div class="individual_bus">
+	{% for update in this_bus %}
+		<div>{{update.user}}</div>
+		<div>{{update.bus}}</div>
+		<pre>{{update.entry}}</pre>
+		<pre>{{update.created}}</pre>
+</div>
+<br>
+<hr>
+<br>
+<br>
+	{% endfor %}
+
+{% endblock %}

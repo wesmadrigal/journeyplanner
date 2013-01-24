@@ -2,7 +2,11 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<p>Welcome {{user}}</p>
+{% if user %}
+<p id="welcome">Welcome {{user}}</p><pre><a href="{{logout_url}}">Logout</a></pre>
+{% else %}
+<p id="welcome">Welcome Guest</p>
+
 
 
 <p>Choose your OpenId Affiliate</p>
@@ -13,6 +17,7 @@
 	{% endfor %}
 </div>
 
+{% endif %}
 
 <div id="parent">
 	<form action="/updates">
