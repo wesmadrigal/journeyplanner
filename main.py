@@ -1,6 +1,7 @@
 import webapp2
 import jinja2
 import os
+import json
 from google.appengine.ext import db
 from google.appengine.api import users
 
@@ -37,7 +38,7 @@ class Handler(webapp2.RequestHandler):
 class User(db.Model):
 	update_state = db.StringProperty()
 	userid = db.UserProperty(required=True)
-	created = db.DateTimeProperty(auto_now_add=True)
+	created = db.DateTimeProperty(required=True)
 
 # DOM
 
@@ -97,6 +98,7 @@ class UpdatesPage(Handler):
 	
 
 	def get(self):
+		buses = BusUpdates.all().order('-created')
 		self.get_update()
 		update_type = self.update_type
 		user = users.get_current_user()
@@ -104,8 +106,10 @@ class UpdatesPage(Handler):
 		#url = tmp + '/'
 		posit = tmp.find('updates')
 		url = tmp[0: posit+ 7] + '/'
-		self.render_all(update_type=update_type, url=url)
-
+		if self.format == 'html':
+			self.render_all(update_type=update_type, url=url)
+		else:
+			self.render_json([b.as_dict() for b in buses])
 	def post(self):
 		# use the current_user to get status from User model
 		#u = User.all()
@@ -147,12 +151,13 @@ class IndividualBus(Handler):
 		
 		b = BusUpdates.all()
 		this_bus = b.filter('bus =', bus).order('-created')
-			
-		if this_bus:
-			self.render("individual_bus.html", bus=bus, this_bus=this_bus)
+		if self.format == 'html':	
+			if this_bus:
+				self.render("individual_bus.html", bus=bus, this_bus=this_bus)
+			else:
+				self.write("There is a freaking error dog!")		
 		else:
-			self.write("There is a freaking error dog!")		
-
+			self.render_json([j.as_dict() for j in this_bus])
 
 		#bus = BusUpdates.all()
 		#this_bus = bus.filter('bus')
@@ -161,8 +166,8 @@ class IndividualBus(Handler):
 
 
 app = webapp2.WSGIApplication([('/', ChoicePage),
-			       ('/updates', UpdatesPage), 
-			       ('/updates/([a-zA-Z]{1}[0-9]+)', IndividualBus)],
+			       ('/updates(?:.json)?', UpdatesPage), 
+			       ('/updates/([a-zA-Z]{1}[0-9]+)(?:.json)?', IndividualBus)],
 			       debug=True)
 
 

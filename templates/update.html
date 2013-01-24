@@ -11,8 +11,9 @@
 	<form method="POST">
 		<label>Bus #: <input type="text" name="bus"></label>
 		<br>
-		<label>Courtesy Information:
+		
 		{% if update_type == "riding" or None %}
+		<label>Delay Time: 
 		<select name="entry">
 			<option value="15 minutes late">15 minutes late</option>
 			<option value="30 minutes late">30 minutes late</option>
@@ -20,12 +21,15 @@
 			<option value="1 hour late">1 hour late</option>
 			<option value="1 hour + late">1 hour +</option>
 		</select>
+		</label>
 		{% else %}
+		<label>Request:
 		<select name="entry">
 			<option value="Delay Info Request">Delay Info Request</option>
 		</select>
-		{% endif %}
 		</label>
+		{% endif %}
+		
 
 		<br>
 		<div class="error" style="color: red">{{error}}</div>
