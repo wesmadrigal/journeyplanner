@@ -2,8 +2,11 @@
 
 {% block body %}
 <body>
-
-<p id="welcome">Welcome to the {{update_type}} updates page</p>
+{% if user %}
+<p id="welcome">Welcome to the {{update_type}} updates page {{user}}</p>
+{% else %}
+<p id="welcome">Welcome to the {{update_type}} updates page guest</p>
+{% endif %}
 
 <p>In case you picked the wrong status:  <a href="/">switch status</a></p>
 <br>
@@ -43,9 +46,11 @@
 
 	{% for b in bus_info %}
 	<div class="bus_stuff">
-		<div class="bus-user">{{b.user}}</div>
+		<div style="font-weight:bold" class="bus-user">{{b.user}}</div>
 		<div class="bus-num"><a href={{url}}{{b.bus}}>{{b.bus}}</a></div>
-		<pre class="bus-court">{{b.entry}}</pre> <pre>{{b.created}}</pre>
+		<pre class="bus-court">{{b.entry}}</pre>
+		<pre class="bus-location">User post location = {{b.location}}</pre>
+		 <pre>{{b.created}}</pre>
 	</div>
 	<br>
 	<hr>

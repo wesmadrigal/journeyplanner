@@ -8,10 +8,11 @@
         	body 	{
 			background-color: #F0F8FF;
 		}
-		#footer {
-			top: 10%;
+		.footer {
+			position: absolute;
+			bottom: 0px
 			text-align: center;
-			left-margin: 400px;
+			left: 450px;
 		}
         	#parent {
                 	width: 1150px;
@@ -63,13 +64,18 @@
         
 	</style>
 </head>
-{% block body %}{% endblock %}
-<br>
+<body>
+{% block body %}
 
-<div id="footer">
 
-    &copy; Copyright 2012 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
+{% endblock %}
 
-</div>
+		<div class="footer">
+                        &copy; Copyright 2012 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
+                </div>
+
+
+
+</body>
 
 </html>

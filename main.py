@@ -2,6 +2,7 @@ import webapp2
 import jinja2
 import os
 import json
+import urllib2
 from google.appengine.ext import db
 from google.appengine.api import users
 
@@ -46,6 +47,7 @@ class BusUpdates(db.Model):
 	user = db.StringProperty()
 	bus = db.StringProperty(required=True)
 	entry = db.TextProperty()
+	location = db.StringProperty()
 	created = db.DateTimeProperty(auto_now_add=True)
 
 	def as_dict(self):
@@ -82,10 +84,10 @@ update_type = None
 current_bus = None
 
 class UpdatesPage(Handler):
-	def render_all(self, update_type="", bus="", entry="", url="",error=""):
+	def render_all(self, update_type="", bus="", entry="", url="",error="", user=""):
 		bus_info = BusUpdates.all().order('-created')
 		
-		self.render("update.html", update_type=update_type, bus=bus, entry=entry, error=error, bus_info=bus_info, url=url)
+		self.render("update.html", update_type=update_type, bus=bus, entry=entry, error=error, bus_info=bus_info, url=url, user=user)
 		
 	update_type = None
 	def get_update(self):
@@ -96,20 +98,35 @@ class UpdatesPage(Handler):
 		if waiters:
 			self.update_type = "waiting"
 	
+	# the hostip.info api
+        url = 'http://api.hostip.info/get_html.php?ip=%s&position=true'
 
 	def get(self):
+		# geolocation with hostip.info api
+		ip = str(self.request.remote_addr)
+		response = urllib2.urlopen(self.url % ip).read()
+		# finding the unwanted stuff
+		extra = response.find('Latitude')		
+		desired_response = response[0:extra]
+		
 		buses = BusUpdates.all().order('-created')
 		self.get_update()
 		update_type = self.update_type
-		user = users.get_current_user()
+		name = users.get_current_user()
+		user = None
+		if name:
+			user = name.nickname()
 		tmp = self.request.url
-		#url = tmp + '/'
 		posit = tmp.find('updates')
 		url = tmp[0: posit+ 7] + '/'
 		if self.format == 'html':
-			self.render_all(update_type=update_type, url=url)
+			self.write(desired_response)
+			self.render_all(update_type=update_type, url=url, user=user)
 		else:
 			self.render_json([b.as_dict() for b in buses])
+
+	# the hostip.info api
+        url = 'http://api.hostip.info/get_html.php?ip=%s&position=true'
 	def post(self):
 		# use the current_user to get status from User model
 		#u = User.all()
@@ -122,14 +139,19 @@ class UpdatesPage(Handler):
 		user = 'guest'
 		if users.get_current_user():
 			user = users.get_current_user().nickname()
-				
 		
+		# geolocation by IP			
+		response = urllib2.urlopen(self.url % str(self.request.remote_addr)).read()	
+		extra = response.find('Latitude')
+		location = response[0:extra]
+
 		bus = self.request.get("bus")
 		entry = self.request.get("entry")
 		if bus:
 			b = BusUpdates(bus=bus)
 			b.user = user
 			b.entry = entry
+			b.location = location
 			b.put()
 			current_bus = b.bus
 	

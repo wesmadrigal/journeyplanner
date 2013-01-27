@@ -1,13 +1,12 @@
 
 {% extends "layout.html" %}
 
+
 {% block body %}
 {% if user %}
 <p id="welcome">Welcome {{user}}</p><pre><a href="{{logout_url}}">Logout</a></pre>
 {% else %}
 <p id="welcome">Welcome Guest</p>
-
-
 
 <p>Choose your login provider of choice</p>
 <div class="providers">
@@ -19,6 +18,7 @@
 
 {% endif %}
 
+
 <div id="parent">
 	<form method="GET" action="/updates">
 		<input type="submit" class="stylish" name="riding" value="Riding">
@@ -26,7 +26,9 @@
 	</form>
 </div>
 
-
 {% endblock %}
+
+
+
 
 
