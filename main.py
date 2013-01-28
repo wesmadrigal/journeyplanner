@@ -47,7 +47,7 @@ class BusUpdates(db.Model):
 	user = db.StringProperty()
 	bus = db.StringProperty(required=True)
 	entry = db.TextProperty()
-	location = db.StringProperty()
+	location = db.TextProperty()
 	created = db.DateTimeProperty(auto_now_add=True)
 
 	def as_dict(self):
@@ -120,7 +120,6 @@ class UpdatesPage(Handler):
 		posit = tmp.find('updates')
 		url = tmp[0: posit+ 7] + '/'
 		if self.format == 'html':
-			self.write(desired_response)
 			self.render_all(update_type=update_type, url=url, user=user)
 		else:
 			self.render_json([b.as_dict() for b in buses])
