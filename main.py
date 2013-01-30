@@ -44,6 +44,7 @@ class BusUpdates(db.Model):
 	entry = db.TextProperty()
 	latitude = db.StringProperty()
 	longitude = db.StringProperty()
+	user_map = db.LinkProperty()
 	created = db.DateTimeProperty(auto_now_add=True)
 
 	def as_dict(self):
@@ -130,7 +131,7 @@ class UpdatesPage(Handler):
 		entry = self.request.get("entry")
 		latitude = self.request.get("latitude")
 		longitude = self.request.get("longitude")
-
+		map_api = "http://maps.googleapis.com/maps/api/staticmap?center={0},{1}&zoom=9&size=300x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C{0},{1}&sensor=false"
 		if bus:
 			b = BusUpdates(bus=bus)
 			b.user = user
@@ -138,6 +139,7 @@ class UpdatesPage(Handler):
 			if latitude and longitude:
 				b.latitude = latitude
 				b.longitude = longitude
+				b.user_map = map_api.format(latitude, longitude)
 			b.put()
 			current_bus = b.bus
 			
