@@ -11,11 +11,34 @@
 <p>In case you picked the wrong status:  <a href="/">switch status</a></p>
 <br>
 
+
+
+<script type="text/javascript">
+                function get_location()      {
+                if (navigator.geolocation)      {
+                        navigator.geolocation.getCurrentPosition(showPosition);
+                } else {
+                        alert('It appears geolocation isnt enabled.');
+                }
+		}
+		function showPosition(position)
+			{
+			document.getElementById("latitude").value=position.coords.latitude;
+			document.getElementById("longitude").value=position.coords.longitude;
+			}
+		/*
+			$(document).ready(function() {
+    				$("#getlocationbutton").click(function() { get_location(); });
+			});
+		*/
+</script>
+
+
 	<form method="POST">
 		<label>Bus #: <input type="text" name="bus"></label>
 		<br>
 		
-		{% if update_type == "riding" or None %}
+		{% if update_type == "riding" %}
 		<label>Delay Time: 
 		<select name="entry">
 			<option value="15 minutes late">15 minutes late</option>
@@ -25,18 +48,28 @@
 			<option value="1 hour + late">1 hour +</option>
 		</select>
 		</label>
+			
+		<input type="hidden" name="latitude" id="latitude" />
+		<input type="hidden" name="longitude" id="longitude" />
+		<br>		
+
+		<br>
+		<div class="error" style="color:red">{{error}}</div>
+		<input type="submit" value="Update">
+				
 		{% else %}
 		<label>Request:
 		<select name="entry">
 			<option value="Delay Info Request">Delay Info Request</option>
 		</select>
 		</label>
-		{% endif %}
-		
-
+		<input type="hidden" name="latitude" id="latitude" />
+		<input type="hidden" name="longitude" id="longitude" />
 		<br>
-		<div class="error" style="color: red">{{error}}</div>
+		<div class="error" style="color:red">{{error}}</div>
 		<input type="submit" value="Update">
+		{% endif %}
+
 	</form>
 	
 	<br>
@@ -45,19 +78,35 @@
 
 
 	{% for b in bus_info %}
+	{% if b.latitude %}
 	<div class="bus_stuff">
 		<div style="font-weight:bold" class="bus-user">{{b.user}}</div>
 		<div class="bus-num"><a href={{url}}{{b.bus}}>{{b.bus}}</a></div>
 		<pre class="bus-court">{{b.entry}}</pre>
-		<pre class="bus-location">User post location = {{b.location}}</pre>
+		<pre class="coords">Coordinates: {{b.latitude}} , {{b.longitude}}</pre>
 		 <pre>{{b.created}}</pre>
 	</div>
 	<br>
 	<hr>
 	<br>
+	{% else %}
+	<div class="bus_stuff">
+                <div style="font-weight:bold" class="bus-user">{{b.user}}</div>
+                <div class="bus-num"><a href={{url}}{{b.bus}}>{{b.bus}}</a></div>
+                <pre class="bus-court">{{b.entry}}</pre>
+                 <pre>{{b.created}}</pre>
+        </div>
+        <br>
+        <hr>
+        <br>
+	{% endif %}
 
 	{% endfor %}
-
+{% if update_type == "riding" %}
+<script type="text/javascript">
+	window.onload = get_location ;
+</script>
+{% endif %}
 </body>
 
 {% endblock %}

@@ -36,23 +36,19 @@ class Handler(webapp2.RequestHandler):
 
 
 
-class User(db.Model):
-	update_state = db.StringProperty()
-	userid = db.UserProperty(required=True)
-	created = db.DateTimeProperty(required=True)
 
-# DOM
 
 class BusUpdates(db.Model):
 	user = db.StringProperty()
 	bus = db.StringProperty(required=True)
 	entry = db.TextProperty()
-	location = db.TextProperty()
+	latitude = db.StringProperty()
+	longitude = db.StringProperty()
 	created = db.DateTimeProperty(auto_now_add=True)
 
 	def as_dict(self):
 		time_format = '%c'
-		d = {'user' : self.user, 'bus': self.bus, 'time': self.created.strftime(time_format) }
+		d = {'user' : self.user, 'bus': self.bus, 'entry': self.entry, 'lat': self.latitude, 'long': self.longitude, 'time': self.created.strftime(time_format) }
 		return json.dumps(d)
 
 
@@ -98,16 +94,8 @@ class UpdatesPage(Handler):
 		if waiters:
 			self.update_type = "waiting"
 	
-	# the hostip.info api
-        url = 'http://api.hostip.info/get_html.php?ip=%s&position=true'
 
 	def get(self):
-		# geolocation with hostip.info api
-		ip = str(self.request.remote_addr)
-		response = urllib2.urlopen(self.url % ip).read()
-		# finding the unwanted stuff
-		extra = response.find('Latitude')		
-		desired_response = response[0:extra]
 		
 		buses = BusUpdates.all().order('-created')
 		self.get_update()
@@ -119,13 +107,12 @@ class UpdatesPage(Handler):
 		tmp = self.request.url
 		posit = tmp.find('updates')
 		url = tmp[0: posit+ 7] + '/'
-		if self.format == 'html':
-			self.render_all(update_type=update_type, url=url, user=user)
-		else:
+		if self.format == 'json':
 			self.render_json([b.as_dict() for b in buses])
+		else:
+			self.render_all(update_type=update_type, url=url, user=user)
+	
 
-	# the hostip.info api
-        url = 'http://api.hostip.info/get_html.php?ip=%s&position=true'
 	def post(self):
 		# use the current_user to get status from User model
 		#u = User.all()
@@ -138,29 +125,30 @@ class UpdatesPage(Handler):
 		user = 'guest'
 		if users.get_current_user():
 			user = users.get_current_user().nickname()
-		
-		# geolocation by IP			
-		response = urllib2.urlopen(self.url % str(self.request.remote_addr)).read()	
-		extra = response.find('Latitude')
-		location = response[0:extra]
 
 		bus = self.request.get("bus")
 		entry = self.request.get("entry")
+		latitude = self.request.get("latitude")
+		longitude = self.request.get("longitude")
+
 		if bus:
 			b = BusUpdates(bus=bus)
 			b.user = user
 			b.entry = entry
-			b.location = location
+			if latitude and longitude:
+				b.latitude = latitude
+				b.longitude = longitude
 			b.put()
 			current_bus = b.bus
-	
+			
+		  		
 			self.redirect('/updates/%s' % str(b.bus))
 		
 			#self.render_all(update_type=update_type)
 	
 		else:
 			error = "We need a bus number to proceed."
-			self.render_all(update_type=update_type, error=error, bus=bus, entry=entry)
+			self.render_all(update_type=update_type, error=error, bus=bus, entry=entry, user=user)
 
 
 class IndividualBus(Handler):
@@ -172,6 +160,7 @@ class IndividualBus(Handler):
 		
 		b = BusUpdates.all()
 		this_bus = b.filter('bus =', bus).order('-created')
+		
 		if self.format == 'html':	
 			if this_bus:
 				self.render("individual_bus.html", bus=bus, this_bus=this_bus)

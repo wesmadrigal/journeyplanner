@@ -7,16 +7,30 @@
 
 <div class="individual_bus">
 	{% for update in this_bus %}
+
+	{% if update.latitude %}
 		<div>{{update.user}}</div>
 		<div>{{update.bus}}</div>
 		<pre>{{update.entry}}</pre>
-		<pre>Post location = {{update.location}}</pre>
+		<pre>Coordinates: {{update.latitude}} , {{update.longitude}}</pre>
 		<pre>{{update.created}}</pre>
 </div>
 <br>
 <hr>
 <br>
 <br>
+	{% else %}
+		<div>{{update.user}}</div>
+                <div>{{update.bus}}</div>
+                <pre>{{update.entry}}</pre>
+                <pre>{{update.created}}</pre>
+</div>
+<br>
+<hr>
+<br>
+<br>
+	{% endif %}
+
 	{% endfor %}
 
 {% endblock %}
