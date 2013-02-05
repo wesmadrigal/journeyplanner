@@ -10,13 +10,17 @@
 
 <p>In case you picked the wrong status:  <a href="/">switch status</a></p>
 <br>
+<br>
 
+<!--
+<div style="width: 300px; height: 300px" id="map_canvas"></div>
+									/!-->
 
 
 <script type="text/javascript">
                 function get_location()      {
                 if (navigator.geolocation)      {
-                        navigator.geolocation.getCurrentPosition(showPosition);
+                        navigator.geolocation.getCurrentPosition(showPosition, handle_error);
                 } else {
                         alert('It appears geolocation isnt enabled.');
                 }
@@ -26,11 +30,15 @@
 			document.getElementById("latitude").value=position.coords.latitude;
 			document.getElementById("longitude").value=position.coords.longitude;
 			}
-		/*
-			$(document).ready(function() {
-    				$("#getlocationbutton").click(function() { get_location(); });
-			});
-		*/
+		function handle_error(err)	{
+			if (err.code == 1) {
+			var response = 'The user declined sharing their location'
+			document.getElementById("latitude").value=response;
+			document.getElementById("longitude").value=response;
+			}
+		}
+			
+	
 </script>
 
 
@@ -84,7 +92,7 @@
 		<div class="bus-num"><a href={{url}}{{b.bus}}>{{b.bus}}</a></div>
 		<pre class="bus-court">{{b.entry}}</pre>
 		<pre class="coords">Coordinates: {{b.latitude}} , {{b.longitude}}</pre>
-		<img class="map-holder" src="{{b.user_map}}">
+		<a href="{{b.user_api_link}}"><img class="map-holder" src="{{b.user_map}}"></a>
 		 <pre>{{b.created}}</pre>
 	</div>
 	<br>

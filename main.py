@@ -2,12 +2,20 @@ import webapp2
 import jinja2
 import os
 import json
+import random
+import time
+from datetime import datetime
+import Cookie
 import urllib2
+import logging
 from google.appengine.ext import db
 from google.appengine.api import users
+from google.appengine.api import memcache
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
+
+
 
 
 class Handler(webapp2.RequestHandler):
@@ -45,7 +53,8 @@ class BusUpdates(db.Model):
 	latitude = db.StringProperty()
 	longitude = db.StringProperty()
 	user_map = db.LinkProperty()
-	created = db.DateTimeProperty(auto_now_add=True)
+	user_api_link = db.LinkProperty()
+	created = db.StringProperty()
 
 	def as_dict(self):
 		time_format = '%c'
@@ -57,10 +66,10 @@ class BusUpdates(db.Model):
 
 federated = {
     'Google'   : 'https://www.google.com/accounts/o8/id',
-    'Yahoo'    : 'http://www.yahoo.com',
-    'Myspace'  : 'http://www.myspace.com',
-    'AOL'      : 'http://www.aol.com',
-    'MyOpenID' : 'http://www.myopenid.com'
+    'AOL'      : 'aol.com',
+    'Yahoo'    : 'yahoo.com',
+    'MySpace'  : 'myspace.com',
+    'MyOpenID' : 'myopenid.com'
 
 }
 
@@ -74,33 +83,63 @@ class ChoicePage(Handler):
 	def get(self):
 		user = users.get_current_user()
 		logout_url = users.create_logout_url(self.request.uri)
-		self.render("choicepage.html", user=user, new_providers=new_providers, logout_url=logout_url)
+		try:
+			self.render("choicepage.html", user=user, new_providers=new_providers, logout_url=logout_url)
+		except:
+			logging.error("Home page render error")
+	
 
 update_type = None
 
-current_bus = None
+
+
+# caching the database queries
+
+def top_bus(update=False):
+	key = 'top'
+	bus_info = memcache.get(key)
+	if bus_info is None or update:
+		global queried
+		queried = int(time.time())
+		logging.error("DATABASE QUERY")
+		bus_info = BusUpdates.all().order('-created').fetch(limit=10)
+		memcache.set(key, bus_info)
+	return bus_info
+
+
+def individual_bus(bus, update=False):
+	key = 'top'
+	individ_bus = memcache.get(key)
+	if individ_bus is None or update:
+		logging.error("Individual Database Query")
+		individ_bus = BusUpdates.all().order('-created').filter('bus=', bus)
+		memcache.set(key, individ_bus)
+	return individ_bus
+
+
 
 class UpdatesPage(Handler):
 	def render_all(self, update_type="", bus="", entry="", url="",error="", user=""):
-		bus_info = BusUpdates.all().order('-created')
+		bus_info = top_bus()
 		
 		self.render("update.html", update_type=update_type, bus=bus, entry=entry, error=error, bus_info=bus_info, url=url, user=user)
 		
-	update_type = None
+	
 	def get_update(self):
+		global update_type
 		riders = self.request.get("riding")
 		waiters = self.request.get("waiting")
 		if riders:
-			self.update_type = "riding"
+			update_type = "riding"
 		if waiters:
-			self.update_type = "waiting"
+			update_type = "waiting"
 	
 
 	def get(self):
-		
-		buses = BusUpdates.all().order('-created')
+		# elminiate db query and call cache
+		buses = top_bus()
+		#buses = BusUpdates.all().order('-created')
 		self.get_update()
-		update_type = self.update_type
 		name = users.get_current_user()
 		user = None
 		if name:
@@ -122,7 +161,6 @@ class UpdatesPage(Handler):
 		#	status = i.update_state
 		
 		self.get_update()
-		update_type = self.update_type
 		user = 'guest'
 		if users.get_current_user():
 			user = users.get_current_user().nickname()
@@ -131,7 +169,11 @@ class UpdatesPage(Handler):
 		entry = self.request.get("entry")
 		latitude = self.request.get("latitude")
 		longitude = self.request.get("longitude")
-		map_api = "http://maps.googleapis.com/maps/api/staticmap?center={0},{1}&zoom=9&size=300x300&maptype=roadmap&markers=color:blue%7Clabel:S%7C{0},{1}&sensor=false"
+		map_api = "http://maps.googleapis.com/maps/api/staticmap?center={0},{1}&zoom=9&size={2}x{3}&maptype=roadmap&markers=color:blue%7Clabel:M%7C{0},{1}&sensor=false"
+		time_api_key = '8c0af75047193432130502'
+		time_api_if_coords = 'http://www.worldweatheronline.com/feed/tz.ashx?key={0}&q={1},{2}&format=xml'
+		time_api_if_not_coords = 'http://www.worldweatheronline.com/feed/tz.ashx?key={0}&q={1}&format=xml'
+		
 		if bus:
 			b = BusUpdates(bus=bus)
 			b.user = user
@@ -139,18 +181,47 @@ class UpdatesPage(Handler):
 			if latitude and longitude:
 				b.latitude = latitude
 				b.longitude = longitude
-				b.user_map = map_api.format(latitude, longitude)
+				b.user_map = map_api.format(latitude, longitude, '300', '300')
+				b.user_api_link = map_api.format(latitude,longitude, '900', '900')
+				time_url = urllib2.urlopen(time_api_if_coords.format(time_api_key, latitude, longitude)).read()
+				start = time_url.find('<localtime>') + 11
+				end = time_url.find('</localtime>')
+				b.created = time_url[start:end]
+				# generate the map_api image
+				#map_url = map_api.format(latitude,longitude)
+				#posit = map_url.find('size')
+				#b.user_api_link = map_url[0: (posit + 4)] + '900x900' + map_url[(posit + 12): ]
+
+			else:
+				def assign():
+					f = urllib2.urlopen(time_api_if_not_coords.format(time_api_key, self.request.remote_addr)).read()
+					start = f.find('<localtime>') + 11
+					end = f.find('</localtime>')
+					if start:
+						return f[start:end]
+					else:
+						return '0:0:0:0'
+				b.latitude = None
+				b.longitude = None
+				b.created = assign()
+
 			b.put()
-			current_bus = b.bus
-			
-		  		
+			top_bus(True)			
+		  	#individual_bus(bus, True)
+	
 			self.redirect('/updates/%s' % str(b.bus))
-		
-			#self.render_all(update_type=update_type)
 	
 		else:
 			error = "We need a bus number to proceed."
-			self.render_all(update_type=update_type, error=error, bus=bus, entry=entry, user=user)
+			# these three lines are necessary otherwise when a user clicks a url after getting
+			# the error message we will be redirected to a nonexistent page and get a 404
+			tmp = self.request.url
+                	posit = tmp.find('updates')
+                	url = tmp[0: posit+ 7] + '/'
+
+			self.render_all(update_type=update_type, error=error, bus=bus, url=url, entry=entry, user=user)
+
+
 
 
 class IndividualBus(Handler):
@@ -160,9 +231,12 @@ class IndividualBus(Handler):
 		posit = url_u.find('updates')
 		bus = url_u[posit+8:]
 		
+
+		#this_bus = individual_bus(bus)
 		b = BusUpdates.all()
-		this_bus = b.filter('bus =', bus).order('-created')
-		
+		this_bus = b.order('-created').filter('bus = ', bus).fetch(limit=10)
+	
+
 		if self.format == 'html':	
 			if this_bus:
 				self.render("individual_bus.html", bus=bus, this_bus=this_bus)
@@ -171,8 +245,7 @@ class IndividualBus(Handler):
 		else:
 			self.render_json([j.as_dict() for j in this_bus])
 
-		#bus = BusUpdates.all()
-		#this_bus = bus.filter('bus')
+
 
 
 
