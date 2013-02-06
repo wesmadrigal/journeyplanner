@@ -55,6 +55,7 @@ class BusUpdates(db.Model):
 	user_map = db.LinkProperty()
 	user_api_link = db.LinkProperty()
 	created = db.StringProperty()
+	timestamp = db.DateTimeProperty(auto_now_add=True)	
 
 	def as_dict(self):
 		time_format = '%c'
@@ -68,7 +69,6 @@ federated = {
     'Google'   : 'https://www.google.com/accounts/o8/id',
     'AOL'      : 'aol.com',
     'Yahoo'    : 'yahoo.com',
-    'MySpace'  : 'myspace.com',
     'MyOpenID' : 'myopenid.com'
 
 }
@@ -102,25 +102,16 @@ def top_bus(update=False):
 		global queried
 		queried = int(time.time())
 		logging.error("DATABASE QUERY")
-		bus_info = BusUpdates.all().order('-created').fetch(limit=10)
+		bus_info = BusUpdates.all().order('-timestamp').fetch(limit=10)
 		memcache.set(key, bus_info)
 	return bus_info
 
 
-def individual_bus(bus, update=False):
-	key = 'top'
-	individ_bus = memcache.get(key)
-	if individ_bus is None or update:
-		logging.error("Individual Database Query")
-		individ_bus = BusUpdates.all().order('-created').filter('bus=', bus)
-		memcache.set(key, individ_bus)
-	return individ_bus
-
 
 
 class UpdatesPage(Handler):
-	def render_all(self, update_type="", bus="", entry="", url="",error="", user=""):
-		bus_info = top_bus()
+	def render_all(self, update_type="", bus="", entry="", url="",error="", user="", bus_info=""):
+		#bus_info = top_bus()
 		
 		self.render("update.html", update_type=update_type, bus=bus, entry=entry, error=error, bus_info=bus_info, url=url, user=user)
 		
@@ -137,8 +128,7 @@ class UpdatesPage(Handler):
 
 	def get(self):
 		# elminiate db query and call cache
-		buses = top_bus()
-		#buses = BusUpdates.all().order('-created')
+		bus_info = top_bus()
 		self.get_update()
 		name = users.get_current_user()
 		user = None
@@ -150,15 +140,10 @@ class UpdatesPage(Handler):
 		if self.format == 'json':
 			self.render_json([b.as_dict() for b in buses])
 		else:
-			self.render_all(update_type=update_type, url=url, user=user)
+			self.render_all(update_type=update_type, url=url, user=user, bus_info=bus_info)
 	
 
 	def post(self):
-		# use the current_user to get status from User model
-		#u = User.all()
-		#person = u.filter('userid =', users.get_current_user()).order('-created')
-		#for i in person.run(limit=1):
-		#	status = i.update_state
 		
 		self.get_update()
 		user = 'guest'
@@ -206,8 +191,7 @@ class UpdatesPage(Handler):
 				b.created = assign()
 
 			b.put()
-			top_bus(True)			
-		  	#individual_bus(bus, True)
+			top_bus(True)		
 	
 			self.redirect('/updates/%s' % str(b.bus))
 	
@@ -231,17 +215,15 @@ class IndividualBus(Handler):
 		posit = url_u.find('updates')
 		bus = url_u[posit+8:]
 		
-
-		#this_bus = individual_bus(bus)
 		b = BusUpdates.all()
-		this_bus = b.order('-created').filter('bus = ', bus).fetch(limit=10)
+		this_bus = b.order('-timestamp').filter('bus = ', bus).fetch(limit=10)
 	
 
 		if self.format == 'html':	
 			if this_bus:
 				self.render("individual_bus.html", bus=bus, this_bus=this_bus)
 			else:
-				self.write("There is a freaking error dog!")		
+				self.write("There is a freaking error!")		
 		else:
 			self.render_json([j.as_dict() for j in this_bus])
 

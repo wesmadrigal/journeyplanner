@@ -18,6 +18,12 @@ indexes:
 
 - kind: BusUpdates
   properties:
+  - name: bus
+  - name: timestamp
+    direction: desc
+
+- kind: BusUpdates
+  properties:
   - name: bus=
   - name: created
     direction: desc
