@@ -13,19 +13,13 @@ indexes:
 - kind: BusUpdates
   properties:
   - name: bus
-  - name: created
-    direction: desc
-
-- kind: BusUpdates
-  properties:
-  - name: bus
   - name: timestamp
     direction: desc
 
 - kind: BusUpdates
   properties:
   - name: bus=
-  - name: created
+  - name: timestamp
     direction: desc
 
 - kind: User
