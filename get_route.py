@@ -40,7 +40,7 @@ def get_doc(url):
 ## with all said city item's possible destinations as <cityitems>
 
 
-def get_title_locations(thexml):
+def get_title_locations_map(thexml):
     city_loc_map = {}
     titles = []
     for i in thexml:
@@ -56,7 +56,19 @@ def get_title_locations(thexml):
         stop = thexml[e][0].find('</')
         city = thexml[e][0][start:stop]
         city_loc_map[city]=e
-    return city_loc_map
+    return city_loc_map, titles
+
+def get_title_locations(thexml):
+    titles = []
+    for i in thexml:
+        for e in i:
+            if '<titlecity>' in e:
+                if thexml.index(i) not in titles:
+                    titles.append(thexml.index(i))
+                else:
+                    if thexml.index(i, titles[-1]+1) not in titles:
+                        titles.append(thexml.index(i, titles[-1]+1))
+    return titles
 
 
 ## thexml = get_doc(url) and

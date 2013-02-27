@@ -4,6 +4,7 @@ import os
 import json
 import random
 import time
+from time import strftime
 from datetime import datetime
 import urllib2
 import logging
@@ -21,22 +22,22 @@ Buses = {'Des Moines, IA': '106', 'Milwaukee, WI': '121', 'Frederick, MD': '109'
 
 # this section is for running a query to megabus once a day to get the new day + 2 weeks of data
 
-JSON_LIB = {}
-month = [32, 29, 32, 31, 32, 31, 32, 32, 31, 32, 31, 32]
-months = [[e for e in range(1,i)] for i in month]
-url = "new_cities.xml"
-xml = get_doc(url)
-locations = get_title_locations(xml)
-routes = generate_routes2(xml, locations)
-def run_once_a_day():
-	start = time.time()
-	for i in routes.keys():
-		for e in routes[i]:
-			get_future_data(mb_api, i, e, months, JSON_LIB)
-	stop = time.time()
-	time.sleep(86400-(stop-start))
-while True:
-	run_once_a_day()
+#JSON_LIB = {}
+#month = [32, 29, 32, 31, 32, 31, 32, 32, 31, 32, 31, 32]
+#months = [[e for e in range(1,i)] for i in month]
+#url = "new_cities.xml"
+#xml = get_doc(url)
+#locations = get_title_locations(xml)
+#routes = generate_routes2(xml, locations)
+#def run_once_a_day():
+#	start = time.time()
+#	for i in routes.keys():
+#		for e in routes[i]:
+#			get_future_data(mb_api, i, e, months, JSON_LIB)
+#	stop = time.time()
+#	time.sleep(86400-(stop-start))
+#while True:
+#	run_once_a_day()
 
 
 
@@ -72,6 +73,7 @@ class Handler(webapp2.RequestHandler):
 class BusUpdates(db.Model):
 	user = db.StringProperty()
 	bus = db.StringProperty(required=True)
+	#time = db.StringProperty(required=True)
 	entry = db.TextProperty()
 	latitude = db.StringProperty()
 	longitude = db.StringProperty()
@@ -156,10 +158,11 @@ class UpdatesPage(Handler):
 		return json.dumps(s)
 
 
+
+	
 	def get(self):
-		# elminiate db query and call cache
-		data = self.generate_some_json({'St Louis, MO-Chicago, IL-2-26': ['600AM-100PM', '1200PM-530PM']})		
-		bus_info = top_bus()
+		bus_info = BusUpdates.all().order('-timestamp').fetch(limit=50)
+		data = self.generate_some_json({'St Louis, MO-Chicago, IL-2-26': ['600AM-100PM', '1200PM-530PM', '500PM-1050PM']})
 		self.get_update()
 		name = users.get_current_user()
 		user = None
@@ -167,12 +170,12 @@ class UpdatesPage(Handler):
 			user = name.nickname()
 		tmp = self.request.url
 		posit = tmp.find('updates')
-		url = tmp[0: posit+ 7] + '/'
+		url = tmp[0:posit+7]+'/'
 		if self.format == 'json':
-			self.render_json([b.as_dict() for b in buses])
+			self.render_json([b.as_dict() for b in bus_info])
 		else:
 			self.render_all(update_type=update_type, url=url, user=user, bus_info=bus_info, data=data)
-	
+			
 
 	def post(self):
 		
@@ -180,8 +183,12 @@ class UpdatesPage(Handler):
 		user = 'guest'
 		if users.get_current_user():
 			user = users.get_current_user().nickname()
-
-		bus = self.request.get("bus")
+		day = str(int(strftime('%d')))
+		month = strftime('%m')
+		departure = self.request.get("departure")
+		arrival = self.request.get("arrival")
+		times = self.request.get("times")
+		bus = departure + '-' + arrival + '-' + month + '-' + day + '-' + times 
 		entry = self.request.get("entry")
 		latitude = self.request.get("latitude")
 		longitude = self.request.get("longitude")
@@ -240,23 +247,22 @@ class UpdatesPage(Handler):
 
 
 class IndividualBus(Handler):
-	def get(self, bus_id):
+	def get(self):
 		url_u = str(self.request.url)
-		length = len(url_u)
 		posit = url_u.find('updates')
-		bus = url_u[posit+8:]
-		
+		bus1 = url_u[posit+8:]
+	        bus = bus1.replace('%20', chr(32))	
 		b = BusUpdates.all()
 		this_bus = b.order('-timestamp').filter('bus = ', bus).fetch(limit=10)
 	
-
-		if self.format == 'html':	
-			if this_bus:
-				self.render("individual_bus.html", bus=bus, this_bus=this_bus)
-			else:
-				self.write("There is a freaking error!")		
-		else:
-			self.render_json([j.as_dict() for j in this_bus])
+		self.render("individual_bus.html", bus=bus, this_bus=this_bus)
+		#if self.format == 'html':	
+		#	if this_bus:
+		#		self.render("individual_bus.html", bus=bus, this_bus=this_bus)
+		#	else:
+		#		self.write("There is a freaking error!")		
+		#else:
+		#	self.render_json([j.as_dict() for j in this_bus])
 
 
 
@@ -264,9 +270,10 @@ class IndividualBus(Handler):
 
 
 app = webapp2.WSGIApplication([('/', ChoicePage),
-			       ('/updates(?:.json)?', UpdatesPage), 
-			       ('/updates/([a-zA-Z]{1}[0-9]+)(?:.json)?', IndividualBus)],
-			       debug=True)
+			       ('/updates(?:.json)?', UpdatesPage),
+			       ('/updates/.*', IndividualBus)], debug=True) 
+			       #('/updates/([a-zA-Z]{1}[0-9]+)(?:.json)?', IndividualBus)],
+			       #debug=True)
 
 
 
