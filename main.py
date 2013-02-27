@@ -22,22 +22,22 @@ Buses = {'Des Moines, IA': '106', 'Milwaukee, WI': '121', 'Frederick, MD': '109'
 
 # this section is for running a query to megabus once a day to get the new day + 2 weeks of data
 
-#JSON_LIB = {}
-#month = [32, 29, 32, 31, 32, 31, 32, 32, 31, 32, 31, 32]
-#months = [[e for e in range(1,i)] for i in month]
-#url = "new_cities.xml"
-#xml = get_doc(url)
-#locations = get_title_locations(xml)
-#routes = generate_routes2(xml, locations)
-#def run_once_a_day():
-#	start = time.time()
-#	for i in routes.keys():
-#		for e in routes[i]:
-#			get_future_data(mb_api, i, e, months, JSON_LIB)
-#	stop = time.time()
-#	time.sleep(86400-(stop-start))
-#while True:
-#	run_once_a_day()
+JSON_LIB = {}
+month = [32, 29, 32, 31, 32, 31, 32, 32, 31, 32, 31, 32]
+months = [[e for e in range(1,i)] for i in month]
+url = "new_cities.xml"
+xml = get_doc(url)
+locations = get_title_locations(xml)
+routes = generate_routes2(xml, locations)
+def run_once_a_day():
+	start = time.time()
+	for i in routes.keys():
+		for e in routes[i]:
+			get_future_data(mb_api, i, e, months, JSON_LIB)
+	stop = time.time()
+	time.sleep(86400-(stop-start))
+while True:
+	run_once_a_day()
 
 
 
@@ -119,8 +119,6 @@ update_type = None
 
 
 
-# caching the database queries
-# a now obsolete caching function
 
 def top_bus(update=False):
 	key = 'top'
@@ -161,8 +159,9 @@ class UpdatesPage(Handler):
 
 	
 	def get(self):
-		bus_info = BusUpdates.all().order('-timestamp').fetch(limit=50)
-		data = self.generate_some_json({'St Louis, MO-Chicago, IL-2-26': ['600AM-100PM', '1200PM-530PM', '500PM-1050PM']})
+		bus_info = top_bus()
+		#data = self.generate_some_json({'St Louis, MO-Chicago, IL-2-26': ['600AM-100PM', '1200PM-530PM', '500PM-1050PM']})
+		data = self.generate_some_json(JSON_LIB)
 		self.get_update()
 		name = users.get_current_user()
 		user = None
@@ -197,7 +196,7 @@ class UpdatesPage(Handler):
 		time_api_if_coords = 'http://www.worldweatheronline.com/feed/tz.ashx?key={0}&q={1},{2}&format=xml'
 		time_api_if_not_coords = 'http://www.worldweatheronline.com/feed/tz.ashx?key={0}&q={1}&format=xml'
 		
-		if bus:
+		if bus[0:4] != 'City':
 			b = BusUpdates(bus=bus)
 			b.user = user
 			b.entry = entry
@@ -234,14 +233,14 @@ class UpdatesPage(Handler):
 			self.redirect('/updates/%s' % str(b.bus))
 	
 		else:
-			error = "We need a bus number to proceed."
+			error = "You must select some real data."
 			# these three lines are necessary otherwise when a user clicks a url after getting
 			# the error message we will be redirected to a nonexistent page and get a 404
 			tmp = self.request.url
                 	posit = tmp.find('updates')
                 	url = tmp[0: posit+ 7] + '/'
-
-			self.render_all(update_type=update_type, error=error, bus=bus, url=url, entry=entry, user=user)
+			bus_info = top_bus()
+			self.render_all(update_type=update_type, error=error, bus=bus, url=url, entry=entry, user=user, bus_info=bus_info)
 
 
 
