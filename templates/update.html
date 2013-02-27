@@ -25,7 +25,7 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
 		var the_json = jQuery.parseJSON(the_dater);
 		var d = new Date();
 		var month = d.getMonth() + 1;
-		var day= d.getDate();
+		var day= d.getDate() + 1;
 		var query_key = dep + '-' + arr + '-' + month + '-' + day;
 		var the_times = the_json[query_key];
 		for (i=0;i<the_times.length;i++){
