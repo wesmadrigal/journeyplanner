@@ -7,6 +7,7 @@ import time
 from time import strftime
 from datetime import datetime
 import urllib2
+import pickle
 import logging
 from get_route import get_future_data2test
 from get_route import get_locations, get_cared_about, find_times2, get_doc, get_title_locations, generate_routes2, get_future_data, mb_api
@@ -23,21 +24,54 @@ Buses = {'Des Moines, IA': '106', 'Milwaukee, WI': '121', 'Frederick, MD': '109'
 
 # this section is for running a query to megabus once a day to get the new day + 2 weeks of data
 
-JSON_LIB = {}
-month = [32, 29, 32, 31, 32, 31, 32, 32, 31, 32, 31, 32]
-months = [[e for e in range(1,i)] for i in month]
-url = "new_cities.xml"
-xml = get_doc(url)
-locations = get_title_locations(xml)
-routes = generate_routes2(xml, locations)
-day = int(strftime('%d'))
 
-if int(strftime('%d')) == day:
-	start = time.time()
-	for i in routes.keys():
-		for e in routes[i]:
-			get_future_data2test(mb_api, i, e, months, JSON_LIB)
-	day +=1
+class JSON_LIB_MODEL(db.Model):
+        day = db.IntegerProperty()
+        pickled_json_dict = db.StringProperty()
+        created = db.DateTimeProperty(auto_now_add=True)
+
+	def to_dict(self):
+		return dict([(p, unicode(getattr(self,p))) for p in self.properties()])
+
+
+
+def run_at_start_but_only_query_once_a_day():
+	day = int(strftime('%d'))
+	month = [32, 29, 32, 31, 32, 31, 32, 32, 31, 32, 31, 32]
+	months = [[e for e in range(1,i)] for i in month]
+	url = "new_cities.xml"
+	xml = get_doc(url)
+	locations = get_title_locations(xml)
+	routes = generate_routes2(xml, locations)
+	j = JSON_LIB_MODEL.all()
+	to_put = {}
+	entries = j.order('-created').to_dict()
+	for entry in entries:
+		if entry['day'] == day+1:
+			for i in routes:
+				for e in routes[i]:
+					get_future_data2test(mb_api, i, e, months, to_put)
+			day += 1
+			json_string = pickle.dumps(to_put)
+			n = JSON_LIB_MODEL()
+			n.day = day
+			n.picked_json_dict = json_string
+			n.put()
+			return to_put
+		else:
+			j = JSON_LIB_MODEL.all()
+		
+			pickled_json = ''
+			for item in res:
+				pickled_json += item.pickled_json_dict
+			json_library = pickle.loads(pickled_json)
+			return json_library
+
+JSON_LIB = run_at_start_but_only_query_once_a_day()
+
+		
+
+
 
 
 
