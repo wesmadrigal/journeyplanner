@@ -286,3 +286,87 @@ def get_data_two_weeks_from_today(mb_api, from_city, to_city, month, day, months
 	val = {key: times}
 	json_lib.update(val)
 	return "routes for two weeks from now finished"
+
+
+
+
+
+############################################################################################
+# Algorithms to reoccur update event
+
+def make_or_get_day2():
+    import os
+    from time import strftime
+    day = str(int(strftime('%d')))
+    try:
+            f = open("day.txt").read()
+            digits = ''
+            for i in f:
+                    if i.isdigit():
+                            digits += i
+            if digits == day:
+                    return False
+            elif int(day) > int(digits):
+                    os.remove("day.txt")
+                    f = open("day.txt", "wb")
+                    f.write("%s" % day)
+                    f.close()
+                    return True
+    except IOError:
+            f = open("day.txt", "wb")
+            f.write("%s" % day)
+            f.close()
+            return True
+
+
+
+def update_data(data_dict, update=False):
+    today = int(strftime('%d'))
+    month = int(strftime('%m'))
+    if update:
+            # iterate through and find obsolete keys and delete them
+            for i in data_dict.keys():
+                curr_key = i
+                star = curr_key.find('-', curr_key.find('-')+1)
+                third_hyph = curr_key.find('-', star+1)
+                curr_key_month = int(curr_key[star+1:third_hyph])
+                day = int(curr_key[third_hyph+1:])
+                if curr_key_month < month:
+                    del data_dict[i]
+                elif curr_key_month == month:
+                    if today > day:
+                        del data_dict[i]
+            # go through our routes data set and get the new day + 2 weeks trip times and
+            # add them to our huge data dictionary of trips
+            for from_c in routes:
+                for to_c in from_c:
+                    get_data_two_weeks_from_today(mb_api, from_c, to_c, month, today, months, data_dict)
+            
+                    
+    return data
+
+
+def send_update_email(user_email):
+    import smtplib
+    import mimetypes
+    from email.MIMEMultipart import MIMEMultipart
+    from email.MIMEText import MIMEText
+    mypass = 'megadmin99'
+    myacct = 'wesleymadrigal_99@hotmail.com'
+    message = 'Hello from MegabusFinder Admin \nIf you are receiving this message it is because you just posted an update to one of our tracked bus routes.  You can view the status of your post and others related to the same trip at %s.\n\n\nRegards\nApp Admin'
+    url = 'http://www.megabusfinder.appspot.com/updates/the_bus'
+    to_send = message % url
+    msg = MIMEMultipart()
+    msg['From'] = myacct
+    msg['To'] = user_email
+    msg['Subject'] = 'Update Notification'
+    msg.attach(MIMEText(to_send))
+    mailServer = smtplib.SMTP('smtp.live.com', 587)
+    mailServer.ehlo()
+    mailServer.starttls()
+    mailServer.ehlo()
+    mailServer.login(myacct, mypass)
+    mailServer.sendmail(myacct, user_email, msg.as_string())
+    return
+
+
