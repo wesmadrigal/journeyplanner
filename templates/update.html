@@ -32,7 +32,6 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
 			times.append('<option>'+the_times[i]+'</option>');
 		}
 	});
-	
 	});
 	});}
 	});});
@@ -142,32 +141,28 @@ function init(){
 
 
 	
-	<form method="POST">
-		<label>Departure:
+	<form title="buspost" method="POST">
+		<label><h2>Departure:</h2>
 		<select name="departure" id="departure">
 			<option>City, State</option>
 		</select>
 		</label>
-		<br>
-		<br>
 
-		<label>Arrival:
+		<label><h2>Arrival:</h2>
 		<select name="arrival" id="arrival">
 			<option>Select a departure first</option>
 		</select>
 		</label>
-		<br>
-		<br>
-		<label>Times:
+	
+		<label><h2>Times:</h2>
 		<select name="times" id="times">
 			<option>Select departure and arrival cities</option>
 		</select>
 		</label>
-		<br>
-		<br>
 		{% if update_type == "riding" %}
-                <label>Delay Time: 
+                <label><h2>Delay Time:</h2> 
                 <select name="entry">
+			<option value="No Delay">No Delay</option>
                         <option value="15 minutes late">15 minutes late</option>
                         <option value="30 minutes late">30 minutes late</option>
                         <option value="45 minutes late">45 minutes late</option>
@@ -180,11 +175,17 @@ function init(){
                 <input type="hidden" name="longitude" id="longitude" />
 		
 		{% else %}
-		<label>Request:
+		<label><h2>Request:</h2>
                 <select name="entry">
                         <option value="Delay Info Request">Delay Info Request</option>
                 </select>
                 </label>
+		<!--
+		<p>Select the bus arriving to your Departure city closest to your Departure Time.</p>
+		<select name="waiter-bus-choices">
+			<option value="Select Arrival">Select Approaching Bus Causing Delay</option>
+		</select>
+		/!-->
                 <input type="hidden" name="latitude" id="latitude" />
                 <input type="hidden" name="longitude" id="longitude" />
                 <br>
@@ -200,11 +201,17 @@ function init(){
 	<br>
 
 	{% for b in bus_info %}
+
 	<div class="bus_stuff">
 		<div style="font-weight:bold" class="bus-user">{{b.user}}</div>
 		<div class="bus-num"><a href="{{url}}{{b.bus}}">{{b.bus}}</a></div>
 		<br>
+		{% if b.latitude %}
+		<div class="entry"><p>Delay time: <b>{{b.entry}}</b></p></div>
+		{% else %}
 		<div class="entry"><p>{{b.entry}}</p></div>
+		{% endif %}
+		<div class="created"></p>Posted at <b>{{b.created}}</b></p></div>
 	</div>
 	<br>
 	<br>

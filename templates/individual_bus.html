@@ -1,12 +1,14 @@
 {% extends "layout.html" %}
 {% block title %}
-<p id="welcome">Bus {{bus}} updates</p>
+<!--<link rel="stylesheet" type="text/css" href="static/stylesheets/style.css">/!-->
+
+<h4><p id="welcome">Bus {{bus}} updates</p></h4>
 <br>
 <a href='/updates'>Updates Page</a>
 {% endblock %}
 
 {% block body %}
-
+<body>
 <br>
 <br>
 
@@ -38,5 +40,5 @@
 	{% endif %}
 </div>
 	{% endfor %}
-
+</body>
 {% endblock %}

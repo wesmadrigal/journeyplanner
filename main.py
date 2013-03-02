@@ -21,6 +21,7 @@ from get_route import get_locations, get_cared_about, find_times2, get_doc, get_
 from google.appengine.ext import db
 from google.appengine.api import users
 from google.appengine.api import memcache
+from google.appengine.api import mail
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
@@ -228,7 +229,18 @@ class UpdatesPage(Handler):
 
 			b.put()
 			top_bus(True)	
-			#send_update_email(user_email)	
+			# email the user notifying them of their post
+			if user_email:
+				tmp = self.request.url
+                		posit = tmp.find('updates')
+                		url_to_send = tmp[0:posit+7]+'/' + b.bus
+				message = mail.EmailMessage(sender="MegabusFinder Admin <wesley7879@gmail.com>",
+						    subject="Update Notification")
+				message.to = user_email
+				message_body = 'Hello from MegabusFinder Admin \nIf you are receiving this message it is because you just posted an update to one of our tracked bus routes.  You can view the status of your post and others related to the same trip at %s.\n\n\nRegards,\nApp Admin'	
+				message.body = message_body % url_to_send
+				message.send()
+	
 			self.redirect('/updates/%s' % str(b.bus))
 	
 		else:
@@ -265,6 +277,7 @@ class IndividualBus(Handler):
 
 
 
+		
 
 
 app = webapp2.WSGIApplication([('/', ChoicePage),
