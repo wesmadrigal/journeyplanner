@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block title %}
+<p id="welcome">Choose a pertinent bus arriving to your departure city closest to your departure time</p>
+{% endblock %}
+
+{% block body %}
+<body>
+<form method="POST">
+{{the_response|safe}}
+</form>
+</body>
+
+{% endblock %}

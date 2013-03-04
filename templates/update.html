@@ -139,7 +139,7 @@ function init(){
 <br>
 <br>
 
-
+	{% if update_type == "riding" %}
 	
 	<form title="buspost" method="POST">
 		<label><h2>Departure:</h2>
@@ -159,7 +159,7 @@ function init(){
 			<option>Select departure and arrival cities</option>
 		</select>
 		</label>
-		{% if update_type == "riding" %}
+	
                 <label><h2>Delay Time:</h2> 
                 <select name="entry">
 			<option value="No Delay">No Delay</option>
@@ -174,18 +174,26 @@ function init(){
                 <input type="hidden" name="latitude" id="latitude" />
                 <input type="hidden" name="longitude" id="longitude" />
 		
-		{% else %}
+		<!--
 		<label><h2>Request:</h2>
                 <select name="entry">
                         <option value="Delay Info Request">Delay Info Request</option>
                 </select>
                 </label>
+		/!-->
 		<!--
 		<p>Select the bus arriving to your Departure city closest to your Departure Time.</p>
 		<select name="waiter-bus-choices">
 			<option value="Select Arrival">Select Approaching Bus Causing Delay</option>
 		</select>
 		/!-->
+		{% else %}
+	<form title="buspost" method="GET" action="/timeschoice">
+		<label><h2>Departure:</h2>
+		<select name="departure" id="departure">
+			<option>City, State</option>
+		</select>
+		</label>
                 <input type="hidden" name="latitude" id="latitude" />
                 <input type="hidden" name="longitude" id="longitude" />
                 <br>
@@ -221,6 +229,7 @@ function init(){
 <form type="hidden">
 	<input type="hidden" id="json" value="{{data}}">
 </form>
+<a href="/timeschoice">Go see some times</a>
 {% if update_type == "riding" %}
 <script type="text/javascript">
 	window.onload = get_location ;

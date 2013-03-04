@@ -278,7 +278,7 @@ def get_future_data2test(mb_api, from_city, to_city, months, json_lib):
 	return "routes finished"
 
 
-def get_data_two_weeks_from_today(mb_api, from_city, to_city, month, day, months, json_lib):
+def get_data_from_future(mb_api, from_city, to_city, month, day, months, json_lib):
 	y = strftime('%Y')
 	cared_about = get_cared_about(mb_api, from_city, to_city, day, month, y)
 	times = find_times2(cared_about, from_city)
@@ -340,7 +340,7 @@ def update_data(data_dict, update=False):
             # add them to our huge data dictionary of trips
             for from_c in routes:
                 for to_c in from_c:
-                    get_data_two_weeks_from_today(mb_api, from_c, to_c, month, today, months, data_dict)
+                    get_data_from_future(mb_api, from_c, to_c, month, today+5, months, data_dict)
             
                     
     return data
@@ -369,4 +369,15 @@ def send_update_email(user_email):
     mailServer.sendmail(myacct, user_email, msg.as_string())
     return
 
-
+def send_request_email(user_email, url):
+	tmp = url
+        posit = tmp.find('com') + 3
+        new_url = tmp[0:posit] + 'updates'
+        bus_f = b.bus
+        url_to_send = new_url + '%s' % bus_f
+        message = mail.EmailMessage(sender="MegabusFinder Admin <wesley7879@gmail.com",
+                                        subject="Delay Request Post Notification")
+        message.to = user_email
+        message_body = 'Hello from MegabusFinder Admin \nIf you are receiving this message it is because you just inquired about a particular bus delay status.  If nobody has posted updates regarding the bus you inquired about, please reply to this email with your particular departure and arrival city for your trip.\n\n\nRegards,\nApp Admin'
+        message.body = message_body
+        message.send()

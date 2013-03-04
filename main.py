@@ -15,9 +15,10 @@ from email.MIMEMultipart import MIMEMultipart
 from email.MIMEText import MIMEText
 from get_route import send_update_email
 from megabus_times_library import library as routes_library
-from get_route import make_or_get_day2, update_data
+from get_route import make_or_get_day2, update_data, get_data_from_future
 from get_route import get_future_data2test
 from get_route import get_locations, get_cared_about, find_times2, get_doc, get_title_locations, generate_routes2, get_future_data, mb_api
+from get_route import send_request_email
 from google.appengine.ext import db
 from google.appengine.api import users
 from google.appengine.api import memcache
@@ -32,10 +33,10 @@ Buses = {'Des Moines, IA': '106', 'Milwaukee, WI': '121', 'Frederick, MD': '109'
 
 # this section is for running a query to megabus once a day to get the new day + 2 weeks of data
 # determine
-#the_data = update_data(routes_library, make_or_get_day2())
 
-
-
+# WRITES TO FILE SYSTEM ARE NOT ALLOWED IN GOOGLE APP ENGINE
+#status = make_or_get_day2()
+#routes = update_data(routes_library, update=status)
 
 
 
@@ -276,13 +277,64 @@ class IndividualBus(Handler):
 
 
 
-
+class TimesChoices(Handler):
+	def get(self):
 		
+		the_url = self.request.url
+		start_point = the_url.find('=') + 1
+		stop_point = the_url.find('&', start_point)
+		encoded_city = the_url[start_point:stop_point]
+		less_encoded_city = encoded_city.replace('+', chr(32))
+		decoded_city = less_encoded_city.replace('%2C', chr(44))
+		departing_city = 'St Louis, MO'
+		day = str(int(strftime('%d')))
+		month = str(int(strftime('%m')))
+		keys = []
+		response = ''
+		for i in routes_library.keys():
+			first = i.find('-')+1
+			sec = i.find('-', first)
+			city = i[first:sec]
+			cur_m = i[sec+1: i.find('-', sec+1)]
+			cur_d = i[i.find('-',sec+1)+1: ]
+			if decoded_city == city and day == cur_d and month == cur_m:
+				keys.append(i)
+		for route in keys:
+			#response += '<div><p name="route">' + route + '</p><ul>/n'
+			response += '<div><input type="radio" name="route" value="%s"' % route + '><b>%s</b><ul>' % route
+			for time in routes_library[route]:
+				response += '<li><input type="submit" name="time" value="%s"' % time + '></li>'
+			response += '</ul></div>'
+			
+		self.render("times_choice.html", the_response=response)
+		
+	def post(self):
+		route = self.request.get("route")	
+		the_chosen_time = self.request.get("time")
+		the_route = route + '-' + the_chosen_time
+		user = 'guest'
+		user_email = ''
+		if users.get_current_user():
+			user = users.get_current_user().nickname()
+			user_email = users.get_current_user().email()
+		bus = the_route
+		entry = "Delay Info Request"
+		b = BusUpdates(bus=bus)
+		b.user = user
+		b.entry = entry
+		b.put()
+		url = self.request.url
+		if user_email:
+			send_request_email(user_email, url)
+		
+		
+		self.redirect('/updates/%s' % b.bus)
 
 
 app = webapp2.WSGIApplication([('/', ChoicePage),
 			       ('/updates(?:.json)?', UpdatesPage),
-			       ('/updates/.*', IndividualBus)], debug=True) 
+			       ('/updates/.*', IndividualBus),
+			       ('/timeschoice', TimesChoices)], debug=True) 
 			       #('/updates/([a-zA-Z]{1}[0-9]+)(?:.json)?', IndividualBus)],
 			       #debug=True)
 
