@@ -369,11 +369,11 @@ def send_update_email(user_email):
     mailServer.sendmail(myacct, user_email, msg.as_string())
     return
 
-def send_request_email(user_email, url):
+def send_request_email(user_email, url, bus):
 	tmp = url
         posit = tmp.find('com') + 3
         new_url = tmp[0:posit] + 'updates'
-        bus_f = b.bus
+        bus_f = bus
         url_to_send = new_url + '%s' % bus_f
         message = mail.EmailMessage(sender="MegabusFinder Admin <wesley7879@gmail.com",
                                         subject="Delay Request Post Notification")

@@ -137,7 +137,6 @@ class UpdatesPage(Handler):
 		#bus_info = top_bus()
 		
 		self.render("update.html", update_type=update_type, bus=bus, entry=entry, error=error, bus_info=bus_info, url=url, user=user, data=data)
-	# new render_all for data mining implement
 
 		
 	
@@ -184,7 +183,7 @@ class UpdatesPage(Handler):
 			user_email = users.get_current_user().email()
 		day = str(int(strftime('%d')))
 		
-		month = strftime('%m')
+		month = str(int(strftime('%m')))
 		departure = self.request.get("departure")
 		arrival = self.request.get("arrival")
 		times = self.request.get("times")
@@ -197,7 +196,7 @@ class UpdatesPage(Handler):
 		time_api_if_coords = 'http://www.worldweatheronline.com/feed/tz.ashx?key={0}&q={1},{2}&format=xml'
 		time_api_if_not_coords = 'http://www.worldweatheronline.com/feed/tz.ashx?key={0}&q={1}&format=xml'
 		
-		if bus[0:4] != 'City':
+		if bus[0:4] != 'City' and arrival != 'choose wisely' and times != 'choose pertinent bus time':
 			b = BusUpdates(bus=bus)
 			b.user = user
 			b.entry = entry
@@ -238,7 +237,7 @@ class UpdatesPage(Handler):
 				message = mail.EmailMessage(sender="MegabusFinder Admin <wesley7879@gmail.com>",
 						    subject="Update Notification")
 				message.to = user_email
-				message_body = 'Hello from MegabusFinder Admin \nIf you are receiving this message it is because you just posted an update to one of our tracked bus routes.  You can view the status of your post and others related to the same trip at %s.\n\n\nRegards,\nApp Admin'	
+				message_body = 'Hello from MegabusFinder Admin \n\n\nIf you are receiving this message it is because you just posted an update to one of our tracked bus routes.  You can view the status of your post and others related to the same trip at %s.\n\n\nRegards,\nApp Admin'	
 				message.body = message_body % url_to_send
 				message.send()
 	
@@ -252,7 +251,8 @@ class UpdatesPage(Handler):
                 	posit = tmp.find('updates')
                 	url = tmp[0: posit+ 7] + '/'
 			bus_info = top_bus()
-			self.render_all(update_type=update_type, error=error, bus=bus, url=url, entry=entry, user=user, bus_info=bus_info)
+			data = self.generate_some_json(routes_library)
+			self.render_all(update_type=update_type, error=error, bus=bus, url=url, entry=entry, user=user, bus_info=bus_info, data=data)
 
 
 
@@ -276,21 +276,19 @@ class IndividualBus(Handler):
 		#	self.render_json([j.as_dict() for j in this_bus])
 
 
-
+response = ''
 class TimesChoices(Handler):
-	def get(self):
 		
+	def get(self):
+	        global response
 		the_url = self.request.url
 		start_point = the_url.find('=') + 1
-		stop_point = the_url.find('&', start_point)
-		encoded_city = the_url[start_point:stop_point]
+		encoded_city = the_url[start_point:]
 		less_encoded_city = encoded_city.replace('+', chr(32))
 		decoded_city = less_encoded_city.replace('%2C', chr(44))
-		departing_city = 'St Louis, MO'
 		day = str(int(strftime('%d')))
 		month = str(int(strftime('%m')))
 		keys = []
-		response = ''
 		for i in routes_library.keys():
 			first = i.find('-')+1
 			sec = i.find('-', first)
@@ -311,24 +309,40 @@ class TimesChoices(Handler):
 	def post(self):
 		route = self.request.get("route")	
 		the_chosen_time = self.request.get("time")
-		the_route = route + '-' + the_chosen_time
-		user = 'guest'
-		user_email = ''
-		if users.get_current_user():
-			user = users.get_current_user().nickname()
-			user_email = users.get_current_user().email()
-		bus = the_route
-		entry = "Delay Info Request"
-		b = BusUpdates(bus=bus)
-		b.user = user
-		b.entry = entry
-		b.put()
-		url = self.request.url
-		if user_email:
-			send_request_email(user_email, url)
+		if route:
+			the_route = route + '-' + the_chosen_time
+			user = 'guest'
+			user_email = ''
+			if users.get_current_user():
+				user = users.get_current_user().nickname()
+				user_email = users.get_current_user().email()
+			bus = the_route
+			entry = "Delay Info Request"
+			b = BusUpdates(bus=bus)
+			b.user = user
+			b.entry = entry
+			b.put()
+			url = self.request.url
+			if user_email:
+				tmp = url
+        			posit = tmp.find('com') + 3
+        			new_url = tmp[0:posit] + 'updates'
+        			bus_f = bus
+        			url_to_send = new_url + '%s' % bus_f
+        			message = mail.EmailMessage(sender="MegabusFinder Admin <wesley7879@gmail.com>",
+                                        	    subject="Delay Request Post Notification")
+        			message.to = user_email
+        			message_body = 'Hello from MegabusFinder Admin, \n\n\nIf you are receiving this message it is because you just inquired about a particular bus delay status.  If nobody has posted updates regarding the bus you inquired about, please reply to this email with your particular departure and arrival city for your trip.\n\n\nRegards,\nApp Admin'
+        			message.body = message_body
+        			message.send()
+			self.redirect('/updates/%s' % b.bus)
+		else:
+			global response
+			error = "You must select a route before selecting a route-specific time."
+			self.render("times_choice.html", the_response=response, error=error)
 		
 		
-		self.redirect('/updates/%s' % b.bus)
+		#self.redirect('/updates/%s' % b.bus)
 
 
 app = webapp2.WSGIApplication([('/', ChoicePage),
