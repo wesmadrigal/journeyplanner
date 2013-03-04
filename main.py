@@ -234,15 +234,17 @@ class UpdatesPage(Handler):
 				tmp = self.request.url
                 		posit = tmp.find('updates')
                 		url_to_send = tmp[0:posit+7]+'/' + b.bus
+				url_to_send_final = url_to_send.replace(' ', '%20')
 				message = mail.EmailMessage(sender="MegabusFinder Admin <wesley7879@gmail.com>",
 						    subject="Update Notification")
 				message.to = user_email
-				message_body = 'Hello from MegabusFinder Admin \n\n\nIf you are receiving this message it is because you just posted an update to one of our tracked bus routes.  You can view the status of your post and others related to the same trip at %s.\n\n\nRegards,\nApp Admin'	
-				message.body = message_body % url_to_send
+				message_body = 'Hello from MegabusFinder Admin, \n\nIf you are receiving this message it is because you just posted an update to one of our tracked bus routes.  You can view the status of your post and others related to the same trip at %s.\n\n\nRegards,\nApp Admin'
+				message.body = message_body % url_to_send_final
 				message.send()
 	
 			self.redirect('/updates/%s' % str(b.bus))
-	
+		
+		
 		else:
 			error = "You must select some real data."
 			# these three lines are necessary otherwise when a user clicks a url after getting
@@ -286,6 +288,8 @@ class TimesChoices(Handler):
 		encoded_city = the_url[start_point:]
 		less_encoded_city = encoded_city.replace('+', chr(32))
 		decoded_city = less_encoded_city.replace('%2C', chr(44))
+		if decoded_city == 'City, State':
+			self.redirect('/updates')
 		day = str(int(strftime('%d')))
 		month = str(int(strftime('%m')))
 		keys = []
@@ -317,22 +321,31 @@ class TimesChoices(Handler):
 				user = users.get_current_user().nickname()
 				user_email = users.get_current_user().email()
 			bus = the_route
+			time_api_key = '8c0af75047193432130502'
+			time_api_if_not_coords = 'http://www.worldweatheronline.com/feed/tz.ashx?key={0}&q={1}&format=xml'
+			created_response = urllib2.urlopen(time_api_if_not_coords.format(time_api_key, self.request.remote_addr)).read()
+			start = created_response.find('<localtime>') + 11
+                        end = created_response.find('</localtime>')
+                        created = created_response[start:end]
 			entry = "Delay Info Request"
 			b = BusUpdates(bus=bus)
 			b.user = user
 			b.entry = entry
+			b.created = created
 			b.put()
+			top_bus(True)
 			url = self.request.url
 			if user_email:
 				tmp = url
         			posit = tmp.find('com') + 3
-        			new_url = tmp[0:posit] + 'updates'
+        			new_url = tmp[0:posit] + '/updates/'
         			bus_f = bus
         			url_to_send = new_url + '%s' % bus_f
+				url_final = url_to_send.replace(' ', '%20')
         			message = mail.EmailMessage(sender="MegabusFinder Admin <wesley7879@gmail.com>",
                                         	    subject="Delay Request Post Notification")
         			message.to = user_email
-        			message_body = 'Hello from MegabusFinder Admin, \n\n\nIf you are receiving this message it is because you just inquired about a particular bus delay status.  If nobody has posted updates regarding the bus you inquired about, please reply to this email with your particular departure and arrival city for your trip.\n\n\nRegards,\nApp Admin'
+        			message_body = 'Hello from MegabusFinder Admin, \n\nIf you are receiving this message it is because you just inquired about a particular bus delay status.  If nobody has posted updates regarding the bus you inquired about, please reply to this email with your particular departure and arrival city for your trip.  To keep tabs on your inquiry and responders follow the link provided. \n%s\n\n\nRegards,\nApp Admin' % url_final
         			message.body = message_body
         			message.send()
 			self.redirect('/updates/%s' % b.bus)

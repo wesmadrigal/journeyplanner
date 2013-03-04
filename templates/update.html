@@ -187,7 +187,12 @@ function init(){
 			<option value="Select Arrival">Select Approaching Bus Causing Delay</option>
 		</select>
 		/!-->
-		{% else %}
+		<br>
+		<div class="error" style="color:red">{{error}}</div>
+		<br>
+		<input type="submit" value="Update">
+	</form>
+	{% else %}
 	<form title="buspost" method="GET" action="/timeschoice">
 		<label><h2>Departure:</h2>
 		<select name="departure" id="departure">
@@ -196,12 +201,13 @@ function init(){
 		</label>
                 
                 <br>
-		{% endif %}
+	
 		<br>
 		<div class="error" style="color:red">{{error}}</div>
 		<br>
-		<input type="submit" value="Update">
+		<input type="submit" value="Find buses arriving in your city">
 	</form>
+	{% endif %}
 	<br>
 	<br>
 	<br>
@@ -228,7 +234,7 @@ function init(){
 <form type="hidden">
 	<input type="hidden" id="json" value="{{data}}">
 </form>
-<a href="/timeschoice">Go see some times</a>
+
 {% if update_type == "riding" %}
 <script type="text/javascript">
 	window.onload = get_location ;
