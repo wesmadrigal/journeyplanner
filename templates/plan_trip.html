@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+{% block title %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function(){
+		var departure = $('#departure');
+		var end = $('#end');
+		$.ajax({
+			type: "GET",
+			url: "static/xml/new_cities.xml",
+			dataType: "xml",
+			success: function(xml){
+			$(xml).find('menuitem').each(function(){
+		
+				var value=$(this).find('titlecity').text();
+				departure.append('<option>'+value+'</option>');
+				end.append('<option>'+value+'</option>');
+		
+			});
+		}
+	});
+	});
+		
+</script>
+
+<p>Once you have chosen your trip, our services will direct you to where you can purchase the desired route.</p>
+{% endblock %}
+
+{% block body %}
+<div>
+<form method="POST">
+	<label>Departure:
+	<select name="departure" id="departure">
+		<option>loading</option>
+	</select>
+	</label>
+	<br>
+	<label>Ending Destination:
+	<select name="end" id="end">
+		<option>loading</option>
+	</select>
+	</label>
+	<br>
+	<label>Day of this month:
+	<input type="text" name="day" id="day">
+	</label>
+	<br>
+	<br>
+	<input type="submit" value="Generate options">
+</form>
+</div>
+<br>
+<br>
+{% if options %}
+{% for i in options.keys() %}
+	<p>option {{i}}: {{options[i]}}</p>
+{% endfor %}
+{% endif %}
+
+<br>
+{% if options_links %}
+<div>
+<p><b>The selected option will open new tabs for all the trips required to get from your start city to final city on the selected day</b></p>
+{% for i in options_links.keys() %}
+	<a href="http://www.megabus.com" target="_blank" onclick="{{options_links[i]}}">Option {{i}} necessary trips</a>
+<br><br><hr>
+{% endfor %}
+</div>
+{% endif %}
+
+
+{% endblock %}
+</body>
+</html>

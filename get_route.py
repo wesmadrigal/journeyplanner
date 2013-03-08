@@ -8,7 +8,12 @@ mb_api = 'http://us.megabus.com/JourneyResults.aspx?originCode={0}&destinationCo
 
 Buses = {'Des Moines, IA': '106', 'Milwaukee, WI': '121', 'Frederick, MD': '109', 'Minnesota': '23', 'Illinois': '13', 'Chattanooga, TN': '290', 'Indiana': '14', 'Louisiana': '18', 'Texas': '43', 'Giddings, TX': '401', 'Galveston, TX': '325', 'Dallas/Fort Worth, TX': '317', 'Knoxville, TN': '118', 'New Brunswick, NJ': '305', 'Connecticut': '7', 'Rochester, NY': '134', 'Atlanta, GA': '289', 'West Virginia': '48', 'Texarkana, AR': '407', 'La Grange, TX': '333', 'Ridgewood, NJ': '133', 'Kansas City, MO': '117', 'El Paso, TX': '397', 'Harrisburg, PA': '111', 'Big Spring, TX': '393', 'East Lansing, MI': '330', 'Toronto, ON': '145', 'Missouri': '25', 'South Bend, IN': '368', 'Fairhaven, MA': '316', 'Kenton, OH': '362', 'Carthage, TX': '395', 'New Jersey': '30', 'Valparaiso, IN': '376', 'Gainesville, FL': '296', 'Iowa City, IA': '116', 'Lufkin, TX': '404', 'Houston, TX': '318', 'San Antonio, TX': '321', 'Eagle Pass, TX': '327', 'Shreveport, LA': '332', 'Maryland': '20', 'Oklahoma City, OK': '323', 'Wisconsin': '49', 'Syracuse, NY': '139', 'Michigan': '22', 'Del Rio, TX': '328', 'New York': '32', 'Massachusetts': '21', 'Mobile, AL': '294', 'Richmond, IN': '371', 'Boston, MA': '94', 'Florida': '10', 'Rhode Island': '39', 'Sparks, NV': '419', 'Nashville, TN': '291', 'Memphis, TN': '120', 'Livingston, TX': '402', 'Ohio': '35', 'State College, PA': '137', 'Burlington, VT': '96', 'North Carolina': '33', 'Athens, GA': '302', 'District of Columbia': '9', 'Birmingham, AL': '292', 'Van Wert, OH': '364', 'Elkhart, IN': '367', 'Maine': '19', 'Christiansburg, VA': '101', 'Ontario': '51', 'Detroit, MI': '107', 'Norman, OK': '322', 'Oklahoma': '36', 'Delaware': '8', 'Champaign, IL': '98', 'Madison, U of Wisc, WI': '300', 'La Marque, TX': '337', 'Arkansas': '4', 'Humble, TX': '334', 'New Haven, CT': '122', 'Secaucus, NJ': '135', 'Indianapolis, IN': '115', 'Newark, DE': '389', 'Lima, OH': '363', 'Sacramento, CA': '415', 'Durham, NC': '131', 'Midland, TX': '405', 'Pittsburgh, PA': '128', 'Washington, DC': '142', 'California': '5', 'Uvalde, TX': '326', 'Providence, RI': '130', 'Georgia': '11', 'Columbia City, IN': '373', 'San Jose, CA': '412', 'Pennsylvania': '38', 'San Francisco, CA': '414', 'Toledo, OH': '140', 'Montgomery, AL': '293', 'Hampton, VA': '110', 'Philadelphia, PA': '127', 'Nacogdoches, TX': '406', 'Riverside, CA': '416', 'Louisville, KY': '298', 'Buffalo Airport, NY': '273', 'Little Rock, AR': '324', 'Ft. Wayne, IN': '365', 'Columbus, OH': '105', 'Dayton-Trotwood, OH': '370', 'Hartford, CT': '112', 'Cincinnati, OH': '102', 'Storrs, CT': '138', 'Buffalo, NY': '95', 'Brenham, TX': '335', 'Nevada': '28', 'Ann Arbor, MI': '91', 'Omaha, NE': '126', 'Cleveland, OH': '103', 'Charlotte, NC': '99', 'Madison, WI': '119', 'Princeton, NJ': '304', 'St Louis, MO': '136', 'Springfield, MO': '411', 'New York, NY': '123', 'Lubbock, TX': '403', 'San Angelo, TX': '329', 'Richmond, VA': '132', 'Baltimore, MD': '143', 'Albany, NY': '89', 'Minneapolis, MN': '144', 'Virginia': '46', 'Las Vegas, NV': '417', 'Binghamton, NY': '93', 'Oakland, CA': '413', 'Los Angeles, CA': '390', 'Austin, TX': '320', 'Vermont': '45', 'Grand Rapids, MI': '331', 'Warsaw, IN': '374', 'Columbia, MO': '104', 'Kentucky': '17', 'Morgantown, WV': '299', 'Nebraska': '27', 'New Orleans, LA': '303', 'Iowa': '15', 'Alabama': '53', 'Angola, IN': '366', 'Prairie View, TX': '336', 'Abilene, TX': '391', 'Chicago, IL': '100', 'Plymouth, IN': '375', 'Jacksonville, FL': '295', 'Tennessee': '42', 'Gary, IN': '369', 'Amherst, MA': '90', 'Portland, ME': '129', 'Muncie, IN': '372', 'Orlando, FL': '297', 'Saratoga Springs, NY': '301'}
 
-# currently unused and purposeless within the scope of this program's functionality
+
+month_d = [32,29,32,31,32,31,32,32,31,32,31,32]
+months = [[i for i in range(1, e)] for e in month_d]
+
+
+# currently unused and purposeless within the scope of this programs functionality
 # yet a good reference of where things started
 
 class MyHTMLParser(HTMLParser):
@@ -229,13 +234,11 @@ def find_times2(cared_about, from_city):
 ## all machines.
 
 
-def get_future_data(mb_api, from_city, to_city, months, json_lib):
+def get_future_data(mb_api, from_city, to_city, m, d, months, json_lib):
     #m = int(strftime('%m'))
     #d = int(strftime('%d'))
-    m = 3
-    d = 2
     y = strftime('%Y')
-    for i in range(d, d+3):
+    for i in range(d+1, d+3):
         if str(m) == '2':
             if i in months[1]:
                 cared_about = get_cared_about(mb_api, from_city, to_city, str(i), str(m), y)
@@ -381,3 +384,42 @@ def send_request_email(user_email, url, bus):
         message_body = 'Hello from MegabusFinder Admin \nIf you are receiving this message it is because you just inquired about a particular bus delay status.  If nobody has posted updates regarding the bus you inquired about, please reply to this email with your particular departure and arrival city for your trip.\n\n\nRegards,\nApp Admin'
         message.body = message_body
         message.send()
+
+
+
+def update_data2(routes, mb_api, months):
+    import logging
+    q = BusData.all().fetch(limit=1)
+    curr_day = str(int(strftime('%d')))
+    curr_m = str(int(strftime('%m')))
+    if len(q) >= 1:
+        db_day = ''
+        db_data = ''
+        for i in q:
+            bd_day += i.bus_key
+            bd_data += i.data
+        if int(db_day) < int(curr_day):
+            parsable_data = json.loads(db_data)
+            for i in parsable_data.keys():
+                sec_hyph = i.find('-', i.find('-')+1)
+                third_hyph = i.find('-', sec_hyph + 1)
+                this_month = i[sec_hyph + 1: third_hyph]
+                this_day = i[third_hyph+1: ]
+                if int(this_month) < int(curr_m):
+                    del parsable_data[i]
+                elif int(this_month) == int(curr_m):
+                    if int(this_day) < int(curr_day):
+                        del parsable_data[i]
+            for title_c in routes:
+                for item_c in routes[title_c]:
+                    get_future_data(mb_api, title_c, item_c, int(curr_m), int(curr_day), months, parsable_data)
+            logging.info("Routes Updated!!!")
+	    q = BusData.all().filter('bus_key=', db_day)
+	    BusData.delete(q)
+            logging.info("old deleted")
+            bd = BusData(bus_key = curr_day)
+            bd.data = json.dumps(parsable_data)
+            bd.put()
+            return json.dumps(parsable_data)
+        else:
+            return json.dumps(db_data)

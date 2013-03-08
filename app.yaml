@@ -4,10 +4,14 @@ runtime: python27
 api_version: 1
 threadsafe: no
 
+
+
 handlers:
 - url: /favicon\.ico
   static_files: favicon.ico
   upload: favicon\.ico
+
+
 
 - url: /static/stylesheets
   static_dir: static/stylesheets
@@ -17,8 +21,16 @@ handlers:
   static_dir: static/xml
   #upload: static/xml
 
+
+- url: /update_bus_data/ .*
+  script: main.app
+
 - url: .*
   script: main.app
+
+builtins:
+- remote_api: on
+
 
 libraries:
 - name: webapp2

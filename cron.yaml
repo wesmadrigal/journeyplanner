@@ -1,0 +1,5 @@
+cron:
+- description: cron bus update
+  url: /update_bus_data
+  schedule: every 24 hours
+  #schedule: every 2 minutes from 00:00 to 23:00

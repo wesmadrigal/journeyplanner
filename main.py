@@ -7,18 +7,15 @@ import time
 from time import strftime
 from datetime import datetime
 import urllib2
-import pickle
 import logging
-import smtplib
-import mimetypes
-from email.MIMEMultipart import MIMEMultipart
-from email.MIMEText import MIMEText
+#from update import DataMain
 from get_route import send_update_email
 from megabus_times_library import library as routes_library
 from get_route import make_or_get_day2, update_data, get_data_from_future
-from get_route import get_future_data2test
-from get_route import get_locations, get_cared_about, find_times2, get_doc, get_title_locations, generate_routes2, get_future_data, mb_api
+from get_route import get_future_data2test, months
+from get_route import get_locations, get_cared_about, find_times2, get_doc, get_title_locations, generate_routes2, get_future_data, mb_api, update_data2
 from get_route import send_request_email
+from trip_planner import plan_trip
 from google.appengine.ext import db
 from google.appengine.api import users
 from google.appengine.api import memcache
@@ -87,7 +84,10 @@ class BusUpdates(db.Model):
 		return json.dumps(d)
 
 
-
+class BusData(db.Model):
+	bus_key = db.StringProperty(required=True)
+	bus_data = db.TextProperty()
+	created = db.DateTimeProperty(auto_now_add=True)
 
 federated = {
     'Google'   : 'https://www.google.com/accounts/o8/id',
@@ -108,7 +108,19 @@ class ChoicePage(Handler):
 		user = users.get_current_user()
 		logout_url = users.create_logout_url(self.request.uri)
 		try:
+			#key = str(int(strftime('%d')))
+			#if len(BusData.all().fetch(limit=1)) < 1:
+                	#	bd = BusData(bus_key = key)
+                	#	bd.bus_data = json.dumps(routes_library)
+                	#	bd.put()
 			self.render("choicepage.html", user=user, new_providers=new_providers, logout_url=logout_url)
+
+			#xml = get_doc("new_cities.xml")
+			#locs = get_locations(xml)
+			#routes = generate_routes2(xml, locs)
+			#update_data2(routes, routes_library, mb_api, months)
+
+			#self.render("choicepage.html", user=user, new_providers=new_providers, logout_url=logout_url)
 		except:
 			logging.error("Home page render error")
 	
@@ -157,8 +169,6 @@ class UpdatesPage(Handler):
 	
 	def get(self):
 		bus_info = top_bus()
-		#data = self.generate_some_json({'St Louis, MO-Chicago, IL-2-26': ['600AM-100PM', '1200PM-530PM', '500PM-1050PM']})
-		data = self.generate_some_json(routes_library)
 		self.get_update()
 		name = users.get_current_user()
 		user = None
@@ -170,7 +180,13 @@ class UpdatesPage(Handler):
 		if self.format == 'json':
 			self.render_json([b.as_dict() for b in bus_info])
 		else:
-			self.render_all(update_type=update_type, url=url, user=user, bus_info=bus_info, data=data)
+			#data = update_data2(routes, routes_library, mb_api, months)
+			q = BusData.all().order('-created').fetch(1)
+			data = ''
+			for item in q:
+				data += item.bus_data
+			data_new = json.dumps(routes_library) 
+			self.render_all(update_type=update_type, url=url, user=user, bus_info=bus_info, data=data_new)
 			
 
 	def post(self):
@@ -282,6 +298,7 @@ response = ''
 class TimesChoices(Handler):
 		
 	def get(self):
+		
 	        global response
 		the_url = self.request.url
 		start_point = the_url.find('=') + 1
@@ -358,12 +375,85 @@ class TimesChoices(Handler):
 		#self.redirect('/updates/%s' % b.bus)
 
 
+class DataMain(webapp2.RequestHandler):
+        def get(self):
+                xml = get_doc("new_cities.xml")
+                locs = get_title_locations(xml)
+                routes = generate_routes2(xml, locs)
+                logging.info("cron started")
+                q = BusData.all().order('-created').fetch(1)
+    		curr_day = str(int(strftime('%d')))
+    		curr_m = str(int(strftime('%m')))
+    		if len(q) >= 1:
+        		db_day = ''
+        		db_data = ''
+        		for i in q:
+				db_day += i.bus_key
+            			db_data += i.bus_data
+        		if int(db_day) < int(curr_day):
+            			parsable_data = json.loads(db_data)
+            			for i in parsable_data.keys():
+                			sec_hyph = i.find('-', i.find('-')+1)
+                			third_hyph = i.find('-', sec_hyph + 1)
+                			this_month = i[sec_hyph + 1: third_hyph]
+                			this_day = i[third_hyph+1: ]
+                			if int(this_month) < int(curr_m):
+                    				del parsable_data[i]
+                			elif int(this_month) == int(curr_m):
+                    				if int(this_day) < int(curr_day):
+                        				del parsable_data[i]
+            			for title_c in routes:
+                			for item_c in routes[title_c]:
+                    				get_future_data(mb_api, title_c, item_c, int(curr_m), int(curr_day), months, parsable_data)
+            			logging.info("Routes Updated!!!")
+            			q = BusData.all().filter('bus_key=', db_day)
+            			BusData.delete(q)
+            			logging.info("old deleted")
+            			bd = BusData(bus_key = curr_day)
+            			bd.bus_data = json.dumps(parsable_data)
+            			bd.put()
+        		else:
+            			logging.info("No update")
+
+                logging.info("cron finished")
+
+
+
+class PlanTrip(Handler):
+	def get(self):
+		self.render("plan_trip.html")
+	
+	def post(self):
+		xml = get_doc("new_cities.xml")
+		locs = get_title_locations(xml)
+		routes = generate_routes2(xml, locs)
+		dep = self.request.get("departure")
+		end = self.request.get("end")
+		day = self.request.get("day")
+		month = str(int(strftime('%m')))
+		options = plan_trip(dep, end, routes)
+		options_links = {}
+		for i in options.keys():
+			options_links[i] = ''
+			for e in range(len(options[i])-1):
+				options_links[i] += "window.open('%s');" % mb_api.format(Buses[options[i][e]], Buses[options[i][e+1]], month, day, '2013')
+		
+		self.render("plan_trip.html", options=options, options_links=options_links)
+		
+
+
+
+
+
+
+
+
+
+
 app = webapp2.WSGIApplication([('/', ChoicePage),
 			       ('/updates(?:.json)?', UpdatesPage),
 			       ('/updates/.*', IndividualBus),
-			       ('/timeschoice', TimesChoices)], debug=True) 
-			       #('/updates/([a-zA-Z]{1}[0-9]+)(?:.json)?', IndividualBus)],
-			       #debug=True)
-
-
-
+			       ('/timeschoice', TimesChoices),
+			     # a cron job to keep our megabus data up-to-date
+			       ('/update_bus_data', DataMain),
+			       ('/plantrip', PlanTrip)], debug=True) 
