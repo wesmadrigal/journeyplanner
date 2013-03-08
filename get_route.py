@@ -128,7 +128,7 @@ def get_locations(cared_about, from_c):
     latest = 0
     for i in cared_about:
             for e in i:
-                    if from_c in e:
+                    if from_c in e.decode('utf-8'):
                             if len(city_indices) == 0:
                                     city_indices.append(cared_about.index(i))
                             else:
@@ -136,6 +136,7 @@ def get_locations(cared_about, from_c):
                                     if cared_about.index(i, latest+1) not in city_indices:
                                             city_indices.append(cared_about.index(i, latest+1))	
     return city_indices
+
 
 
 

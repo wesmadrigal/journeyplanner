@@ -8,14 +8,13 @@ from time import strftime
 from datetime import datetime
 import urllib2
 import logging
-#from update import DataMain
 from get_route import send_update_email
 from megabus_times_library import library as routes_library
 from get_route import make_or_get_day2, update_data, get_data_from_future
 from get_route import get_future_data2test, months
 from get_route import get_locations, get_cared_about, find_times2, get_doc, get_title_locations, generate_routes2, get_future_data, mb_api, update_data2
 from get_route import send_request_email
-from trip_planner import plan_trip
+from trip_planner import plan_trip, find_hours, generate_proper_routes
 from google.appengine.ext import db
 from google.appengine.api import users
 from google.appengine.api import memcache
@@ -431,14 +430,21 @@ class PlanTrip(Handler):
 		end = self.request.get("end")
 		day = self.request.get("day")
 		month = str(int(strftime('%m')))
-		options = plan_trip(dep, end, routes)
-		options_links = {}
-		for i in options.keys():
-			options_links[i] = ''
-			for e in range(len(options[i])-1):
-				options_links[i] += "window.open('%s');" % mb_api.format(Buses[options[i][e]], Buses[options[i][e+1]], month, day, '2013')
-		
-		self.render("plan_trip.html", options=options, options_links=options_links)
+		if dep != 'loading' and end != 'loading' and len(day) >= 1:
+			options = plan_trip(dep, end, routes)
+			diff_options = {}
+			for i in options.keys():
+				diff_options[i] = ''
+				for e in options[i]:
+					if options[i].index(e) != len(options[i])-1:
+						diff_options[i] += e + '  ------>  '
+					else:
+						diff_options[i] += e
+			options_links = generate_proper_routes(dep, end, day, routes)
+			self.render("plan_trip.html", options=diff_options, options_links=options_links)
+		else:
+			error = 'You must choose a departure city, arrival city, and a day of departure.'
+			self.render("plan_trip.html", error=error)
 		
 
 

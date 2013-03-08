@@ -23,10 +23,11 @@
 		
 </script>
 
-<p>Once you have chosen your trip, our services will direct you to where you can purchase the desired route.</p>
 {% endblock %}
 
 {% block body %}
+<body>
+<p id="welcome">Fill the below and then choose one of the options our options.</p>
 <div>
 <form method="POST">
 	<label>Departure:
@@ -46,6 +47,9 @@
 	</label>
 	<br>
 	<br>
+	<div class="error">
+	<p style="color:red">{{error}}</p>
+	</div>
 	<input type="submit" value="Generate options">
 </form>
 </div>
@@ -53,7 +57,7 @@
 <br>
 {% if options %}
 {% for i in options.keys() %}
-	<p>option {{i}}: {{options[i]}}</p>
+	<p><b>Option {{i}}:</b> {{options[i]}}</p>
 {% endfor %}
 {% endif %}
 

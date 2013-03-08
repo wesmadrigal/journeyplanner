@@ -38,6 +38,52 @@ def plan_trip(start, finish, routes):
                 return journey[start][finish]
 
 
+# algorithm utilizing some of the get_route algorithms to figure out the time for a trip
+
+def find_hours(cared_about, from_c):
+    locs = get_locations(cared_about, from_c)
+    region = cared_about[locs[0]:]
+    if len(locs) > 1:
+        region = cared_about[locs[0]:locs[1]]
+    trip_time = ''
+    for i in region:
+            for e in i:
+                    if 'hrs' and 'mins' in e:
+                            for f in e[0: e.find('hrs')]:
+                                    if f.isdigit():
+                                            trip_time += f
+                            trip_time += '.'
+                            for l in e[e.find('hrs')+1:]:
+                                    if l.isdigit():
+                                            trip_time += l
+    return trip_time
+
+
+# To utilize the tools above, we can combine them into an even better algorithm to give us 
+# all the link options for our users
+
+def generate_proper_routes(from_c, to_c, day, routes):
+    month = str(int(strftime('%m')))
+    year = str(int(strftime('%Y')))
+    trip_dict = plan_trip(from_c, to_c, routes)
+    formatted_apis = {}
+    for i in trip_dict.keys():
+        hours_so_far = 0
+        formatted_apis[i] = ''
+        for e in range(len(trip_dict[i])-1):
+            cared_about = get_cared_about(mb_api, trip_dict[i][e], trip_dict[i][e+1], day, month, year)
+            if hours_so_far < 15:
+                formatted_apis[i] += "window.open('%s');" % mb_api.format(Buses[trip_dict[i][e]], Buses[trip_dict[i][e+1]], month, day, year)
+                hours_so_far += float(find_hours(cared_about, trip_dict[i][e]))
+            else:
+                formatted_apis[i] += "window.open('%s');" % mb_api.format(Buses[trip_dict[i][e]], Buses[trip_dict[i][e+1]], month, str(int(day)+1), year)
+                hours_so_far += float(find_hours(cared_about, trip_dict[i][e]))
+    return formatted_apis
+
+
+
+
+
 
 def main():
 	url = "new_cities.xml"
