@@ -28,6 +28,7 @@
 {% block body %}
 <body>
 <p id="welcome">Fill the below and then choose one of the options our options.</p>
+<div id="homelink"><a href="/">Home Page</a></div>
 <div>
 <form method="POST">
 	<label>Departure:
@@ -66,7 +67,7 @@
 <div>
 <p><b>The selected option will open new tabs for all the trips required to get from your start city to final city on the selected day</b></p>
 {% for i in options_links.keys() %}
-	<a href="http://www.megabus.com" target="_blank" onclick="{{options_links[i]}}">Option {{i}} necessary trips</a>
+	<a href="http://us.megabus.com" target="_blank" onclick="{{options_links[i]}}">Option {{i}} necessary trips</a>
 <br><br><hr>
 {% endfor %}
 </div>

@@ -239,7 +239,7 @@ def get_future_data(mb_api, from_city, to_city, m, d, months, json_lib):
     #m = int(strftime('%m'))
     #d = int(strftime('%d'))
     y = strftime('%Y')
-    for i in range(d+1, d+3):
+    for i in range(d, d+2):
         if str(m) == '2':
             if i in months[1]:
                 cared_about = get_cared_about(mb_api, from_city, to_city, str(i), str(m), y)
@@ -267,7 +267,7 @@ def get_future_data(mb_api, from_city, to_city, m, d, months, json_lib):
             key = from_city + '-' + to_city + '-' + str(m+1) + '-' + str(d)
             val = {key: times}
             json_lib.update(val)
-    print "route finished"
+    return
 
   
 def get_future_data2test(mb_api, from_city, to_city, months, json_lib):

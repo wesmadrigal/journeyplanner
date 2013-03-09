@@ -102,24 +102,25 @@ for i in federated.keys():
 	new_providers[i] = users.create_login_url(federated_identity=federated[i])
 
 
+
+class MainPage(Handler):
+	def get(self):
+		user = users.get_current_user()
+		logout_url = users.create_logout_url(self.request.uri)
+		self.render("mainpage.html", user=user, new_providers = new_providers, logout_url=logout_url)
+
+
+
+
+
+
+
 class ChoicePage(Handler):
 	def get(self):
 		user = users.get_current_user()
 		logout_url = users.create_logout_url(self.request.uri)
 		try:
-			#key = str(int(strftime('%d')))
-			#if len(BusData.all().fetch(limit=1)) < 1:
-                	#	bd = BusData(bus_key = key)
-                	#	bd.bus_data = json.dumps(routes_library)
-                	#	bd.put()
 			self.render("choicepage.html", user=user, new_providers=new_providers, logout_url=logout_url)
-
-			#xml = get_doc("new_cities.xml")
-			#locs = get_locations(xml)
-			#routes = generate_routes2(xml, locs)
-			#update_data2(routes, routes_library, mb_api, months)
-
-			#self.render("choicepage.html", user=user, new_providers=new_providers, logout_url=logout_url)
 		except:
 			logging.error("Home page render error")
 	
@@ -452,14 +453,11 @@ class PlanTrip(Handler):
 
 
 
-
-
-
-
-app = webapp2.WSGIApplication([('/', ChoicePage),
+app = webapp2.WSGIApplication([('/', MainPage),
+			       ('/choicepage', ChoicePage),
 			       ('/updates(?:.json)?', UpdatesPage),
 			       ('/updates/.*', IndividualBus),
 			       ('/timeschoice', TimesChoices),
-			     # a cron job to keep our megabus data up-to-date
-			       ('/update_bus_data', DataMain),
-			       ('/plantrip', PlanTrip)], debug=True) 
+			       ('/plantrip', PlanTrip),
+			       ('/update_bus_data', DataMain)],
+			       debug=True)

@@ -37,68 +37,6 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
 	});});
 
 
-/*
-$(document).ready(function(){
-	$("button").click(function(){
-		$("#div1").load("static/xml/cities.xml", function(responseTxt, statusTxt, xhr){
-			if (statusTxt=="success")
-				alert("External content loaded successfully");
-			if (statusTxt=="error")
-				alert("Error: "+xhr.status+": "+xhr.statusText);
-		});
-	});
-});
-	
-
-
-
-//the better method
-function init(){
-	$("#arrival").hide();
-	loadXML("static/xml/cities.xml");
-	}
-	function loadXML(_xmlFile){
-	$.ajax({
-		url: _xmlFile,
-		success: setXML,
-		dataType: "xml",
-		type: "GET",
-	})
-	function setXML(_xml){
-		var _idx=0;
-		var curOption;
-		var curCity = $(_xml).find('menuitem');
-		$(curCity).each(function(i){
-			var city=$(this);
-			curOption=$('<option>'+city.children('titlecity').text()+'</option>')
-			curOption.data('city', city);
-			$(curOption).appendTo($('#departure'))
-			})
-		}
-	function setLocations(){
-		var curCity = $('#departure').children(':selected').data('city')
-		$('#arrivals').html(''); //reset arrivals list
-		var curArr = $(curCity).find('cityitem');
-		if (curArr.length > 1){
-			curArr.each(function(i){
-				var city = $(this);
-				if (i == 0){
-					curOption='<option>'+city.text()+'</option>';
-				}else{
-					curOption+='<option>'+lang.text()+'</option>'
-				}
-			});
-			$(curOption).appendTo($('#arrivals'));
-			$('#arrivals').show()
-		}else if (curCity==null){
-			$('#arrivals').hide();
-		}else{
-			$('#arrivals').hide();
-			alert("No arrivals!");
-		}
-	}
-
-*/
 </script>
 
 
@@ -135,7 +73,7 @@ function init(){
 <p id="welcome">Welcome to the {{update_type}} updates page guest</p>
 {% endif %}
 
-<p>In case you picked the wrong status:  <a href="/">switch status</a></p>
+<p>In case you picked the wrong status:  <a href="/choicepage">switch status</a></p>
 <br>
 <br>
 

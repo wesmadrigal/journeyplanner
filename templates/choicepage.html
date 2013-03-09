@@ -7,21 +7,10 @@
 {% else %}
 <p id="welcome">Welcome Guest</p>
 {% endif %}
+<a href="/">Home</a>
 {% endblock %}
 
 {% block body %}
-
-
-{% if not user %}
-
-<p>Choose your login provider of choice</p>
-<div class="providers">
-	{% for i in new_providers.keys() %}
-		<a href="{{new_providers[i]}}"><h3>{{i}}</h3></a>	
-	{% endfor %}
-</div>
-
-{% endif %}
 
 
 <div id="parent">

@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}
+<link href="/maps/documentation/javascript/examples/default.css" rel="stylesheet">
+{% if user %}
+<p id="home">Our services are here to make your journey as convenient as possible.  We thank you for choosing us {{user}}.</p>
+<br>
+<a href="{{logout_url}}"><b>Logout</b></a>
+{% else %}
+<p id="home">Our services are here to make your journey as convenient as possible.  We thank you for choosing us.</p>
+<br>
+<div>Choose your login affiliate:
+<br>
+{% for item in new_providers.keys() %}
+	<a href="{{new_providers[item]}}"><h3>{{item}}</h3></a>
+{% endfor %}
+
+{% endif %}
+{% endblock %}
+{% block body %}
+<body>
+<hr>
+<br><br><br>
+<br>
+<a href="/choicepage">Megabus Tracker</a><br>
+
+<br>
+<a href="/plantrip">Plan Trip</a><br>
+
+
+
+
+
+</body>
+{% endblock %}
+

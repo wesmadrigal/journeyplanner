@@ -72,7 +72,7 @@ def generate_proper_routes(from_c, to_c, day, routes):
         formatted_apis[i] = ''
         for e in range(len(trip_dict[i])-1):
             cared_about = get_cared_about(mb_api, trip_dict[i][e], trip_dict[i][e+1], day, month, year)
-            if hours_so_far < 15:
+            if hours_so_far < 12:
                 formatted_apis[i] += "window.open('%s');" % mb_api.format(Buses[trip_dict[i][e]], Buses[trip_dict[i][e+1]], month, day, year)
                 hours_so_far += float(find_hours(cared_about, trip_dict[i][e]))
             else:
