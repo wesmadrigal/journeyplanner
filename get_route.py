@@ -239,7 +239,7 @@ def get_future_data(mb_api, from_city, to_city, m, d, months, json_lib):
     #m = int(strftime('%m'))
     #d = int(strftime('%d'))
     y = strftime('%Y')
-    for i in range(d, d+2):
+    for i in range(d, d+1):
         if str(m) == '2':
             if i in months[1]:
                 cared_about = get_cared_about(mb_api, from_city, to_city, str(i), str(m), y)

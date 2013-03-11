@@ -169,8 +169,8 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
 	<hr>
 	{% endfor %}
 
-<form>
-	<input id="json" value="{{data}}">
+<form type="hidden">
+	<input id="json" type="hidden" value="{{data}}">
 </form>
 
 {% if update_type == "riding" %}

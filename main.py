@@ -14,7 +14,7 @@ from get_route import make_or_get_day2, update_data, get_data_from_future
 from get_route import get_future_data2test, months
 from get_route import get_locations, get_cared_about, find_times2, get_doc, get_title_locations, generate_routes2, get_future_data, mb_api, update_data2
 from get_route import send_request_email
-from trip_planner import plan_trip, find_hours, generate_proper_routes
+from trip_planner import plan_trip, find_hours, generate_proper_routes, make_displayable_options
 from google.appengine.ext import db
 from google.appengine.api import users
 from google.appengine.api import memcache
@@ -432,17 +432,8 @@ class PlanTrip(Handler):
 		day = self.request.get("day")
 		month = str(int(strftime('%m')))
 		if dep != 'loading' and end != 'loading' and len(day) >= 1:
-			options = plan_trip(dep, end, routes)
-			diff_options = {}
-			for i in options.keys():
-				diff_options[i] = ''
-				for e in options[i]:
-					if options[i].index(e) != len(options[i])-1:
-						diff_options[i] += e + '  ------>  '
-					else:
-						diff_options[i] += e
-			options_links = generate_proper_routes(dep, end, day, routes)
-			self.render("plan_trip.html", options=diff_options, options_links=options_links)
+			options_links_new = make_displayable_options(dep, end, day, routes)	
+			self.render("plan_trip.html", options_links_new = options_links_new)
 		else:
 			error = 'You must choose a departure city, arrival city, and a day of departure.'
 			self.render("plan_trip.html", error=error)

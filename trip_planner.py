@@ -83,6 +83,31 @@ def generate_proper_routes(from_c, to_c, day, routes):
 
 
 
+def make_displayable_options(from_c, to_c, day, routes):
+    month = str(int(strftime('%m')))
+    year = str(int(strftime('%Y')))
+    trip_dict = plan_trip(from_c, to_c, routes)
+    link_trip_dict = {}
+    for i in trip_dict.keys():
+        key = ''
+        hours_so_far = 0
+        for e in trip_dict[i]:
+            if trip_dict[i].index(e) != len(trip_dict[i])-1:
+                key += e + ' -----> '
+            else:
+                key += e
+        link_trip_dict[key] = ''
+        for j in range(len(trip_dict[i])-1):
+            cared_about = get_cared_about(mb_api, trip_dict[i][j], trip_dict[i][j+1], day, month, year)
+            if hours_so_far < 12:
+                link_trip_dict[key] += "window.open('%s');" % mb_api.format(Buses[trip_dict[i][j]], Buses[trip_dict[i][j+1]], month, day, year)
+                hours_so_far += float(find_hours(cared_about, trip_dict[i][j]))
+            else:
+                link_trip_dict[key] += "window.open('%s');" % mb_api.format(Buses[trip_dict[i][j]], Buses[trip_dict[i][j+1]], month, str(int(day)+1), year)
+                hours_so_far += float(find_hours(cared_about, trip_dict[i][j]))
+    return link_trip_dict
+
+
 
 
 def main():

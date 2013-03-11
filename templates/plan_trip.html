@@ -27,53 +27,52 @@
 
 {% block body %}
 <body>
-<p id="welcome">Fill the below and then choose one of the options our options.</p>
-<div id="homelink"><a href="/">Home Page</a></div>
-<div>
-<form method="POST">
-	<label>Departure:
-	<select name="departure" id="departure">
-		<option>loading</option>
-	</select>
-	</label>
-	<br>
-	<label>Ending Destination:
-	<select name="end" id="end">
-		<option>loading</option>
-	</select>
-	</label>
-	<br>
-	<label>Day of this month:
-	<input type="text" name="day" id="day">
-	</label>
-	<br>
-	<br>
-	<div class="error">
-	<p style="color:red">{{error}}</p>
-	</div>
-	<input type="submit" value="Generate options">
-</form>
+<div class="welcome">
+	<p id="welcome">Fill the below and then choose one of our options.</p>
+	<a href="/">Home Page</a>
+</div>
+<br><br>
+<div class="mainform">
+	<form method="POST">
+		<label>Departure:
+		<select name="departure" id="departure">
+			<option>loading</option>
+		</select>
+		</label>
+		<br>
+		<label>Ending Destination:
+		<select name="end" id="end">
+			<option>loading</option>
+		</select>
+		</label>
+		<br>
+		<label>Day of this month:
+		<input type="text" name="day" id="day">
+		</label>
+		<br>
+		<br>
+		<div class="error">
+		<p style="color:red">{{error}}</p>
+		</div>
+		<input type="submit" value="Generate options">
+	</form>
 </div>
 <br>
-<br>
-{% if options %}
-{% for i in options.keys() %}
-	<p><b>Option {{i}}:</b> {{options[i]}}</p>
-{% endfor %}
-{% endif %}
+{% if options_links_new %}
+<div class="options">
+	<p id="optionmsg"><b>The selected option will open tabs for the route selected in the order displayed</b></p>
 
-<br>
-{% if options_links %}
-<div>
-<p><b>The selected option will open new tabs for all the trips required to get from your start city to final city on the selected day</b></p>
-{% for i in options_links.keys() %}
-	<a href="http://us.megabus.com" target="_blank" onclick="{{options_links[i]}}">Option {{i}} necessary trips</a>
-<br><br><hr>
-{% endfor %}
+	
+	{% for i in options_links_new.keys() %}
+		<br>
+		<br>
+		<a href="http://us.megabus.com" target="_blank" onclick="{{options_links_new[i]}}">{{i}}</a>	
+	<br><br>
+		
+	{% endfor %}
 </div>
 {% endif %}
 
 
 {% endblock %}
 </body>
-</html>
