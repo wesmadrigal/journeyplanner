@@ -73,7 +73,7 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
 <p id="welcome">Welcome to the {{update_type}} updates page guest</p>
 {% endif %}
 
-<p>In case you picked the wrong status:  <a href="/choicepage">switch status</a></p>
+<p>In case you picked the wrong status:  <a class="button-link" href="/choicepage">switch status</a></p>
 <br>
 <br>
 
@@ -128,7 +128,7 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
 		<br>
 		<div class="error" style="color:red">{{error}}</div>
 		<br>
-		<input type="submit" value="Update">
+		<input type="submit" value="Update" onclick="this.disabled=true">
 	</form>
 	{% else %}
 	<form title="buspost" method="GET" action="/timeschoice">
@@ -143,7 +143,7 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
 		<br>
 		<div class="error" style="color:red">{{error}}</div>
 		<br>
-		<input type="submit" value="Find buses arriving in your city">
+		<input type="submit" value="Find buses arriving in your city" onclick="this.disabled=true">
 	</form>
 	{% endif %}
 	<br>

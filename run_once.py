@@ -22,14 +22,15 @@ def main():
 		d = i[third_hyph+1:]
 		if not m or not d:
 			del new_lib[i]
-		if int(m) < int(month):
+		elif int(m) < int(month):
 			del new_lib[i]
 		elif int(m) == int(month):
 			if int(d) < int(today):
 				del new_lib[i]
-	for from_c in routes.keys():
-		for to_c in routes[from_c]:
-			get_future_data(mb_api, from_c, to_c, month, int(today)+1, months, new_lib)
+	#for from_c in routes.keys():
+	#	for to_c in routes[from_c]:
+	#		get_future_data(mb_api, from_c, to_c, month, int(today)+4, months, new_lib)
+	os.remove("megabus_times_library.py")
 	f = open("megabus_times_library.py", "w")
 	f.write("library = %s" % new_lib)
 	print 'Finished updating megabus_times_library'

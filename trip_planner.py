@@ -198,22 +198,28 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
     #trips = sorted([int(i) for i in trip_dict.keys()])
     trip_dict_keys = sorted([int(i) for i in trip_dict.keys()])
     for trip_dict_key in trip_dict_keys:
-        response += '<p style="font-size:25px; font-weight:bold">Option %s</p><br>' % str(trip_dict_key)
+        response += '<a href="http://us.megabus.com" target="_blank" onclick="{0}"><b>Option {1}</b></a>'.format(link_trip_dict[str(trip_dict_key)], str(trip_dict_key))
         response += '<p>Total on-bus hours: <b>%s</b></p>' % trip_hours[str(trip_dict_key)]
 	# to sort the legs
 	legs = sorted([int(i[i.find(' ')+1:]) for i in trip_dict[str(trip_dict_key)].keys()])
 	for leg in legs:
 	    the_leg = 'leg ' + str(leg)
-            response += '<tr>%s</tr><br>' % the_leg
+            response += '<p%s</p><br>' % the_leg
             for route in trip_dict[str(trip_dict_key)][the_leg].keys():
-                response += '<tr><b>%s</b></tr>' % route
+		first = route.find('-')
+		second = route.find('-', first+1)
+		from_c = route[0:first]
+		to_c = route[first+1:second]
+		new_route = from_c + '  ----->  ' + to_c + ' on %s' % route[second+1:] 
+                response += '<p><b>%s</b></p>' % new_route
                 response += '<ul>'
                 for time in trip_dict[str(trip_dict_key)][the_leg][route]:
-                    response += '<li>%s</li>' % time
+                    response += '<li style="border:10px; margin:10px;">%s</li>' % time
                 response += '</ul>'
             response += '<br><br>'
-        response += '<a href="http://us.megabus.com" target="_blank" onclick="%s">Click for official site links</a><br><hr>' % link_trip_dict[str(trip_dict_key)]
-    response += '</div>'
+        #response += '<a href="http://us.megabus.com" target="_blank" onclick="%s">Click for official site links</a><br><hr>' % link_trip_dict[str(trip_dict_key)]
+    	response += '<br><hr>'
+	response += '</div>'
     return response
 
 

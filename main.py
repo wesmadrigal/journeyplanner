@@ -181,12 +181,8 @@ class UpdatesPage(Handler):
 			self.render_json([b.as_dict() for b in bus_info])
 		else:
 			#data = update_data2(routes, routes_library, mb_api, months)
-			q = BusData.all().order('-created').fetch(1)
-			data = ''
-			for item in q:
-				data += item.bus_data
-			data_new = json.dumps(routes_library) 
-			self.render_all(update_type=update_type, url=url, user=user, bus_info=bus_info, data=data_new)
+			data = json.dumps(routes_library) 
+			self.render_all(update_type=update_type, url=url, user=user, bus_info=bus_info, data=data)
 			
 
 	def post(self):
