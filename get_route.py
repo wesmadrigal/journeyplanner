@@ -149,7 +149,7 @@ def get_cared_about(mb_api, from_city, to_city, d, m, y):
     stop = 0
     for i in new_data:
             for e in i:
-                    if 'Departs' in e:
+                    if 'JourneyResylts_OutboundList_GridViewResults_ctl00_row_item' in e:
                             start = new_data.index(i)
                     elif 'footer' in e:
                             stop = new_data.index(i)
@@ -324,30 +324,24 @@ def make_or_get_day2():
 
 
 
-def update_data(data_dict, update=False):
+def update_data(data_dict):
     today = int(strftime('%d'))
     month = int(strftime('%m'))
-    if update:
-            # iterate through and find obsolete keys and delete them
-            for i in data_dict.keys():
-                curr_key = i
-                star = curr_key.find('-', curr_key.find('-')+1)
-                third_hyph = curr_key.find('-', star+1)
-                curr_key_month = int(curr_key[star+1:third_hyph])
-                day = int(curr_key[third_hyph+1:])
-                if curr_key_month < month:
-                    del data_dict[i]
-                elif curr_key_month == month:
-                    if today > day:
-                        del data_dict[i]
-            # go through our routes data set and get the new day + 2 weeks trip times and
-            # add them to our huge data dictionary of trips
-            for from_c in routes:
-                for to_c in from_c:
-                    get_data_from_future(mb_api, from_c, to_c, month, today+5, months, data_dict)
-            
-                    
-    return data
+    for i in data_dict.keys():
+    	curr_key = i
+        star = curr_key.find('-', curr_key.find('-')+1)
+        third_hyph = curr_key.find('-', star+1)
+        curr_key_month = int(curr_key[star+1:third_hyph])
+        day = int(curr_key[third_hyph+1:])
+        if curr_key_month < month:
+        	del data_dict[i]
+        elif curr_key_month == month:
+        	if today > day:
+                	del data_dict[i]
+        for from_c in routes:
+        	for to_c in from_c:
+                    get_data_from_future(mb_api, from_c, to_c, month, today+1, months, data_dict) 
+    return data_dict
 
 
 def send_update_email(user_email):

@@ -58,19 +58,11 @@
 	</form>
 </div>
 <br>
-{% if options_links_new %}
+{% if response %}
 <div class="options">
-	<p id="optionmsg"><b>The selected option will open tabs for the route selected in the order displayed</b></p>
+{{response}}
+</div>	
 
-	
-	{% for i in options_links_new.keys() %}
-		<br>
-		<br>
-		<a href="http://us.megabus.com" target="_blank" onclick="{{options_links_new[i]}}">{{i}}</a>	
-	<br><br>
-		
-	{% endfor %}
-</div>
 {% endif %}
 
 

@@ -14,14 +14,14 @@ from get_route import make_or_get_day2, update_data, get_data_from_future
 from get_route import get_future_data2test, months
 from get_route import get_locations, get_cared_about, find_times2, get_doc, get_title_locations, generate_routes2, get_future_data, mb_api, update_data2
 from get_route import send_request_email
-from trip_planner import plan_trip, find_hours, generate_proper_routes, make_displayable_options
+from trip_planner import plan_trip, find_hours, generate_proper_routes, make_displayable_options2, make_formatted, generate_response
 from google.appengine.ext import db
 from google.appengine.api import users
 from google.appengine.api import memcache
 from google.appengine.api import mail
 
 template_dir = os.path.join(os.path.dirname(__file__), 'templates')
-jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=True)
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), autoescape=False)
 
 
 Buses = {'Des Moines, IA': '106', 'Milwaukee, WI': '121', 'Frederick, MD': '109', 'Minnesota': '23', 'Illinois': '13', 'Chattanooga, TN': '290', 'Indiana': '14', 'Louisiana': '18', 'Texas': '43', 'Giddings, TX': '401', 'Galveston, TX': '325', 'Dallas/Fort Worth, TX': '317', 'Knoxville, TN': '118', 'New Brunswick, NJ': '305', 'Connecticut': '7', 'Rochester, NY': '134', 'Atlanta, GA': '289', 'West Virginia': '48', 'Texarkana, AR': '407', 'La Grange, TX': '333', 'Ridgewood, NJ': '133', 'Kansas City, MO': '117', 'El Paso, TX': '397', 'Harrisburg, PA': '111', 'Big Spring, TX': '393', 'East Lansing, MI': '330', 'Toronto, ON': '145', 'Missouri': '25', 'South Bend, IN': '368', 'Fairhaven, MA': '316', 'Kenton, OH': '362', 'Carthage, TX': '395', 'New Jersey': '30', 'Valparaiso, IN': '376', 'Gainesville, FL': '296', 'Iowa City, IA': '116', 'Lufkin, TX': '404', 'Houston, TX': '318', 'San Antonio, TX': '321', 'Eagle Pass, TX': '327', 'Shreveport, LA': '332', 'Maryland': '20', 'Oklahoma City, OK': '323', 'Wisconsin': '49', 'Syracuse, NY': '139', 'Michigan': '22', 'Del Rio, TX': '328', 'New York': '32', 'Massachusetts': '21', 'Mobile, AL': '294', 'Richmond, IN': '371', 'Boston, MA': '94', 'Florida': '10', 'Rhode Island': '39', 'Sparks, NV': '419', 'Memphis, TN': '120', 'Livingston, TX': '402', 'Ohio': '35', 'State College, PA': '137', 'Burlington, VT': '96', 'North Carolina': '33', 'Nashville, TN': '291', 'Athens, GA': '302', 'District of Columbia': '9', 'Birmingham, AL': '292', 'Van Wert, OH': '364', 'Elkhart, IN': '367', 'Maine': '19', 'Christiansburg, VA': '101', 'Ontario': '51', 'Detroit, MI': '107', 'Norman, OK': '322', 'Oklahoma': '36', 'Delaware': '8', 'Champaign, IL': '98', 'Madison, U of Wisc, WI': '300', 'La Marque, TX': '337', 'Arkansas': '4', 'Humble, TX': '334', 'New Haven, CT': '122', 'Secaucus, NJ': '135', 'Indianapolis, IN': '115', 'Newark, DE': '389', 'Lima, OH': '363', 'Sacramento, CA': '415', 'Durham, NC': '131', 'Midland, TX': '405', 'Pittsburgh, PA': '128', 'Washington, DC': '142', 'California': '5', 'Uvalde, TX': '326', 'Providence, RI': '130', 'Georgia': '11', 'Columbia City, IN': '373', 'San Jose, CA': '412', 'Pennsylvania': '38', 'San Francisco, CA': '414', 'Toledo, OH': '140', 'Montgomery, AL': '293', 'Hampton, VA': '110', 'Philadelphia, PA': '127', 'Nacogdoches, TX': '406', 'Riverside, CA': '416', 'Louisville, KY': '298', 'Buffalo Airport, NY': '273', 'Little Rock, AR': '324', 'Ft. Wayne, IN': '365', 'Columbus, OH': '105', 'Dayton-Trotwood, OH': '370', 'Hartford, CT': '112', 'Cincinnati, OH': '102', 'Storrs, CT': '138', 'Buffalo, NY': '95', 'Brenham, TX': '335', 'Nevada': '28', 'Ann Arbor, MI': '91', 'Omaha, NE': '126', 'Cleveland, OH': '103', 'Charlotte, NC': '99', 'Madison, WI': '119', 'Princeton, NJ': '304', 'St Louis, MO': '136', 'Springfield, MO': '411', 'New York, NY': '123', 'Lubbock, TX': '403', 'San Angelo, TX': '329', 'Richmond, VA': '132', 'Baltimore, MD': '143', 'Albany, NY': '89', 'Minneapolis, MN': '144', 'Virginia': '46', 'Las Vegas, NV': '417', 'Binghamton, NY': '93', 'Oakland, CA': '413', 'Los Angeles, CA': '390', 'Austin, TX': '320', 'Vermont': '45', 'Grand Rapids, MI': '331', 'Warsaw, IN': '374', 'Columbia, MO': '104', 'Kentucky': '17', 'Morgantown, WV': '299', 'Nebraska': '27', 'New Orleans, LA': '303', 'Iowa': '15', 'Alabama': '53', 'Angola, IN': '366', 'Prairie View, TX': '336', 'Abilene, TX': '391', 'Chicago, IL': '100', 'Plymouth, IN': '375', 'Jacksonville, FL': '295', 'Tennessee': '42', 'Gary, IN': '369', 'Amherst, MA': '90', 'Portland, ME': '129', 'Muncie, IN': '372', 'Orlando, FL': '297', 'Saratoga Springs, NY': '301'}
@@ -298,7 +298,6 @@ response = ''
 class TimesChoices(Handler):
 		
 	def get(self):
-		
 	        global response
 		the_url = self.request.url
 		start_point = the_url.find('=') + 1
@@ -318,14 +317,18 @@ class TimesChoices(Handler):
 			cur_d = i[i.find('-',sec+1)+1: ]
 			if decoded_city == city and day == cur_d and month == cur_m:
 				keys.append(i)
+		response = ''
 		for route in keys:
 			#response += '<div><p name="route">' + route + '</p><ul>/n'
 			response += '<div><input type="radio" name="route" value="%s"' % route + '><b>%s</b><ul>' % route
 			for time in routes_library[route]:
-				response += '<li><input type="submit" name="time" value="%s"' % time + '></li>'
+				arrival_time = 'Arriving at ' + time[time.find('-')+1:]
+				#response += '<li><input type="submit" name="time" value="%s"' % time + '>%s</li>'
+				response += '<li><button name="time" value="%s"' % time + '>%s</button></li>' % arrival_time
 			response += '</ul></div>'
-			
+		
 		self.render("times_choice.html", the_response=response)
+	
 		
 	def post(self):
 		route = self.request.get("route")	
@@ -431,15 +434,23 @@ class PlanTrip(Handler):
 		end = self.request.get("end")
 		day = self.request.get("day")
 		month = str(int(strftime('%m')))
+#		if dep != 'loading' and end != 'loading' and len(day) >= 1:
+#			options_links_new, hours_dict = make_displayable_options2(dep, end, day, routes)
+#			trip = plan_trip(dep, end, routes)
+#			route_link_display = make_trip_buttons_dict(trip)
+#				
+#			self.render("plan_trip.html", options_links_new = options_links_new, hours_dict = hours_dict)
+
 		if dep != 'loading' and end != 'loading' and len(day) >= 1:
-			options_links_new = make_displayable_options(dep, end, day, routes)	
-			self.render("plan_trip.html", options_links_new = options_links_new)
+			trip = plan_trip(dep, end, routes)
+			trip_options, trip_times, trip_links = make_formatted(trip, month, day)
+			response = generate_response(trip_options, trip_times, trip_links)
+			self.render("plan_trip.html", response=response)
+			
 		else:
 			error = 'You must choose a departure city, arrival city, and a day of departure.'
 			self.render("plan_trip.html", error=error)
 		
-
-
 
 
 
