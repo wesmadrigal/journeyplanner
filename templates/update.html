@@ -154,15 +154,16 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
 	{% for b in bus_info %}
 
 	<div class="bus_stuff">
-		<div style="font-weight:bold" class="bus-user">{{b.user}}</div>
-		<div class="bus-num"><a href="{{url}}{{b.bus}}">{{b.bus}}</a></div>
+		<div class="bus-user" style="font-family: Arial Black, Gadget, sans-serif;">{{b.user}}</div>
 		<br>
+		<div class="bus-num"><a href="{{url}}{{b.bus}}">{{b.bus}}</a></div>
+		
 		{% if b.latitude %}
-		<div class="entry"><p>Delay time: <b>{{b.entry}}</b></p></div>
+		<div class="entry" style="color:#808080"><p>Delay time: <b>{{b.entry}}</b></p></div>
 		{% else %}
-		<div class="entry"><p>{{b.entry}}</p></div>
+		<div class="entry" style="color:#808080"><p>{{b.entry}}</p></div>
 		{% endif %}
-		<div class="created"></p>Posted at <b>{{b.created}}</b></p></div>
+		<div class="created"><p>Posted at <b>{{b.created}}</b></p></div>
 	</div>
 	<br>
 	<br>

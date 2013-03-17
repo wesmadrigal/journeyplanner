@@ -198,7 +198,7 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
     #trips = sorted([int(i) for i in trip_dict.keys()])
     trip_dict_keys = sorted([int(i) for i in trip_dict.keys()])
     for trip_dict_key in trip_dict_keys:
-        response += '<a href="http://us.megabus.com" target="_blank" onclick="{0}"><b>Option {1}</b></a>'.format(link_trip_dict[str(trip_dict_key)], str(trip_dict_key))
+        response += '<a class="option-button" href="http://us.megabus.com" target="_blank" onclick="{0}"><b>Option {1}</b></a>'.format(link_trip_dict[str(trip_dict_key)], str(trip_dict_key))
         response += '<p>Total on-bus hours: <b>%s</b></p>' % trip_hours[str(trip_dict_key)]
 	# to sort the legs
 	legs = sorted([int(i[i.find(' ')+1:]) for i in trip_dict[str(trip_dict_key)].keys()])

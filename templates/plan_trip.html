@@ -29,7 +29,7 @@
 <body>
 <div class="welcome">
 	<p id="welcome">Fill the below and then choose one of our options.</p>
-	<a class="button-link" href="/">Home Page</a>
+	<a class="button-link" href="/">Home</a>
 </div>
 <br><br>
 <div class="mainform">
@@ -58,12 +58,14 @@
 	</form>
 </div>
 <br>
+{% autoescape false %}
 {% if response %}
 <div class="options">
 {{response}}
 </div>	
 
 {% endif %}
+{% endautoescape %}
 
 
 {% endblock %}

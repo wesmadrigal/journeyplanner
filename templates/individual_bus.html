@@ -4,7 +4,7 @@
 
 <p id="welcome">Bus {{bus}} updates</p>
 <br>
-<a href='/updates'>Updates Page</a>
+<a class="button-link" href='/updates'>Updates Page</a>
 {% endblock %}
 
 {% block body %}
@@ -15,12 +15,14 @@
 	{% for update in this_bus %}
 <div class="bus_stuff">
 	{% if update.latitude %}
-		<div style="font-weight:bold">{{update.user}}</div>
-		<div>{{update.bus}}</div>
-		<pre>{{update.entry}}</pre>
+		<div style="font-family: Arial Black, Gadget, sans-serif;">{{update.user}}</div>
+		<br>
+		<div style="font-family: Arial Black, Gadget, sans-serif; font-weight:bold;">{{update.bus}}</div>
+		<br>
+		<div style="color:#808080;">Delay Time: <b>{{update.entry}}</b></div>
 		<pre>Coordinates: {{update.latitude}} , {{update.longitude}}</pre>
 		<a href="{{update.user_api_link}}"><img class="map-holder" src="{{update.user_map}}"></a>
-		<pre>{{update.created}}</pre>
+		<div style="font-weight:bold;">{{update.created}}</div>
 
 <br>
 <hr>
@@ -28,10 +30,12 @@
 <br>
 	{% else %}
 
-		<div style="font-weight:bold">{{update.user}}</div>
-                <div>{{update.bus}}</div>
-                <pre>{{update.entry}}</pre>
-                <pre>{{update.created}}</pre>
+		<div style="font-family: Arial Black, Gadget, sans-serif;">{{update.user}}</div>
+		<br>
+                <div style="font-family: Arial Black, Gadget, sans-serif; font-weight:bold;">{{update.bus}}</div>
+		<br>
+                <div style="color:#808080;">{{update.entry}}</div>
+                <div style="font-weight:bold;">{{update.created}}</div>
 
 <br>
 <hr>
