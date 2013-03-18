@@ -453,6 +453,10 @@ class PlanTrip(Handler):
 		
 
 
+class AboutMe(Handler):
+	def get(self):
+		self.render("aboutme.html")
+
 
 
 app = webapp2.WSGIApplication([('/', MainPage),
@@ -462,5 +466,6 @@ app = webapp2.WSGIApplication([('/', MainPage),
 			       ('/updates/.*', IndividualBus),
 			       ('/timeschoice', TimesChoices),
 			       ('/plantrip', PlanTrip),
-			       ('/update_bus_data', DataMain)],
+			       ('/update_bus_data', DataMain),
+			       ('/aboutme', AboutMe)],
 			       debug=True)
