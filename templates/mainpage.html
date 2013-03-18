@@ -1,21 +1,21 @@
 {% extends "layout.html" %}
 {% block title %}
 <link href="/maps/documentation/javascript/examples/default.css" rel="stylesheet">
-<div class="welcome">
-	{% if user %}
-	<p id="home">Our services are here to make your journey as convenient as possible.  We thank you for choosing us {{user}}.</p>
-		<br>
-	<a href="{{logout_url}}"><b>Logout</b></a>
-	{% else %}
-	<p id="home">Our services are here to make your journey as convenient as possible.  We thank you for choosing us.</p>
-		<br>
-	<div class="login">Choose your login affiliate:
-		<br>
-	{% for item in new_providers.keys() %}
-		<a href="{{new_providers[item]}}"><h3>{{item}}</h3></a>
-	{% endfor %}
 
-	{% endif %}
+
+
+<div class="logging">
+        {% if user %}
+        <a href="{{logout_url}}"><b>Logout</b></a>
+        {% else %}
+        <a href="/login"><b>Login</b></a>
+        {% endif %}
+</div>
+
+
+
+<div class="welcome">
+	<p>Our services are here to make your journey as convenient as possible.</p>
 </div>
 {% endblock %}
 {% block body %}
@@ -37,10 +37,10 @@
 
 <section id="bookmark">
   <h2>Like it? Share it</h2>
-  <p class="twitter"><a href="https://twitter.com/intent/tweet?original_referer=THE-CURRENT-URL&amp;source=tweetbutton&amp;text=THE+TITLE+OF+THE+PAGE&amp;url=THE-CURRENT-URL&amp;via=OUR-TWITTER-ACCOUNT"><img src="/i/button-twitter.png" alt="Tweet"/></a></p>
-  <p class="facebook"><a href="http://www.facebook.com/sharer.php?u=THE-CURRENT-URL"><img src="/i/button-facebook.png" alt="Share on Facebook"/></a></p>
-  <p class="linkedin"><a href="https://www.linkedin.com/cws/share?url=THE-CURRENT-URL&amp;original_referer=THE-CURRENT-URL"><img src="/i/button-linkedin.png" alt="Share on LinkedIn"/></a></p>
-  <p class="google_plus"><a href="https://plus.google.com/share?url=THE-CURRENT-URL"><img src="/i/button-googleplus.png" alt="Share on Google Plus"/></a></p>
+  <p class="twitter"><a class="zocial twitter" href="https://twitter.com/intent/tweet?original_referer=https://www.megabusfinder.appspot.com&amp;source=tweetbutton&amp;text=Megabus+Travel+Aid&amp;url=http://www.megabusfinder.appspot.com&amp;via=YoungMadMan1"><img src="/i/button-twitter.png" alt="Tweet"/></a></p>
+  <p class="facebook"><a href="http://www.facebook.com/sharer.php?u=https://www.megabusfinder.appspot.com"><img src="/i/button-facebook.png" alt="Share on Facebook"/></a></p>
+  <p class="linkedin"><a href="https://www.linkedin.com/cws/share?url=https://www.megabusfinder.appspot.com&amp;original_referer=https://www.megabusfinder.appspot.com"><img src="/i/button-linkedin.png" alt="Share on LinkedIn"/></a></p>
+  <p class="google_plus"><a href="https://plus.google.com/share?url=https://www.megabusfinder.appspot.com&amp;text=Megabus+Travel+Aid"><img src="/i/button-googleplus.png" alt="Share on Google Plus"/></a></p>
 </section>
 
 

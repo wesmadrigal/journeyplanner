@@ -2,12 +2,19 @@
 {% extends "layout.html" %}
 
 {% block title %}
+
+<div class="logging">
+	{% if user %}
+	<a href="{{logout_url}}">Logout</a>
+	{% else %}
+	<h2><a href="/login">Login</a></h2>
+	{% endif %}
+</div>
 {% if user %}
-<p id="welcome">Welcome {{user}}</p><pre><h2><a href="{{logout_url}}">Logout</a></h2></pre>
+<p id="welcome">Welcome {{user}}</p>
 {% else %}
 <p id="welcome">Welcome Guest</p>
 {% endif %}
-<a class="button-link" href="/">Home</a>
 {% endblock %}
 
 {% block body %}

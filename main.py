@@ -59,9 +59,7 @@ class Handler(webapp2.RequestHandler):
 			self.format = 'json'
 		else:
 			self.format = 'html'
-
-
-
+	
 
 
 class BusUpdates(db.Model):
@@ -107,9 +105,15 @@ class MainPage(Handler):
 	def get(self):
 		user = users.get_current_user()
 		logout_url = users.create_logout_url(self.request.uri)
-		self.render("mainpage.html", user=user, new_providers = new_providers, logout_url=logout_url)
+		self.render("mainpage.html", user=user, logout_url=logout_url)
 
 
+class LoginPage(Handler):
+        def get(self):
+                user = users.get_current_user()
+                if user:
+                        self.redirect('/')
+                self.render("loginpage.html", new_providers = new_providers)
 
 
 
@@ -120,7 +124,7 @@ class ChoicePage(Handler):
 		user = users.get_current_user()
 		logout_url = users.create_logout_url(self.request.uri)
 		try:
-			self.render("choicepage.html", user=user, new_providers=new_providers, logout_url=logout_url)
+			self.render("choicepage.html", user=user, logout_url=logout_url)
 		except:
 			logging.error("Home page render error")
 	
@@ -452,6 +456,7 @@ class PlanTrip(Handler):
 
 
 app = webapp2.WSGIApplication([('/', MainPage),
+			       ('/login', LoginPage),
 			       ('/choicepage', ChoicePage),
 			       ('/updates(?:.json)?', UpdatesPage),
 			       ('/updates/.*', IndividualBus),
