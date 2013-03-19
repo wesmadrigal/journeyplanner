@@ -2,18 +2,26 @@
 <html>
 
 <head>
+	<link rel="stylesheet" type="text/css" href="/static/stylesheets/logstyle.css">
 	<title>Megabus Aid Login</title>
 </head>
 
 <body>
 
-<p>With our Federated Login system you don't need to create an account with us, simply use one of your already created accounts with an affiliate provided.</p>
+<p id="federated">With our Federated Login system you don't need to create an account with us, simply use one of your pre-existing accounts with an affiliate provided.</p>
 	<div id="logins">
 		{% for item in new_providers.keys() %}
-		<a href="{{new_providers[item]}}">{{item}}</a>
+		
+		<h1><a href="{{new_providers[item]}}"><b>{{item}}</b></a></h1>
 		<br>
+		
+		<!--
+		<a href="{{new_providers[item]}}"><img src="{{providers_images[item]}}"></a>
+		<br>
+		/!-->
 		{% endfor %}
-	</div>
+
+		<img src="{{providers_images['AOL']}}"><a href="{{new_providers['AOL']}}"></a></img>
 
 </body>
 

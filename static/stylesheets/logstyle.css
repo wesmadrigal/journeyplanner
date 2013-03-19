@@ -1,0 +1,19 @@
+
+
+body	{
+	background: #F0F8FF;
+	}
+#federated	{
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: 25px;
+	width: 400px;
+	margin-top:50px;
+	}
+#logins
+	{
+	margin-top: 100px;
+	margin-left: 200px;
+	margin-bottom: 200px;
+	margin-right: 200px;
+	}

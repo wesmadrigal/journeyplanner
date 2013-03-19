@@ -1,7 +1,20 @@
 {% extends "layout.html" %}
+{% block links %}
+<div class="mainlinks">
+        <a class="mainlink-button" href="/">Home</a>
+        <a class="mainlink-button" href="/aboutme">About Me</a>
+        <a class="mainlink-button" href="/plantrip">Trip Planner</a>
+        <a class="mainlink-button" href="/choicepage">Riding or Waiting - Bus Tracker</a>
+</div>
+{% endblock %}
 {% block title %}
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-<script>
+
+<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js"></script>
+<script>/*
+	The select method
+
 	$(document).ready(function(){
 		var departure = $('#departure');
 		var end = $('#end');
@@ -20,7 +33,49 @@
 		}
 	});
 	});
+	*/
+
+	$(document).ready(function(){
+		var myArr = new Array();
+		$.ajax({
+			type : "GET",
+			url : "static/xml/new_cities.xml",
+			dataType : "xml",
+			success : parseXml,
+			complete : doAuto,
+			error : function(){
+				alert("Couldn't find XML");
+				}
+			});
+		//function finds elements named menuitem, finds that menuitems
+		//titlecity and adds that titlecity to the myArr array object
+		function parseXml(xml){
+			$(xml).find('menuitem').each(function(){
+				var val = $(this).find('titlecity').text();
+				myArr.push(val);
+			});
+		}	
 		
+	
+		function doAuto(){
+			$("input#start").autocomplete({
+				source: myArr,
+				minLength: 1,
+				keypress: function(event, ui){
+					$("input#start").val(ui.item.value);
+				}
+			});
+			
+			$("input#end").autocomplete({
+				source: myArr,
+				minLength: 1,
+				keypress: function(event,ui){
+					$("input#end").val(ui.item.value);
+				}
+			});
+			
+		}
+	});
 </script>
 
 {% endblock %}
@@ -31,6 +86,31 @@
 	<p id="welcome">Fill the below and then choose one of our options.</p>
 </div>
 <br><br>
+
+
+
+	<form method="POST" id="searchForm">
+		<label>Start:
+		<input type="text" name="start" id="start" />
+		</label>
+		<br>
+		<label>End:
+		<input type="text" name="end" id="end" />
+		</label>
+		<br>
+		<label>Day of the month:
+		<input type="text" size="10" name="day" id="day" />
+		</label>
+		<div class="error">
+		<p style="color:red">{{error}}</p>
+		</div>
+		<input type="submit" value="Generate Options">
+	</form>
+
+
+
+
+<!--
 <div class="mainform">
 	<form method="POST">
 		<label>Departure:
@@ -56,6 +136,7 @@
 		<input type="submit" value="Generate options">
 	</form>
 </div>
+/!-->
 <br>
 {% autoescape false %}
 {% if response %}

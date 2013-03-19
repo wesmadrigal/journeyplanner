@@ -95,10 +95,18 @@ federated = {
 }
 
 
+
+
 new_providers = {}
 for i in federated.keys():
 	new_providers[i] = users.create_login_url(federated_identity=federated[i])
 
+providers_images = {
+	'Google' : "",
+	'AOL': "javascript:location.href='http://www.addtoany.com/add_to/aol_mail?linkurl='+encodeURIComponent(location.href)+'&linkname='+encodeURIComponent(document.title)",
+	'Yahoo' : "",
+	'MyOpenID': ""
+	}
 
 
 class MainPage(Handler):
@@ -113,7 +121,7 @@ class LoginPage(Handler):
                 user = users.get_current_user()
                 if user:
                         self.redirect('/')
-                self.render("loginpage.html", new_providers = new_providers)
+                self.render("loginpage.html", new_providers = new_providers, providers_images = providers_images)
 
 
 
@@ -430,7 +438,7 @@ class PlanTrip(Handler):
 		xml = get_doc("new_cities.xml")
 		locs = get_title_locations(xml)
 		routes = generate_routes2(xml, locs)
-		dep = self.request.get("departure")
+		dep = self.request.get("start")
 		end = self.request.get("end")
 		day = self.request.get("day")
 		month = str(int(strftime('%m')))

@@ -217,6 +217,12 @@
                         -ms-user-select: none;
                         user-select: none;
                         }
+		.mainlink-button:hover	{
+			background: #2F4F4F;
+                        border: solid 1px #2A4E77;
+                        text-decoration: none;
+			}
+			
 		.logging	{
 			top: 15px;
 			text-align: right;
