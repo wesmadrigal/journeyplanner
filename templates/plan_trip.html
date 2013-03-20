@@ -4,56 +4,48 @@
 {% block title %}
 
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
-<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
 
+<!--
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+/!-->
 <script>
 
 	$(document).ready(function(){
 		var myArr = new Array();
 		$.ajax({
 			type : "GET",
-			url : "static/xml/new_cities.xml",
-			dataType : "xml",
-			success : parseXml,
-			complete : doAuto,
-			error : function(){
-				alert("Couldn't find XML");
+			url: "static/xml/new_cities.xml",
+			dataType: "xml",
+			success: parseXml,
+			complete: doAdd,
+			error: function(){
+				alert("Couldn't find XL");
 				}
 			});
-		//function finds elements named menuitem, finds that menuitems
-		//titlecity and adds that titlecity to the myArr array object
 		function parseXml(xml){
 			$(xml).find('menuitem').each(function(){
 				var val = $(this).find('titlecity').text();
 				myArr.push(val);
 			});
-		}	
-		
-	
-		function doAuto(){
-			$("input#start").autocomplete({
-				source: myArr,
-				minLength: 1,
-				keypress: function(event, ui){
-					$("input#start").val(ui.item.value);
-				}
-			});
-			
-			$("input#end").autocomplete({
-				source: myArr,
-				minLength: 1,
-				keypress: function(event,ui){
-					$("input#end").val(ui.item.value);
-				}
-			});
-			
+		}
+		function doAdd(){
+			$("#start").typeahead({source: myArr});
+			$("#end").typeahead({source: myArr});
 		}
 	});
-
-	$(function()	{
-		$("#date").datepicker();
+	
+	var $j = jQuery.noConflict();
+	$j(document).ready(function(){
+		$j('#date').datepicker();
 	});
+
+
+	
+
 </script>
 
 {% endblock %}
@@ -69,15 +61,15 @@
 <div class="mainform">
 	<form method="POST" id="searchForm">
 		<label>Start:
-		<input type="text" name="start" id="start" />
+		<input type="text" name="start" id="start" data-provide="typeahead" />
 		</label>
 		<br>
 		<label>End:
-		<input type="text" name="end" id="end" />
+		<input type="text" name="end" id="end" data-provide="typeahead" />
 		</label>
 		<br>
 		<label>Date of departure:
-		<input type="dropdown" size="5" name="date" id="date" />
+		<input type="dropdown" size="10" name="date" id="date" />
 		</label>
 		<div class="error">
 		<p style="color:red">{{error}}</p>
@@ -95,7 +87,6 @@
 
 {% endif %}
 {% endautoescape %}
-
 
 {% endblock %}
 </body>

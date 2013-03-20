@@ -68,14 +68,13 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
 {% endblock title %}
 
 {% block body %}
-<body>
+
 {% if user %}
 <p id="welcome">Welcome to the {{update_type}} updates page {{user}}</p>
 {% else %}
 <p id="welcome">Welcome to the {{update_type}} updates page guest</p>
 {% endif %}
 
-<p>In case you picked the wrong status:  <a class="button-link" href="/choicepage">switch status</a></p>
 <br>
 <br>
 
@@ -181,6 +180,6 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
 	window.onload = get_location ;
 </script>
 {% endif %}
-</body>
+
 
 {% endblock %}
