@@ -4,7 +4,8 @@
 <head>
 <meta name="google-site-verification" content="4IOzp5M-KTDSTCxo-BhHJt9fHqyJ-6h2zoL59XUBjBU" />
 	<title>Megabus Aid | Courtesy. Insight. Preparation | Providing bus updates and journey planning</title>
-	<link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css">
+<!--	<link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css">
+/!-->
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ /!-->
 
     <link href="/maps/documentation/javascript/examples/default.css" rel="stylesheet">
@@ -72,27 +73,74 @@
     </script>	
 
 
-
+<link href="twitter-bootstrap-37d0a30/docs/assets/css/bootstrap.css" rel="stylesheet">
+<link href="twitter-bootstrap-37d0a30/docs/assets/css/example-fixed-layout.css" rel="stylesheet">
 <!--   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ /!-->
-{% block links %}
-{% endblock %}
+
 
 {% block title %}
 {% endblock %}
 </head>
 <body>
+	<div class="container">
+
+<div class="navbar navbar-fixed-top">
+   <div class="navbar-inner">
+      <div class="container-fluid">
+         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+         </a>
+	<!--
+	 <a class="brand" href="#"><img src="/images/w3r.png" width="111" heigh="30" alt="w3resource logo" /></a>
+	/!-->
+	 <div class="nav-collapse">
+	    <ul class="nav">
+
+            	<li><a href="/">Home</a></li>
+        	<li><a href="/aboutme">About Me</a></li>
+        	<li><a href="/plantrip">Trip Planner</a></li>
+        	<li><a href="/choicepage">Riding or Waiting - Bus Tracker</a></li>
+	    </ul>
+	    {% if user %}
+	    <p class="navbar-text pull-right">Logged in: <a href="{{logout}}">{{user}}</a></p>
+	    {% else %}
+	    <p class="navbar-text pull-right">Guest: <a href="/login">Log In</a></p>
+	    {% endif %}
+	 </div>
+      </div>
+   </div>
+</div>
+
 {% block body %}
+
 
 
 {% endblock %}
 
 {% block footer %}
 		<div class="footer">
-                        &copy; Copyright 2012 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
+                        &copy; Copyright 2013 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
                 </div>
 
 {% endblock %}
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/jquery.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-transition.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-alert.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-modal.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-dropdown.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-scrollspy.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-tab.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-tooltip.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-popover.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-button.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-collapse.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-carousel.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-typeahead.js"></script>
 
+	</div>
 </body>
 
 </html>

@@ -1,39 +1,22 @@
 
 {% extends "layout.html" %}
-{% block links %}
-<div class="mainlinks">
-        <a class="mainlink-button" href="/">Home</a>
-	<a class="mainlink-button" href="/aboutme">About Me</a>
-        <a class="mainlink-button" href="/plantrip">Trip Planner</a>
-        <a class="mainlink-button" href="/choicepage">Riding or Waiting - Bus Tracker</a>
-</div>
-{% endblock %}
 {% block title %}
-
-<div class="logging">
-	{% if user %}
-	<a href="{{logout_url}}">Logout</a>
-	{% else %}
-	<h2><a href="/login">Login</a></h2>
-	{% endif %}
-</div>
-{% if user %}
-<p id="welcome">Welcome {{user}}</p>
-{% else %}
-<p id="welcome">Welcome Guest</p>
-{% endif %}
 {% endblock %}
 
 {% block body %}
-
-
-<div id="parent">
+<br><br><br>
+<div class="container-fluid">
+<div class="span9">
+   <div class="row-fluid">
+      <div class="span4">
 	<form method="GET" action="/updates">
-		<input type="submit" class="stylish" name="riding" value="Riding">
-		<input type="submit" class="stylish" name="waiting" value="Waiting">
+		<input type="submit" class="btn btn-success btn-large" name="riding" value="Riding">
+		<input type="submit" class="btn btn-success btn-large" name="waiting" value="Waiting">
 	</form>
+      </div>
+   </div>
 </div>
-
+</div>
 {% endblock %}
 {% block footer %}
 {% endblock %}

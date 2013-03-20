@@ -1,3 +1,4 @@
+<!--
 <!DOCTYPE HTML>
 <html>
 
@@ -5,25 +6,34 @@
 	<link rel="stylesheet" type="text/css" href="/static/stylesheets/logstyle.css">
 	<title>Megabus Aid Login</title>
 </head>
+/!-->
+{% extends "layout.html" %}
+{% block body %}
 
-<body>
 
-<p id="federated">With our Federated Login system you don't need to create an account with us, simply use one of your pre-existing accounts with an affiliate provided.</p>
-	<div id="logins">
+<div style="margin-top: 100px;" class="container-fluid">
+   <div class="row-fluid">
+      <div class="span3">
+         <div class="well sidebar-nav">
+            <ul class="nav nav-list">
 		{% for item in new_providers.keys() %}
 		
-		<h1><a href="{{new_providers[item]}}"><b>{{item}}</b></a></h1>
+		<li><h2><a href="{{new_providers[item]}}"><b>{{item}}</b></a></h2></li>
 		<br>
-		
-		<!--
-		<a href="{{new_providers[item]}}"><img src="{{providers_images[item]}}"></a>
-		<br>
-		/!-->
 		{% endfor %}
+            </ul>
+         </div>
+      </div>
+      <div class="span9">
+         <div class="leaderboard">
+         <h2>Our Affiliate based Login</h2>
+         <p>With our federated login system you have the convenience of using a pre-existing account with one of our affiliates.  Our system will enable personalization and specific user recognition without placing another account creation and password memory retention on you.  We believe that comlexity never needs to be directly associated with complicated.  Complexity is most eloquent when made simple.</p>
+         </div>
+      </div>
+   </div>
+</div>
+	
 
-		<img src="{{providers_images['AOL']}}"><a href="{{new_providers['AOL']}}"></a></img>
+{% endblock %}
 
-</body>
-
-</html>
 

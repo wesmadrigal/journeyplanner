@@ -15,6 +15,9 @@ handlers:
 
 - url: /static/stylesheets
   static_dir: static/stylesheets
+
+- url: /twitter-bootstrap-37d0a30
+  static_dir: twitter-bootstrap-37d0a30
  
 
 - url: /static/xml

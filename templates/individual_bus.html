@@ -1,18 +1,9 @@
 {% extends "layout.html" %}
-{% block links %}
-<div class="mainlinks">
-        <a class="mainlink-button" href="/">Home</a>
-        <a class="mainlink-button" href="/aboutme">About Me</a>
-        <a class="mainlink-button" href="/plantrip">Trip Planner</a>
-        <a class="mainlink-button" href="/choicepage">Riding or Waiting - Bus Tracker</a>
-</div>
-{% endblock %}
 {% block title %}
 <!--<link rel="stylesheet" type="text/css" href="static/stylesheets/style.css">/!-->
 
 <p id="welcome">Bus {{bus}} updates</p>
 <br>
-<a class="button-link" href='/updates'>Updates Page</a>
 {% endblock %}
 
 {% block body %}
@@ -52,5 +43,7 @@
 	{% endif %}
 </div>
 	{% endfor %}
+
 </body>
 {% endblock %}
+

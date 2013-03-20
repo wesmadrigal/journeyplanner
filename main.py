@@ -112,15 +112,13 @@ providers_images = {
 class MainPage(Handler):
 	def get(self):
 		user = users.get_current_user()
-		logout_url = users.create_logout_url(self.request.uri)
-		self.render("mainpage.html", user=user, logout_url=logout_url)
+		logout = users.create_logout_url(self.request.uri)
+		self.render("mainpage.html", user=user, logout=logout)
 
 
 class LoginPage(Handler):
         def get(self):
                 user = users.get_current_user()
-                if user:
-                        self.redirect('/')
                 self.render("loginpage.html", new_providers = new_providers, providers_images = providers_images)
 
 
@@ -130,9 +128,9 @@ class LoginPage(Handler):
 class ChoicePage(Handler):
 	def get(self):
 		user = users.get_current_user()
-		logout_url = users.create_logout_url(self.request.uri)
+		logout = users.create_logout_url(self.request.uri)
 		try:
-			self.render("choicepage.html", user=user, logout_url=logout_url)
+			self.render("choicepage.html", user=user, logout=logout)
 		except:
 			logging.error("Home page render error")
 	
@@ -157,10 +155,10 @@ def top_bus(update=False):
 
 
 class UpdatesPage(Handler):
-	def render_all(self, update_type="", bus="", entry="", url="",error="", user="", bus_info="", data=""):
+	def render_all(self, update_type="", bus="", entry="", url="",error="", user="", bus_info="", data="", logout=""):
 		#bus_info = top_bus()
 		
-		self.render("update.html", update_type=update_type, bus=bus, entry=entry, error=error, bus_info=bus_info, url=url, user=user, data=data)
+		self.render("update.html", update_type=update_type, bus=bus, entry=entry, error=error, bus_info=bus_info, url=url, user=user, data=data, logout=logout)
 
 		
 	
@@ -186,6 +184,7 @@ class UpdatesPage(Handler):
 		user = None
 		if name:
 			user = name.nickname()
+		logout = users.create_logout_url(self.request.uri)
 		tmp = self.request.url
 		posit = tmp.find('updates')
 		url = tmp[0:posit+7]+'/'
@@ -194,7 +193,7 @@ class UpdatesPage(Handler):
 		else:
 			#data = update_data2(routes, routes_library, mb_api, months)
 			data = json.dumps(routes_library) 
-			self.render_all(update_type=update_type, url=url, user=user, bus_info=bus_info, data=data)
+			self.render_all(update_type=update_type, url=url, user=user, bus_info=bus_info, data=data, logout=logout)
 			
 
 	def post(self):
@@ -291,8 +290,9 @@ class IndividualBus(Handler):
 	        bus = bus1.replace('%20', chr(32))	
 		b = BusUpdates.all()
 		this_bus = b.order('-timestamp').filter('bus = ', bus).fetch(limit=10)
+		logout = users.create_logout_url(self.request.uri)
 	
-		self.render("individual_bus.html", bus=bus, this_bus=this_bus)
+		self.render("individual_bus.html", bus=bus, this_bus=this_bus, logout=logout)
 		#if self.format == 'html':	
 		#	if this_bus:
 		#		self.render("individual_bus.html", bus=bus, this_bus=this_bus)
@@ -334,8 +334,13 @@ class TimesChoices(Handler):
 				#response += '<li><input type="submit" name="time" value="%s"' % time + '>%s</li>'
 				response += '<li><button name="time" value="%s"' % time + '>%s</button></li>' % arrival_time
 			response += '</ul></div>'
-		
-		self.render("times_choice.html", the_response=response)
+
+		u = users.get_current_user()
+		user = None
+		if u:
+			user = u.nickname() 
+		logout = users.create_logout_url(self.request.uri)	
+		self.render("times_choice.html", the_response=response, user=user, logout=logout)
 	
 		
 	def post(self):
@@ -435,29 +440,29 @@ class PlanTrip(Handler):
 		self.render("plan_trip.html")
 	
 	def post(self):
+		u = users.get_current_user()
+		user = None
+		if u:
+			user = u.nickname()
+		logout = users.create_logout_url(self.request.uri)
 		xml = get_doc("new_cities.xml")
 		locs = get_title_locations(xml)
 		routes = generate_routes2(xml, locs)
 		dep = self.request.get("start")
 		end = self.request.get("end")
-		day = self.request.get("day")
-		month = str(int(strftime('%m')))
-#		if dep != 'loading' and end != 'loading' and len(day) >= 1:
-#			options_links_new, hours_dict = make_displayable_options2(dep, end, day, routes)
-#			trip = plan_trip(dep, end, routes)
-#			route_link_display = make_trip_buttons_dict(trip)
-#				
-#			self.render("plan_trip.html", options_links_new = options_links_new, hours_dict = hours_dict)
-
-		if dep != 'loading' and end != 'loading' and len(day) >= 1:
+		date = self.request.get("date")
+		if len(date) > 0:
+			month = str(int(date[0:date.find('/')]))
+			day = str(int(date[date.find('/')+1:date.find('/',date.find('/')+1)]))
+		if dep != 'loading' and end != 'loading' and len(date) >= 1:
 			trip = plan_trip(dep, end, routes)
 			trip_options, trip_times, trip_links = make_formatted(trip, month, day)
 			response = generate_response(trip_options, trip_times, trip_links)
-			self.render("plan_trip.html", response=response)
+			self.render("plan_trip.html", response=response, user=user, logout=logout)
 			
 		else:
 			error = 'You must choose a departure city, arrival city, and a day of departure.'
-			self.render("plan_trip.html", error=error)
+			self.render("plan_trip.html", user=user, logout=logout, error=error)
 		
 
 

@@ -1,39 +1,13 @@
 {% extends "layout.html" %}
 {% block links %}
-<div class="mainlinks">
-        <a class="mainlink-button" href="/">Home</a>
-        <a class="mainlink-button" href="/aboutme">About Me</a>
-        <a class="mainlink-button" href="/plantrip">Trip Planner</a>
-        <a class="mainlink-button" href="/choicepage">Riding or Waiting - Bus Tracker</a>
-</div>
 {% endblock %}
 {% block title %}
 
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.js"></script>
-<script>/*
-	The select method
 
-	$(document).ready(function(){
-		var departure = $('#departure');
-		var end = $('#end');
-		$.ajax({
-			type: "GET",
-			url: "static/xml/new_cities.xml",
-			dataType: "xml",
-			success: function(xml){
-			$(xml).find('menuitem').each(function(){
-		
-				var value=$(this).find('titlecity').text();
-				departure.append('<option>'+value+'</option>');
-				end.append('<option>'+value+'</option>');
-		
-			});
-		}
-	});
-	});
-	*/
+<script>
 
 	$(document).ready(function(){
 		var myArr = new Array();
@@ -76,6 +50,10 @@
 			
 		}
 	});
+
+	$(function()	{
+		$("#date").datepicker();
+	});
 </script>
 
 {% endblock %}
@@ -88,7 +66,7 @@
 <br><br>
 
 
-
+<div class="mainform">
 	<form method="POST" id="searchForm">
 		<label>Start:
 		<input type="text" name="start" id="start" />
@@ -98,45 +76,16 @@
 		<input type="text" name="end" id="end" />
 		</label>
 		<br>
-		<label>Day of the month:
-		<input type="text" size="10" name="day" id="day" />
+		<label>Date of departure:
+		<input type="dropdown" size="5" name="date" id="date" />
 		</label>
 		<div class="error">
 		<p style="color:red">{{error}}</p>
 		</div>
 		<input type="submit" value="Generate Options">
 	</form>
-
-
-
-
-<!--
-<div class="mainform">
-	<form method="POST">
-		<label>Departure:
-		<select name="departure" id="departure">
-			<option>loading</option>
-		</select>
-		</label>
-		<br>
-		<label>Ending Destination:
-		<select name="end" id="end">
-			<option>loading</option>
-		</select>
-		</label>
-		<br>
-		<label>Day of this month:
-		<input type="text" name="day" id="day">
-		</label>
-		<br>
-		<br>
-		<div class="error">
-		<p style="color:red">{{error}}</p>
-		</div>
-		<input type="submit" value="Generate options">
-	</form>
 </div>
-/!-->
+
 <br>
 {% autoescape false %}
 {% if response %}
