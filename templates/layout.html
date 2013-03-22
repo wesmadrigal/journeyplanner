@@ -119,18 +119,15 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
 </div>
 
 <div class="content">
-   <div class="span9 main"> 
+ 
 {% block body %}
 
 
 {% endblock %}
-   </div>
-   <div class="span3 sidebar">
-      <h2>Here is a sidebar</h2>
-   </div>
+
 
 	{% block footer %}
-		<div class="navbar navbar-fixed-bottom">
+		<div class="navbar navbar-static-bottom">
                         &copy; Copyright 2013 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
                 </div>
 
