@@ -3,17 +3,17 @@
 <html>
 <head>
 <meta name="google-site-verification" content="4IOzp5M-KTDSTCxo-BhHJt9fHqyJ-6h2zoL59XUBjBU" />
-	<title>Megabus Aid | Courtesy. Insight. Preparation | Providing bus updates and journey planning</title>
-<!--	<link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css">
+<title>Megabus Aid | Courtesy. Insight. Preparation | Providing bus updates and journey planning</title>
+<!-- <link rel="stylesheet" type="text/css" href="/static/stylesheets/style.css">
 /!-->
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ /!-->
 
     <link href="/maps/documentation/javascript/examples/default.css" rel="stylesheet">
     <!--
-    Include the maps javascript with sensor=true because this code is using a
-    sensor (a GPS locator) to determine the user's location.
-    See: https://developers.google.com/apis/maps/documentation/javascript/basics#SpecifyingSensor
-    -->
+Include the maps javascript with sensor=true because this code is using a
+sensor (a GPS locator) to determine the user's location.
+See: https://developers.google.com/apis/maps/documentation/javascript/basics#SpecifyingSensor
+-->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=true"></script>
 
     <script>
@@ -28,13 +28,13 @@
             mapOptions);
 
         // Try HTML5 geolocation
-       /*  if(navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-            var pos = new google.maps.LatLng(position.coords.latitude,
-                                             position.coords.longitude);
-										*/
-	    var pos = new google.maps.LatLng( {{ latitude | safe }},
-					      {{ longitude | safe }};
+       /* if(navigator.geolocation) {
+navigator.geolocation.getCurrentPosition(function(position) {
+var pos = new google.maps.LatLng(position.coords.latitude,
+position.coords.longitude);
+*/
+var pos = new google.maps.LatLng( {{ latitude | safe }},
+{{ longitude | safe }};
 
             var infowindow = new google.maps.InfoWindow({
               map: map,
@@ -73,45 +73,49 @@
     </script>	
 
 <meta name="viewport" content="width=divice-width, initial-scale=1.0">
-<link href="twitter-bootstrap-37d0a30/docs/assets/css/bootstrap-responsive.css" rel="stylesheet">
-<link href="twitter-bootstrap-37d0a30/docs/assets/css/bootstrap.css" rel="stylesheet">
+<link href="twitter-bootstrap-37d0a30/docs/assets/css/bootstrap-responsive.css" rel="stylesheet" media="screen">
+<link href="twitter-bootstrap-37d0a30/docs/assets/css/bootstrap.css" rel="stylesheet" media="screen">
 <link href="twitter-bootstrap-37d0a30/docs/assets/css/example-fixed-layout.css" rel="stylesheet">
 <link href="twitter-bootstrap-37d0a30/less/responsive.less" rel="stylesheet">
-<!--   ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ /!-->
+<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ /!-->
 
 
 {% block title %}
 {% endblock %}
 </head>
 <body>
-	<div class="container">
 
-<div class="navbar navbar-fixed-top">
+<div class="navbar navbar-static-top">
    <div class="navbar-inner">
-      <div class="container-fluid">
-         <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+      <a class="brand" href="/">MegabusAid</a>
+      <div class="container">
+         <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 	    <span class="icon-bar"></span>
 	    <span class="icon-bar"></span>
+ 	    <span class="icon-bar"></span>
 	    <span class="icon-bar"></span>
-	    <span class="icon-bar"></span>
-         </a>
-	<!--
-	 <a class="brand" href="#"><img src="/images/w3r.png" width="111" heigh="30" alt="w3resource logo" /></a>
-	/!-->
-	 <div class="nav-collapse">
-	    <ul class="nav">
-
-            	<li><a href="/">Home</a></li>
-        	<li><a href="/aboutme">About Me</a></li>
-        	<li><a href="/plantrip">Trip Planner</a></li>
-        	<li><a href="/choicepage">Riding or Waiting - Bus Tracker</a></li>
-	    </ul>
-	    {% if user %}
-	    <p class="navbar-text pull-right">Logged in: <a href="{{logout}}">{{user}}</a></p>
-	    {% else %}
-	    <p class="navbar-text pull-right">Guest: <a href="/login">Log In</a></p>
-	    {% endif %}
-	 </div>
+         </button>
+<!--
+<a class="brand" href="#"><img src="/images/w3r.png" width="111" heigh="30" alt="w3resource logo" /></a>
+/!-->
+	<div class="nav-collapse collapse">
+	<ul class="nav nav-tabs">
+ 	<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Navigation<b class="caret"></b></a>
+	   <ul class="dropdown-menu">
+	      <li><a href="/">Home</a></li>
+              <li><a href="/plantrip">Trip Planner</a></li>
+              <li><a href="/choicepage">Riding or Waiting - Bus Tracker</a></li>
+	      <li><a href="/aboutme">About Me</a></li>
+	   </ul>
+	</li>
+	
+	{% if user %}
+		<p class="navbar-text pull-right">Logged in: <a href="{{logout}}">{{user}}</a></p>
+	{% else %}
+		<p class="navbar-text pull-right">Guest: <a href="/login">Log In</a></p>
+	{% endif %}
+	</ul>
+	</div>
       </div>
    </div>
 </div>
@@ -123,27 +127,27 @@
 {% endblock %}
 
 {% block footer %}
-		<div class="footer">
+		<div class="navbar navbar-fixed-bottom">
                         &copy; Copyright 2013 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
                 </div>
 
 {% endblock %}
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/jquery.js"></script>  
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-transition.js"></script>  
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-alert.js"></script>  
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-modal.js"></script>  
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-dropdown.js"></script>  
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-scrollspy.js"></script>  
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-tab.js"></script>  
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-tooltip.js"></script>  
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-popover.js"></script>  
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-button.js"></script>  
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-collapse.js"></script>  
-<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-carousel.js"></script>  
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/jquery.js"></script>
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-transition.js"></script>
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-alert.js"></script>
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-modal.js"></script>
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-dropdown.js"></script>
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-scrollspy.js"></script>
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-tab.js"></script>
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-tooltip.js"></script>
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-popover.js"></script>
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-button.js"></script>
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-collapse.js"></script>
+<script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-carousel.js"></script>
 <script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-typeahead.js"></script>
 
 
-	</div>
+</div>
 </body>
 
 </html>

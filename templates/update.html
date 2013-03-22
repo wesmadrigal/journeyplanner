@@ -8,43 +8,43 @@
 
 $(document).ready(function(){var departure=$('#departure'); var arrival=$('#arrival'); var times=$('#times');
 $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: function(xml){$(xml).find('menuitem').each(function(){var titlecity=$(this).find('titlecity').text();departure.append("<option>"+titlecity+"</option>");});$('#departure').change(function()
-	{
-	$('#arrival').empty();
-	arrival.append('<option>'+'choose wisely'+'</option>');
-	var selectedIndex = $('#departure option').index($('#departure option:selected'))-1;
-	
-	var newOpt = $(xml).find('values').eq(selectedIndex).find('cityitem').each(function(){
-	
-	var value = $(this).text();
+{
+$('#arrival').empty();
+arrival.append('<option>'+'choose wisely'+'</option>');
+var selectedIndex = $('#departure option').index($('#departure option:selected'))-1;
 
-	arrival.append('<option>'+value+'</option>');
-	$('#arrival').change(function(){
-		$('#times').empty();
-		times.append('<option>'+'choose pertinent bus time'+'</option>');
-		var dep = $('#departure option:selected').text();
-		var arr = $('#arrival option:selected').text();
-		var the_dater = document.getElementById("json").value;
-		var the_json = jQuery.parseJSON(the_dater);
-		var d = new Date();
-		var month = d.getMonth() + 1;
-		var day= d.getDate();
-		var query_key = dep + '-' + arr + '-' + month + '-' + day;
-		var the_times = the_json[query_key];
-		for (i=0;i<the_times.length;i++){
-			times.append('<option>'+the_times[i]+'</option>');
-		}
-	});
-	});
-	});}
-	});});
+var newOpt = $(xml).find('values').eq(selectedIndex).find('cityitem').each(function(){
+
+var value = $(this).text();
+
+arrival.append('<option>'+value+'</option>');
+$('#arrival').change(function(){
+$('#times').empty();
+times.append('<option>'+'choose pertinent bus time'+'</option>');
+var dep = $('#departure option:selected').text();
+var arr = $('#arrival option:selected').text();
+var the_dater = document.getElementById("json").value;
+var the_json = jQuery.parseJSON(the_dater);
+var d = new Date();
+var month = d.getMonth() + 1;
+var day= d.getDate();
+var query_key = dep + '-' + arr + '-' + month + '-' + day;
+var the_times = the_json[query_key];
+for (i=0;i<the_times.length;i++){
+times.append('<option>'+the_times[i]+'</option>');
+}
+});
+});
+});}
+});});
 
 
 </script>
 
 
 <script type="text/javascript">
-                function get_location()      {
-                if (navigator.geolocation)      {
+                function get_location() {
+                if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(showPosition, handle_error);
                 } else {
                         alert('It appears geolocation isnt enabled.');
@@ -55,7 +55,7 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
                         document.getElementById("latitude").value=position.coords.latitude;
                         document.getElementById("longitude").value=position.coords.longitude;
                         }
-                function handle_error(err)      {
+                function handle_error(err) {
                         if (err.code == 1) {
                         var response = 'The user declined sharing their location'
                         document.getElementById("latitude").value=response;
@@ -78,30 +78,30 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
 <br>
 <br>
 
-	{% if update_type == "riding" %}
-	
-	<form title="buspost" method="POST">
-		<label><h2>Departure:</h2>
-		<select name="departure" id="departure">
-			<option>City, State</option>
-		</select>
-		</label>
+{% if update_type == "riding" %}
 
-		<label><h2>Arrival:</h2>
-		<select name="arrival" id="arrival">
-			<option>Select a departure first</option>
-		</select>
-		</label>
-	
-		<label><h2>Times:</h2>
-		<select name="times" id="times">
-			<option>Select departure and arrival cities</option>
-		</select>
-		</label>
-	
-                <label><h2>Delay Time:</h2> 
+<form title="buspost" method="POST">
+<label><h2>Departure:</h2>
+<select name="departure" id="departure">
+<option>City, State</option>
+</select>
+</label>
+
+<label><h2>Arrival:</h2>
+<select name="arrival" id="arrival">
+<option>Select a departure first</option>
+</select>
+</label>
+
+<label><h2>Times:</h2>
+<select name="times" id="times">
+<option>Select departure and arrival cities</option>
+</select>
+</label>
+
+                <label><h2>Delay Time:</h2>
                 <select name="entry">
-			<option value="No Delay">No Delay</option>
+<option value="No Delay">No Delay</option>
                         <option value="15 minutes late">15 minutes late</option>
                         <option value="30 minutes late">30 minutes late</option>
                         <option value="45 minutes late">45 minutes late</option>
@@ -112,72 +112,72 @@ $.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: fu
                         
                 <input type="hidden" name="latitude" id="latitude" />
                 <input type="hidden" name="longitude" id="longitude" />
-		
-		<!--
-		<label><h2>Request:</h2>
-                <select name="entry">
-                        <option value="Delay Info Request">Delay Info Request</option>
-                </select>
-                </label>
-		/!-->
-		<!--
-		<p>Select the bus arriving to your Departure city closest to your Departure Time.</p>
-		<select name="waiter-bus-choices">
-			<option value="Select Arrival">Select Approaching Bus Causing Delay</option>
-		</select>
-		/!-->
-		<br>
-		<div class="error" style="color:red">{{error}}</div>
-		<br>
-		<input type="submit" value="Update" onclick="this.disabled=true">
-	</form>
-	{% else %}
-	<form title="buspost" method="GET" action="/timeschoice">
-		<label><h2>Departure:</h2>
-		<select name="departure" id="departure">
-			<option>City, State</option>
-		</select>
-		</label>
+
+<!--
+<label><h2>Request:</h2>
+<select name="entry">
+<option value="Delay Info Request">Delay Info Request</option>
+</select>
+</label>
+/!-->
+<!--
+<p>Select the bus arriving to your Departure city closest to your Departure Time.</p>
+<select name="waiter-bus-choices">
+<option value="Select Arrival">Select Approaching Bus Causing Delay</option>
+</select>
+/!-->
+<br>
+<div class="error" style="color:red">{{error}}</div>
+<br>
+<input type="submit" value="Update" onclick="this.disabled=true">
+</form>
+{% else %}
+<form title="buspost" method="GET" action="/timeschoice">
+<label><h2>Departure:</h2>
+<select name="departure" id="departure">
+<option>City, State</option>
+</select>
+</label>
                 
                 <br>
-	
-		<br>
-		<div class="error" style="color:red">{{error}}</div>
-		<br>
-		<input type="submit" value="Find buses arriving in your city" onclick="this.disabled=true">
-	</form>
-	{% endif %}
-	<br>
-	<br>
-	<br>
-	<br>
 
-	{% for b in bus_info %}
+<br>
+<div class="error" style="color:red">{{error}}</div>
+<br>
+<input type="submit" value="Find buses arriving in your city" onclick="this.disabled=true">
+</form>
+{% endif %}
+<br>
+<br>
+<br>
+<br>
 
-	<div class="bus_stuff">
-		<div class="bus-user" style="font-family: Arial Black, Gadget, sans-serif;">{{b.user}}</div>
-		<br>
-		<div class="bus-num"><a href="{{url}}{{b.bus}}">{{b.bus}}</a></div>
-		
-		{% if b.latitude %}
-		<div class="entry" style="color:#808080"><p>Delay time: <b>{{b.entry}}</b></p></div>
-		{% else %}
-		<div class="entry" style="color:#808080"><p>{{b.entry}}</p></div>
-		{% endif %}
-		<div class="created"><p>Posted at <b>{{b.created}}</b></p></div>
-	</div>
-	<br>
-	<br>
-	<hr>
-	{% endfor %}
+{% for b in bus_info %}
+
+<div class="bus_stuff">
+<div class="bus-user" style="font-family: Arial Black, Gadget, sans-serif;">{{b.user}}</div>
+<br>
+<div class="bus-num"><a href="{{url}}{{b.bus}}">{{b.bus}}</a></div>
+
+{% if b.latitude %}
+<div class="entry" style="color:#808080"><p>Delay time: <b>{{b.entry}}</b></p></div>
+{% else %}
+<div class="entry" style="color:#808080"><p>{{b.entry}}</p></div>
+{% endif %}
+<div class="created"><p>Posted at <b>{{b.created}}</b></p></div>
+</div>
+<br>
+<br>
+<hr>
+{% endfor %}
 
 <form type="hidden">
-	<input id="json" type="hidden" value="{{data}}">
+<input id="json" type="hidden" value="{{data}}">
 </form>
 
 {% if update_type == "riding" %}
 <script type="text/javascript">
-	window.onload = get_location ;
+window.onload = get_location ;
 </script>
 {% endif %}
 

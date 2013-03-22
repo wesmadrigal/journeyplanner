@@ -11,28 +11,28 @@
 <br>
 <br>
 
-	{% for update in this_bus %}
+{% for update in this_bus %}
 <div class="bus_stuff">
-	{% if update.latitude %}
-		<div style="font-family: Arial Black, Gadget, sans-serif;">{{update.user}}</div>
-		<br>
-		<div style="font-family: Arial Black, Gadget, sans-serif; font-weight:bold;">{{update.bus}}</div>
-		<br>
-		<div style="color:#808080;">Delay Time: <b>{{update.entry}}</b></div>
-		<pre>Coordinates: {{update.latitude}} , {{update.longitude}}</pre>
-		<a href="{{update.user_api_link}}"><img class="map-holder" src="{{update.user_map}}"></a>
-		<div style="font-weight:bold;">{{update.created}}</div>
+{% if update.latitude %}
+<div style="font-family: Arial Black, Gadget, sans-serif;">{{update.user}}</div>
+<br>
+<div style="font-family: Arial Black, Gadget, sans-serif; font-weight:bold;">{{update.bus}}</div>
+<br>
+<div style="color:#808080;">Delay Time: <b>{{update.entry}}</b></div>
+<pre>Coordinates: {{update.latitude}} , {{update.longitude}}</pre>
+<a href="{{update.user_api_link}}"><img class="map-holder" src="{{update.user_map}}"></a>
+<div style="font-weight:bold;">{{update.created}}</div>
 
 <br>
 <hr>
 <br>
 <br>
-	{% else %}
+{% else %}
 
-		<div style="font-family: Arial Black, Gadget, sans-serif;">{{update.user}}</div>
-		<br>
+<div style="font-family: Arial Black, Gadget, sans-serif;">{{update.user}}</div>
+<br>
                 <div style="font-family: Arial Black, Gadget, sans-serif; font-weight:bold;">{{update.bus}}</div>
-		<br>
+<br>
                 <div style="color:#808080;">{{update.entry}}</div>
                 <div style="font-weight:bold;">{{update.created}}</div>
 
@@ -40,10 +40,9 @@
 <hr>
 <br>
 <br>
-	{% endif %}
+{% endif %}
 </div>
-	{% endfor %}
+{% endfor %}
 
 </body>
 {% endblock %}
-

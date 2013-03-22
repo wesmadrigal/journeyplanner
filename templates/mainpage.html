@@ -3,35 +3,21 @@
 {% endblock %}
 
 {% block title %}
+<!--
 <link href="/maps/documentation/javascript/examples/default.css" rel="stylesheet">
-
-
-
-<div class="logging">
-        {% if user %}
-        <a href="{{logout_url}}"><b>Logout</b></a>
-        {% else %}
-        <a href="/login"><b>Login</b></a>
-        {% endif %}
-</div>
-
-
-
-<div class="welcome">
-	<p>Our services are here to make your journey as convenient as possible.</p>
-</div>
+/!-->
 {% endblock %}
 {% block body %}
-<body>
+
 <hr>
 <br><br><br>
 <br>
 <div class="tracker">
-	<a class="button-link" href="/choicepage">Megabus Tracker</a><br>
+<a class="button-link" href="/choicepage">Megabus Tracker</a><br>
 </div>
 <br>
 <div class="planner">
-	<a class="button-link" href="/plantrip">Trip Planner</a><br>
+<a class="button-link" href="/plantrip">Trip Planner</a><br>
 </div>
 
 
@@ -47,6 +33,5 @@
 </section>
 
 
-</body>
-{% endblock %}
 
+{% endblock %}

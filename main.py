@@ -391,50 +391,6 @@ class TimesChoices(Handler):
 		#self.redirect('/updates/%s' % b.bus)
 
 
-class DataMain(webapp2.RequestHandler):
-        def get(self):
-                xml = get_doc("new_cities.xml")
-                locs = get_title_locations(xml)
-                routes = generate_routes2(xml, locs)
-                logging.info("cron started")
-                q = BusData.all().order('-created').fetch(1)
-    		curr_day = str(int(strftime('%d')))
-    		curr_m = str(int(strftime('%m')))
-    		if len(q) >= 1:
-        		db_day = ''
-        		db_data = ''
-        		for i in q:
-				db_day += i.bus_key
-            			db_data += i.bus_data
-        		if int(db_day) < int(curr_day):
-            			parsable_data = json.loads(db_data)
-            			for i in parsable_data.keys():
-                			sec_hyph = i.find('-', i.find('-')+1)
-                			third_hyph = i.find('-', sec_hyph + 1)
-                			this_month = i[sec_hyph + 1: third_hyph]
-                			this_day = i[third_hyph+1: ]
-                			if int(this_month) < int(curr_m):
-                    				del parsable_data[i]
-                			elif int(this_month) == int(curr_m):
-                    				if int(this_day) < int(curr_day):
-                        				del parsable_data[i]
-            			for title_c in routes:
-                			for item_c in routes[title_c]:
-                    				get_future_data(mb_api, title_c, item_c, int(curr_m), int(curr_day), months, parsable_data)
-            			logging.info("Routes Updated!!!")
-            			q = BusData.all().filter('bus_key=', db_day)
-            			BusData.delete(q)
-            			logging.info("old deleted")
-            			bd = BusData(bus_key = curr_day)
-            			bd.bus_data = json.dumps(parsable_data)
-            			bd.put()
-        		else:
-            			logging.info("No update")
-
-                logging.info("cron finished")
-
-
-
 class PlanTrip(Handler):
 	def get(self):
 		self.render("plan_trip.html")
@@ -479,6 +435,5 @@ app = webapp2.WSGIApplication([('/', MainPage),
 			       ('/updates/.*', IndividualBus),
 			       ('/timeschoice', TimesChoices),
 			       ('/plantrip', PlanTrip),
-			       ('/update_bus_data', DataMain),
 			       ('/aboutme', AboutMe)],
 			       debug=True)

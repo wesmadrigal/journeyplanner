@@ -14,37 +14,37 @@
 /!-->
 <script>
 
-	$(document).ready(function(){
-		var myArr = new Array();
-		$.ajax({
-			type : "GET",
-			url: "static/xml/new_cities.xml",
-			dataType: "xml",
-			success: parseXml,
-			complete: doAdd,
-			error: function(){
-				alert("Couldn't find XL");
-				}
-			});
-		function parseXml(xml){
-			$(xml).find('menuitem').each(function(){
-				var val = $(this).find('titlecity').text();
-				myArr.push(val);
-			});
-		}
-		function doAdd(){
-			$("#start").typeahead({source: myArr});
-			$("#end").typeahead({source: myArr});
-		}
-	});
-	
-	var $j = jQuery.noConflict();
-	$j(document).ready(function(){
-		$j('#date').datepicker();
-	});
+$(document).ready(function(){
+var myArr = new Array();
+$.ajax({
+type : "GET",
+url: "static/xml/new_cities.xml",
+dataType: "xml",
+success: parseXml,
+complete: doAdd,
+error: function(){
+alert("Couldn't find XL");
+}
+});
+function parseXml(xml){
+$(xml).find('menuitem').each(function(){
+var val = $(this).find('titlecity').text();
+myArr.push(val);
+});
+}
+function doAdd(){
+$("#start").typeahead({source: myArr});
+$("#end").typeahead({source: myArr});
+}
+});
+
+var $j = jQuery.noConflict();
+$j(document).ready(function(){
+$j('#date').datepicker();
+});
 
 
-	
+
 
 </script>
 
@@ -53,29 +53,29 @@
 {% block body %}
 <body>
 <div class="welcome">
-	<p id="welcome">Fill the below and then choose one of our options.</p>
+<p id="welcome">Fill the below and then choose one of our options.</p>
 </div>
 <br><br>
 
 
 <div class="mainform">
-	<form method="POST" id="searchForm">
-		<label>Start:
-		<input type="text" name="start" id="start" data-provide="typeahead" />
-		</label>
-		<br>
-		<label>End:
-		<input type="text" name="end" id="end" data-provide="typeahead" />
-		</label>
-		<br>
-		<label>Date of departure:
-		<input type="dropdown" size="10" name="date" id="date" />
-		</label>
-		<div class="error">
-		<p style="color:red">{{error}}</p>
-		</div>
-		<input type="submit" value="Generate Options">
-	</form>
+<form method="POST" id="searchForm">
+<label>Start:
+<input type="text" name="start" id="start" data-provide="typeahead" />
+</label>
+<br>
+<label>End:
+<input type="text" name="end" id="end" data-provide="typeahead" />
+</label>
+<br>
+<label>Date of departure:
+<input type="dropdown" size="10" name="date" id="date" />
+</label>
+<div class="error">
+<p style="color:red">{{error}}</p>
+</div>
+<input type="submit" value="Generate Options">
+</form>
 </div>
 
 <br>
