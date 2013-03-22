@@ -5,18 +5,22 @@
 
 {% block body %}
 <br><br><br>
+<!--
 <div class="container-fluid">
 <div class="span9">
    <div class="row-fluid">
-      <div class="span4">
-<form method="GET" action="/updates">
-<input type="submit" class="btn btn-success btn-large" name="riding" value="Riding">
-<input type="submit" class="btn btn-success btn-large" name="waiting" value="Waiting">
-</form>
+      <div class="span6 pagination-centered">
+/!-->
+	<form method="GET" action="/updates">
+		<input type="submit" class="btn primary large" name="riding" value="Riding">
+		<input type="submit" class="btn primary large" name="waiting" value="Waiting">
+	</form>
+<!--
       </div>
    </div>
 </div>
 </div>
-{% endblock %}
+/!-->
 {% block footer %}
+{% endblock %}
 {% endblock %}

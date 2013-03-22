@@ -84,27 +84,26 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
 {% endblock %}
 </head>
 <body>
+<div class="container">
+
 
 <div class="navbar navbar-static-top">
    <div class="navbar-inner">
       <a class="brand" href="/">MegabusAid</a>
-      <div class="container">
          <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 	    <span class="icon-bar"></span>
 	    <span class="icon-bar"></span>
  	    <span class="icon-bar"></span>
 	    <span class="icon-bar"></span>
          </button>
-<!--
-<a class="brand" href="#"><img src="/images/w3r.png" width="111" heigh="30" alt="w3resource logo" /></a>
-/!-->
-	<div class="nav-collapse collapse">
+	<div class="nav-collapse" style="height: auto;">
 	<ul class="nav nav-tabs">
  	<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Navigation<b class="caret"></b></a>
 	   <ul class="dropdown-menu">
 	      <li><a href="/">Home</a></li>
               <li><a href="/plantrip">Trip Planner</a></li>
               <li><a href="/choicepage">Riding or Waiting - Bus Tracker</a></li>
+	      <li><a href="/updates">Updates Page</a></li>
 	      <li><a href="/aboutme">About Me</a></li>
 	   </ul>
 	</li>
@@ -116,22 +115,27 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
 	{% endif %}
 	</ul>
 	</div>
-      </div>
    </div>
 </div>
 
+<div class="content">
+   <div class="span9 main"> 
 {% block body %}
 
 
-
 {% endblock %}
+   </div>
+   <div class="span3 sidebar">
+      <h2>Here is a sidebar</h2>
+   </div>
 
-{% block footer %}
+	{% block footer %}
 		<div class="navbar navbar-fixed-bottom">
                         &copy; Copyright 2013 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
                 </div>
 
-{% endblock %}
+	{% endblock %}
+</div>
 <script src="twitter-bootstrap-37d0a30/docs/assets/js/jquery.js"></script>
 <script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-transition.js"></script>
 <script src="twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-alert.js"></script>
