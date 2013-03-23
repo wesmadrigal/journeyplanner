@@ -1,48 +1,40 @@
 {% extends "layout.html" %}
-{% block title %}
-<!--<link rel="stylesheet" type="text/css" href="static/stylesheets/style.css">/!-->
 
-<p id="welcome">Bus {{bus}} updates</p>
-<br>
-{% endblock %}
 
 {% block body %}
-<body>
-<br>
-<br>
 
-{% for update in this_bus %}
-<div class="bus_stuff">
-{% if update.latitude %}
-<div style="font-family: Arial Black, Gadget, sans-serif;">{{update.user}}</div>
-<br>
-<div style="font-family: Arial Black, Gadget, sans-serif; font-weight:bold;">{{update.bus}}</div>
-<br>
-<div style="color:#808080;">Delay Time: <b>{{update.entry}}</b></div>
-<pre>Coordinates: {{update.latitude}} , {{update.longitude}}</pre>
-<a href="{{update.user_api_link}}"><img class="map-holder" src="{{update.user_map}}"></a>
-<div style="font-weight:bold;">{{update.created}}</div>
+<p id="welcome">Bus {{bus}} updates</p>
+<br><br><br>
+	{% for update in this_bus %}
 
-<br>
-<hr>
-<br>
-<br>
-{% else %}
+	{% if update.latitude %}
+		<div style="font-family: Arial Black, Gadget, sans-serif;">{{update.user}}</div>
+		<br>
+		<div style="font-family: Arial Black, Gadget, sans-serif; font-weight:bold;">{{update.bus}}</div>
+		<br>
+		<div style="color:#808080;">Delay Time: <b>{{update.entry}}</b></div>
+		<pre>Coordinates: {{update.latitude}} , {{update.longitude}}</pre>
+		<a href="{{update.user_api_link}}"><img class="map-holder" src="{{update.user_map}}"></a>
+		<div style="font-weight:bold;">{{update.created}}</div>
 
-<div style="font-family: Arial Black, Gadget, sans-serif;">{{update.user}}</div>
-<br>
-                <div style="font-family: Arial Black, Gadget, sans-serif; font-weight:bold;">{{update.bus}}</div>
-<br>
-                <div style="color:#808080;">{{update.entry}}</div>
-                <div style="font-weight:bold;">{{update.created}}</div>
+		<br>
+		<hr>
+		<br>
+		<br>
+	{% else %}
 
-<br>
-<hr>
-<br>
-<br>
-{% endif %}
-</div>
-{% endfor %}
+		<div style="font-family: Arial Black, Gadget, sans-serif;">{{update.user}}</div>
+		<br>
+        	<div style="font-family: Arial Black, Gadget, sans-serif; font-weight:bold;">{{update.bus}}</div>
+		<br>
+        	<div style="color:#808080;">{{update.entry}}</div>
+        	<div style="font-weight:bold;">{{update.created}}</div>
 
-</body>
+		<br>
+		<hr>
+		<br>
+		<br>
+	{% endif %}
+	{% endfor %}
+
 {% endblock %}

@@ -1,8 +1,8 @@
 {% extends "layout.html" %}
 {% block links %}
 {% endblock %}
-{% block title %}
 
+{% block script %}
 <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
@@ -14,40 +14,39 @@
 /!-->
 <script>
 
-$(document).ready(function(){
-var myArr = new Array();
-$.ajax({
-type : "GET",
-url: "static/xml/new_cities.xml",
-dataType: "xml",
-success: parseXml,
-complete: doAdd,
-error: function(){
-alert("Couldn't find XL");
-}
-});
-function parseXml(xml){
-$(xml).find('menuitem').each(function(){
-var val = $(this).find('titlecity').text();
-myArr.push(val);
-});
-}
-function doAdd(){
-$("#start").typeahead({source: myArr});
-$("#end").typeahead({source: myArr});
-}
-});
+	$(document).ready(function(){
+		var myArr = new Array();
+		$.ajax({
+			type : "GET",
+			url: "static/xml/new_cities.xml",
+			dataType: "xml",
+			success: parseXml,
+			complete: doAdd,
+			error: function(){
+				alert("Couldn't find XL");
+				}
+			});
+		function parseXml(xml){
+			$(xml).find('menuitem').each(function(){
+				var val = $(this).find('titlecity').text();
+				myArr.push(val);
+			});
+		}
+		function doAdd(){
+			$("#start").typeahead({source: myArr});
+			$("#end").typeahead({source: myArr});
+		}
+	});
 
-var $j = jQuery.noConflict();
-$j(document).ready(function(){
-$j('#date').datepicker();
-});
+	var $j = jQuery.noConflict();
+	$j(document).ready(function(){
+		$j('#date').datepicker();
+	});
 
 
 
 
 </script>
-
 {% endblock %}
 
 {% block body %}

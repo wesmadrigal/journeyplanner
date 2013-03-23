@@ -75,18 +75,19 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
 <meta name="viewport" content="width=divice-width, initial-scale=1.0">
 <link href="twitter-bootstrap-37d0a30/docs/assets/css/bootstrap-responsive.css" rel="stylesheet" media="screen">
 <link href="twitter-bootstrap-37d0a30/docs/assets/css/bootstrap.css" rel="stylesheet" media="screen">
+<link href="twitter-bootstrap-37d0a30/elusive-iconfont-master/css/elusive-webfont.css">
 <link href="twitter-bootstrap-37d0a30/docs/assets/css/example-fixed-layout.css" rel="stylesheet">
 <link href="twitter-bootstrap-37d0a30/less/responsive.less" rel="stylesheet">
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ /!-->
-
-
-{% block title %}
+{% block script %}
 {% endblock %}
+
 </head>
 <body>
 <div class="container">
-
-
+{% block title %}
+<h2>Preparation for the rest of U.S.</h2>
+{% endblock %}
 <div class="navbar navbar-static-top">
    <div class="navbar-inner">
       <a class="brand" href="/">MegabusAid</a>
@@ -100,11 +101,11 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
 	<ul class="nav nav-tabs">
  	<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Navigation<b class="caret"></b></a>
 	   <ul class="dropdown-menu">
-	      <li><a href="/">Home</a></li>
-              <li><a href="/plantrip">Trip Planner</a></li>
-              <li><a href="/choicepage">Riding or Waiting - Bus Tracker</a></li>
-	      <li><a href="/updates">Updates Page</a></li>
-	      <li><a href="/aboutme">About Me</a></li>
+	      <li><a href="/"><i class="icon-home"></i> Home</a></li>
+              <li><a href="/plantrip"><i class="icon-pencil"></i> Trip Planner</a></li>
+              <li><a href="/choicepage"><i class="icon-map-marker"></i> Riding or Waiting - Bus Tracker</a></li>
+	      <li><a href="/updates"><i class="icon-check"></i> Updates Page</a></li>
+	      <li><a href="/aboutme"><i class="icon-male"></i> About Me</a></li>
 	   </ul>
 	</li>
 	

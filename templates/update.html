@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 {% block links %}
 {% endblock %}
-{% block title %}
+
+{% block script %}
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
 <script>
@@ -65,7 +66,24 @@ times.append('<option>'+the_times[i]+'</option>');
                         
         
 </script>
-{% endblock title %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+	$('#departure').selectBoxIt({
+		theme: 'jquerymobile'
+	});
+	$('#arrival').selectBoxIt({
+		theme: 'jquerymobile'
+	});
+	$('#times').selectBoxIt({
+		theme: 'jquerymobile'
+	});
+	$('#entry').selectBoxIt({
+		theme: 'jquerymobile'
+	});
+});
+</script>
+{% endblock %}
 
 {% block body %}
 
@@ -78,30 +96,30 @@ times.append('<option>'+the_times[i]+'</option>');
 <br>
 <br>
 
-{% if update_type == "riding" %}
+	{% if update_type == "riding" %}
 
-<form title="buspost" method="POST">
-<label><h2>Departure:</h2>
-<select name="departure" id="departure">
-<option>City, State</option>
-</select>
-</label>
+	<form title="buspost" method="POST">
+		<label><h2>Departure:</h2>
+		<select name="departure" id="departure">
+			<option>City, State</option>
+		</select>
+		</label>
 
-<label><h2>Arrival:</h2>
-<select name="arrival" id="arrival">
-<option>Select a departure first</option>
-</select>
-</label>
+		<label><h2>Arrival:</h2>
+		<select name="arrival" id="arrival">
+			<option>Select a departure first</option>
+		</select>
+		</label>
 
-<label><h2>Times:</h2>
-<select name="times" id="times">
-<option>Select departure and arrival cities</option>
-</select>
-</label>
+		<label><h2>Times:</h2>
+		<select name="times" id="times">
+			<option>Select departure and arrival cities</option>
+		</select>
+		</label>
 
                 <label><h2>Delay Time:</h2>
-                <select name="entry">
-<option value="No Delay">No Delay</option>
+                <select name="entry" id="entry">
+			<option value="No Delay">No Delay</option>
                         <option value="15 minutes late">15 minutes late</option>
                         <option value="30 minutes late">30 minutes late</option>
                         <option value="45 minutes late">45 minutes late</option>
@@ -112,45 +130,29 @@ times.append('<option>'+the_times[i]+'</option>');
                         
                 <input type="hidden" name="latitude" id="latitude" />
                 <input type="hidden" name="longitude" id="longitude" />
-
-<!--
-<label><h2>Request:</h2>
-<select name="entry">
-<option value="Delay Info Request">Delay Info Request</option>
-</select>
-</label>
-/!-->
-<!--
-<p>Select the bus arriving to your Departure city closest to your Departure Time.</p>
-<select name="waiter-bus-choices">
-<option value="Select Arrival">Select Approaching Bus Causing Delay</option>
-</select>
-/!-->
-<br>
-<div class="error" style="color:red">{{error}}</div>
-<br>
-<input type="submit" value="Update" onclick="this.disabled=true">
-</form>
-{% else %}
-<form title="buspost" method="GET" action="/timeschoice">
-<label><h2>Departure:</h2>
-<select name="departure" id="departure">
-<option>City, State</option>
-</select>
-</label>
-                
+		<br>
+		<div class="error" style="color:red">{{error}}</div>
+		<br>
+		<input type="submit" value="Update">
+	</form>
+	{% else %}
+	<form title="buspost" method="GET" action="/timeschoice">
+		<label><h2>Departure:</h2>
+		<select name="departure" id="departure">
+		<option>City, State</option>
+		</select>
+		</label>                
                 <br>
-
-<br>
-<div class="error" style="color:red">{{error}}</div>
-<br>
-<input type="submit" value="Find buses arriving in your city" onclick="this.disabled=true">
-</form>
-{% endif %}
-<br>
-<br>
-<br>
-<br>
+		<br>
+		<div class="error" style="color:red">{{error}}</div>
+		<br>
+		<input type="submit" value="Find buses arriving in your city">
+	</form>
+	{% endif %}
+	<br>
+	<br>
+	<br>
+	<br>
 
 {% for b in bus_info %}
 
