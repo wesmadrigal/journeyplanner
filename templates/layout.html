@@ -79,6 +79,11 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
 <link href="twitter-bootstrap-37d0a30/docs/assets/css/example-fixed-layout.css" rel="stylesheet">
 <link href="twitter-bootstrap-37d0a30/less/responsive.less" rel="stylesheet">
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ /!-->
+
+<!-- social networking scripts /!-->
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "0fb214aa-191e-4643-9458-c3158b66fbf8", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+
 {% block script %}
 {% endblock %}
 
@@ -130,6 +135,12 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
 	{% block footer %}
 		<div class="navbar navbar-static-bottom">
                         &copy; Copyright 2013 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
+			<span class='st_facebook_large' displayText='Facebook'></span>
+			<span class='st_fblike_large' displayText='Facebook Like'></span>
+			<span class='st_plusone_large' displayText='Google +1'></span>
+			<span class='st_reddit_large' displayText='Reddit'></span>
+			<span class='st_twitter_large' displayText='Tweet'></span>
+			<span class='st_linkedin_large' displayText='LinkedIn'></span>
                 </div>
 
 	{% endblock %}

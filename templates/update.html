@@ -98,7 +98,7 @@ $(document).ready(function(){
 
 	{% if update_type == "riding" %}
 
-	<form title="buspost" method="POST">
+	<form title="buspost" method="POST" class="well">
 		<label><h2>Departure:</h2>
 		<select name="departure" id="departure">
 			<option>City, State</option>
@@ -136,7 +136,7 @@ $(document).ready(function(){
 		<input type="submit" value="Update">
 	</form>
 	{% else %}
-	<form title="buspost" method="GET" action="/timeschoice">
+	<form title="buspost" method="GET" action="/timeschoice" class="well">
 		<label><h2>Departure:</h2>
 		<select name="departure" id="departure">
 		<option>City, State</option>

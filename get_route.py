@@ -229,6 +229,53 @@ def find_times2(cared_about, from_city):
     return times_list
 
 
+def find_times_and_price(cared_about, from_city):
+    city_indices = get_locations(cared_about, from_city)
+    times = {}
+    prices = {}
+    times_list = []
+    iteration = 1
+    dep_str = ''
+    arr_str = ''
+    price_str = ''
+    while len(city_indices) > 0:
+        #dep_str = ''
+        #arr_str = ''
+        curr = city_indices[0]
+        del city_indices[0]
+        for i in cared_about[curr-2][0]:
+                if i.isdigit():
+                        dep_str += i
+                elif i.isupper():
+                        dep_str += i
+        for e in cared_about[curr+7][0]:
+                if e.isdigit():
+                        arr_str += e
+                elif e.isupper():
+                        arr_str += e
+        times[str(iteration)] = [dep_str, arr_str]
+        price_string = cared_about[curr+27][0]
+        period = price_string.find('.')
+        dollars_part = price_string[0:period]
+        cents_part = price_string[period:]
+        price_str += '$'
+        for j in dollars_part:
+            if j.isdigit():
+                price_str += j
+        price_str += '.'
+        for n in cents_part:
+            if n.isdigit():
+                price_str += n
+        prices[str(iteration)] = price_str 
+        iteration += 1
+        dep_str = ''
+        arr_str = ''
+	price_str = ''
+    for i in times.keys():
+        times_list.append((times[i][0] + '-' + times[i][1], prices[i]))
+    return times_list
+
+
 ## Last but most importantly, my algorithm to combine the
 ## data mining tool algorithms into my final data mining
 ## machine.  As is true in life, tools are components of

@@ -169,7 +169,7 @@ def make_formatted(trip, m, day):
         for e in range(len(trip[i])-1):
             leg = 'leg ' + str(e+1)
             cared_about = get_cared_about(mb_api, trip[i][e], trip[i][e+1], day, m, y)
-            times = find_times2(cared_about, trip[i][e])
+            times = find_times_and_price(cared_about, trip[i][e])
             if hours_so_far < 12:
                 link_trip_dict[i] += "window.open('%s');" % mb_api.format(Buses[trip[i][e]], Buses[trip[i][e+1]], m, day, y)
                 key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + day
@@ -211,10 +211,10 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
 		from_c = route[0:first]
 		to_c = route[first+1:second]
 		new_route = from_c + '  ----->  ' + to_c + ' on %s' % route[second+1:] 
-                response += '<p><b>%s</b></p>' % new_route
+                response += '<p><h4><b>%s</b></h4></p>' % new_route
                 response += '<ul>'
-                for time in trip_dict[str(trip_dict_key)][the_leg][route]:
-                    response += '<li style="border:10px; margin:10px;">%s</li>' % time
+                for time, price in trip_dict[str(trip_dict_key)][the_leg][route]:
+                    response += '<li style="border:10px; margin:10px;"><h5>%s<p style="margin-left:10px; color:blue;">%s</p></h5></li>' % (time,price)
                 response += '</ul>'
             response += '<br><br>'
         #response += '<a href="http://us.megabus.com" target="_blank" onclick="%s">Click for official site links</a><br><hr>' % link_trip_dict[str(trip_dict_key)]
