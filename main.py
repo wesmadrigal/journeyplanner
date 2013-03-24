@@ -424,9 +424,20 @@ class PlanTrip(Handler):
 
 class AboutMe(Handler):
 	def get(self):
-		self.render("aboutme.html")
+		user = users.get_current_user()
+		user_email = None
+		if user:
+			user_email = user.email()
+		self.render("aboutme.html", user_email=user_email)
 
-
+	def post(self):
+		subject = self.request.get("subject")
+		content = self.request.get("content")
+		email = users.get_current_user().email()
+		message = mail.EmailMessage(sender = email, subject=subject)
+		message.to = 'wesley7879@gmail.com'
+		message.body = content	
+		message.send()
 
 app = webapp2.WSGIApplication([('/', MainPage),
 			       ('/login', LoginPage),
