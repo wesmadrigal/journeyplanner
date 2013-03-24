@@ -42,24 +42,29 @@ def plan_trip(start, finish, routes):
 
 def find_hours(cared_about, from_c):
     locs = get_locations(cared_about, from_c)
-    region = cared_about[locs[0]:]
+    region = None
+    if len(locs) > 0:
+    	region = cared_about[locs[0]:]
     if len(locs) > 1:
         region = cared_about[locs[0]:locs[1]]
     trip_time = ''
-    for i in region:
-            for e in i:
-                    if 'hrs' and 'mins' in e:
-                            for f in e[0: e.find('hrs')]:
-                                    if f.isdigit():
-                                            trip_time += f
+    if region != None:
+    	for i in region:
+        	for e in i:
+                	if 'hrs' and 'mins' in e:
+                        	for f in e[0: e.find('hrs')]:
+                                	if f.isdigit():
+                                        	trip_time += f
                             #trip_time += '.'
-			    sec_digs = ''
-                            for l in e[e.find('hrs')+1:]:
-                                    if l.isdigit():
-                                            sec_digs += l
-			    sec_digs2 = str(float(int(sec_digs))/float(60))
-			    to_add = sec_digs2[sec_digs2.find('.'):sec_digs2.find('.')+3]
-			    trip_time += to_add
+				sec_digs = ''
+                        	for l in e[e.find('hrs')+1:]:
+                                	if l.isdigit():
+                                        	sec_digs += l
+				sec_digs2 = str(float(int(sec_digs))/float(60))
+			        to_add = sec_digs2[sec_digs2.find('.'):sec_digs2.find('.')+3]
+			        trip_time += to_add
+    if trip_time == '':
+        return '0.0'
     return trip_time
 
 
