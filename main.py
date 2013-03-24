@@ -428,7 +428,8 @@ class AboutMe(Handler):
 		user_email = None
 		if user:
 			user_email = user.email()
-		self.render("aboutme.html", user_email=user_email)
+		logout = users.create_logout_url(self.request.uri)
+		self.render("aboutme.html", user=user, logout=logout,user_email=user_email)
 
 	def post(self):
 		subject = self.request.get("subject")
@@ -436,8 +437,10 @@ class AboutMe(Handler):
 		email = users.get_current_user().email()
 		message = mail.EmailMessage(sender = email, subject=subject)
 		message.to = 'wesley7879@gmail.com'
-		message.body = content	
+		app_identifier = '\nSent from a user through Megabusfinder.\n'
+		message.body = content + app_identifier
 		message.send()
+		self.redirect('/aboutme')
 
 app = webapp2.WSGIApplication([('/', MainPage),
 			       ('/login', LoginPage),
