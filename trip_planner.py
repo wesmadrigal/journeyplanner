@@ -203,7 +203,25 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
     #trips = sorted([int(i) for i in trip_dict.keys()])
     trip_dict_keys = sorted([int(i) for i in trip_dict.keys()])
     for trip_dict_key in trip_dict_keys:
-        response += '<a class="option-button" href="http://us.megabus.com" target="_blank" onclick="{0}"><b>Option {1}</b></a>'.format(link_trip_dict[str(trip_dict_key)], str(trip_dict_key))
+	current_links = link_trip_dict[str(trip_dict_key)]
+        windows = []
+        windows.append(current_links.find('window'))
+        while current_links.find('window', windows[len(windows)-1]+1) != -1:
+           windows.append(current_links.find('window', windows[len(windows)-1]+1))
+        if len(windows) == 1:
+            start = current_links.find("'")
+            stop = current_links.find("'", start+1)
+            link = current_links[start+1:stop]
+            response += '<a href="{0}" target="_blank"><b>Option {1}</b></a>'.format(link, str(trip_dict_key))
+        else:
+            last_link_start = windows[len(windows)-1]
+            last_link = current_links[last_link_start:]
+            start = last_link.find("'")
+            stop = last_link.find("'", start+1)
+            last_L = last_link[start+1:stop]
+            other_links = current_links[0: last_link_start]
+            response += '<a href="{0}" target="_blank" onclick="{1}"><b>Option {2}</b></a>'.format(last_L, other_links, str(i))	
+
         response += '<p>Total on-bus hours: <b>%s</b></p>' % trip_hours[str(trip_dict_key)]
 	# to sort the legs
 	legs = sorted([int(i[i.find(' ')+1:]) for i in trip_dict[str(trip_dict_key)].keys()])

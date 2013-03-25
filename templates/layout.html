@@ -72,12 +72,14 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
       google.maps.event.addDomListener(window, 'load', initialize);
     </script>	
 
-<meta name="viewport" content="width=divice-width, initial-scale=1.0">
-<link href="twitter-bootstrap-37d0a30/docs/assets/css/bootstrap-responsive.css" rel="stylesheet" media="screen">
+<meta name="viewport" content="width=divice-width, height=device-height, target-density=device-dpi, initial-scale=1.0">
 <link href="twitter-bootstrap-37d0a30/docs/assets/css/bootstrap.css" rel="stylesheet" media="screen">
+<link href="twitter-bootstrap-37d0a30/docs/assets/css/bootstrap-responsive.css" rel="stylesheet" media="screen">
 <link href="twitter-bootstrap-37d0a30/elusive-iconfont-master/css/elusive-webfont.css">
+<!--
 <link href="twitter-bootstrap-37d0a30/docs/assets/css/example-fixed-layout.css" rel="stylesheet">
 <link href="twitter-bootstrap-37d0a30/less/responsive.less" rel="stylesheet">
+/!-->
 <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ /!-->
 
 <!-- social networking scripts /!-->
@@ -104,7 +106,7 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
          </button>
 	<div class="nav-collapse" style="height: auto;">
 	<ul class="nav nav-tabs">
- 	<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Navigation<b class="caret"></b></a>
+ 	<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>Navigation</b><b class="caret"></b></a>
 	   <ul class="dropdown-menu">
 	      <li><a href="/"><i class="icon-home"></i> Home</a></li>
               <li><a href="/plantrip"><i class="icon-pencil"></i> Trip Planner</a></li>
@@ -133,7 +135,7 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
 
 
 	{% block footer %}
-		<div class="navbar navbar-static-bottom">
+		<div class="navbar navbar-static-bottom" style="margin-top:10px;">
                         &copy; Copyright 2013 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
 			<span class='st_facebook_large' displayText='Facebook'></span>
 			<span class='st_fblike_large' displayText='Facebook Like'></span>

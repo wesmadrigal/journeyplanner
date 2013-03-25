@@ -290,9 +290,13 @@ class IndividualBus(Handler):
 	        bus = bus1.replace('%20', chr(32))	
 		b = BusUpdates.all()
 		this_bus = b.order('-timestamp').filter('bus = ', bus).fetch(limit=10)
+		name = users.get_current_user()
+		user = None
+		if name:
+			user = name.nickname()
 		logout = users.create_logout_url(self.request.uri)
 	
-		self.render("individual_bus.html", bus=bus, this_bus=this_bus, logout=logout)
+		self.render("individual_bus.html", bus=bus, user=user, this_bus=this_bus, logout=logout)
 		#if self.format == 'html':	
 		#	if this_bus:
 		#		self.render("individual_bus.html", bus=bus, this_bus=this_bus)
@@ -410,14 +414,14 @@ class PlanTrip(Handler):
 		if len(date) > 0:
 			month = str(int(date[0:date.find('/')]))
 			day = str(int(date[date.find('/')+1:date.find('/',date.find('/')+1)]))
-		if dep != 'loading' and end != 'loading' and len(date) >= 1:
+		if dep != 'loading' and end != 'loading' and len(date) >= 1 and dep in routes.keys() and end in routes.keys():
 			trip = plan_trip(dep, end, routes)
 			trip_options, trip_times, trip_links = make_formatted(trip, month, day)
 			response = generate_response(trip_options, trip_times, trip_links)
 			self.render("plan_trip.html", response=response, user=user, logout=logout)
 			
 		else:
-			error = 'You must choose a departure city, arrival city, and a day of departure.'
+			error = 'You must choose a valid departure city, arrival city, and a day of departure.'
 			self.render("plan_trip.html", user=user, logout=logout, error=error)
 		
 
@@ -445,7 +449,7 @@ class AboutMe(Handler):
 app = webapp2.WSGIApplication([('/', MainPage),
 			       ('/login', LoginPage),
 			       ('/choicepage', ChoicePage),
-			       ('/updates(?:.json)?', UpdatesPage),
+			       ('/updates', UpdatesPage),
 			       ('/updates/.*', IndividualBus),
 			       ('/timeschoice', TimesChoices),
 			       ('/plantrip', PlanTrip),

@@ -24,10 +24,6 @@ handlers:
   static_dir: static/xml
   #upload: static/xml
 
-
-- url: /update_bus_data/ .*
-  script: main.app
-
 - url: .*
   script: main.app
 
