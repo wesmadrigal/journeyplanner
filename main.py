@@ -414,10 +414,13 @@ class PlanTrip(Handler):
 		if len(date) > 0:
 			month = str(int(date[0:date.find('/')]))
 			day = str(int(date[date.find('/')+1:date.find('/',date.find('/')+1)]))
-		if dep != 'loading' and end != 'loading' and len(date) >= 1 and dep in routes.keys() and end in routes.keys():
-			trip = plan_trip(dep, end, routes)
-			trip_options, trip_times, trip_links = make_formatted(trip, month, day)
-			response = generate_response(trip_options, trip_times, trip_links)
+		if dep != 'loading' and end != 'loading' and len(date) >= 1 and dep in routes.keys() and end in routes.keys() and dep != end:
+			try:
+				trip = plan_trip(dep, end, routes)
+				trip_options, trip_times, trip_links = make_formatted(trip, month, day)
+				response = generate_response(trip_options, trip_times, trip_links)
+			except:
+				response = '<p style="color:red"><b>The requested route is impossible with megabus.</b></p>'
 			self.render("plan_trip.html", response=response, user=user, logout=logout)
 			
 		else:

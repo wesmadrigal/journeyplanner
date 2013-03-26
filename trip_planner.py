@@ -212,7 +212,7 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
             start = current_links.find("'")
             stop = current_links.find("'", start+1)
             link = current_links[start+1:stop]
-            response += '<a href="{0}" target="_blank"><b>Option {1}</b></a>'.format(link, str(trip_dict_key))
+            response += '<a href="{0}" target="_blank"><h3><b>Option {1} Link</b></h3></a>'.format(link, str(trip_dict_key))
         else:
             last_link_start = windows[len(windows)-1]
             last_link = current_links[last_link_start:]
@@ -220,7 +220,7 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
             stop = last_link.find("'", start+1)
             last_L = last_link[start+1:stop]
             other_links = current_links[0: last_link_start]
-            response += '<a href="{0}" target="_blank" onclick="{1}"><b>Option {2}</b></a>'.format(last_L, other_links, str(i))	
+            response += '<a href="{0}" target="_blank" onclick="{1}"><h3><b>Option {2} Links</b></h3></a>'.format(last_L, other_links, str(trip_dict_key))	
 
         response += '<p>Total on-bus hours: <b>%s</b></p>' % trip_hours[str(trip_dict_key)]
 	# to sort the legs
@@ -237,7 +237,10 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
                 response += '<p><h4><b>%s</b></h4></p>' % new_route
                 response += '<ul>'
                 for time, price in trip_dict[str(trip_dict_key)][the_leg][route]:
-                    response += '<li style="border:10px; margin:10px;"><h5>%s<p style="margin-left:10px; color:blue;">%s</p></h5></li>' % (time,price)
+		    if len(time) > 1 and len(price) > 1:
+                        response += '<li style="border:10px; margin:10px;"><h5>%s<p style="margin-left:10px; color:blue;">%s</p></h5></li>' % (time,price)
+		    else:
+  			response += '<li style="border:10px; margin:10px;"><h5><p style="color:red">No trips available</p></h5></li>'
                 response += '</ul>'
             response += '<br><br>'
         #response += '<a href="http://us.megabus.com" target="_blank" onclick="%s">Click for official site links</a><br><hr>' % link_trip_dict[str(trip_dict_key)]
