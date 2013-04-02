@@ -101,12 +101,6 @@ new_providers = {}
 for i in federated.keys():
 	new_providers[i] = users.create_login_url(federated_identity=federated[i])
 
-providers_images = {
-	'Google' : "",
-	'AOL': "javascript:location.href='http://www.addtoany.com/add_to/aol_mail?linkurl='+encodeURIComponent(location.href)+'&linkname='+encodeURIComponent(document.title)",
-	'Yahoo' : "",
-	'MyOpenID': ""
-	}
 
 
 class MainPage(Handler):
@@ -419,11 +413,13 @@ class PlanTrip(Handler):
 				trip = plan_trip(dep, end, routes)
 				trip_options, trip_times, trip_links = make_formatted(trip, month, day)
 				response = generate_response(trip_options, trip_times, trip_links)
+			#	self.render("plan_trip.html", response=response, user=user, logout=logout)
 			except:
 				response = '<p style="color:red"><b>The requested route is impossible with megabus.</b></p>'
-			self.render("plan_trip.html", response=response, user=user, logout=logout)
-			
+			#	self.render("plan_trip.html", response=response, user=user, logout=logout)
+			self.render("plan_trip.html", response=response, user=user, logout=logout)		
 		else:
+		
 			error = 'You must choose a valid departure city, arrival city, and a day of departure.'
 			self.render("plan_trip.html", user=user, logout=logout, error=error)
 		
@@ -439,15 +435,22 @@ class AboutMe(Handler):
 		self.render("aboutme.html", user=user, logout=logout,user_email=user_email)
 
 	def post(self):
+		user = users.get_current_user().nickname()
+		logout = users.create_logout_url(self.request.uri)
 		subject = self.request.get("subject")
 		content = self.request.get("content")
-		email = users.get_current_user().email()
-		message = mail.EmailMessage(sender = email, subject=subject)
-		message.to = 'wesley7879@gmail.com'
-		app_identifier = '\nSent from a user through Megabusfinder.\n'
-		message.body = content + app_identifier
-		message.send()
-		self.redirect('/aboutme')
+		user_email = users.get_current_user().email()
+		if len(subject) < 1 and len(content) < 1:
+			error = 'Must have a subject and content'
+			self.render("aboutme.html", user=user, logout=logout, user_email=user_email, error=error)
+		else:
+			message = mail.EmailMessage(sender = user_email, subject=subject)
+			message.to = 'wesley7879@gmail.com'
+			app_identifier = '\nSent from a user through Megabusfinder.\n'
+			message.body = content + app_identifier
+			message.send()
+			message_sent = 'Your message was sent to the administrator.'
+			self.render("aboutme.html", user=user, logout=logout, user_email=user_email, message_sent=message_sent)
 
 app = webapp2.WSGIApplication([('/', MainPage),
 			       ('/login', LoginPage),
@@ -458,3 +461,5 @@ app = webapp2.WSGIApplication([('/', MainPage),
 			       ('/plantrip', PlanTrip),
 			       ('/aboutme', AboutMe)],
 			       debug=True)
+
+

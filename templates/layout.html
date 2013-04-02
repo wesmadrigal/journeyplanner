@@ -95,7 +95,7 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
 {% block title %}
 <h2>Preparation for the rest of U.S.</h2>
 {% endblock %}
-<div class="navbar navbar-static-top">
+<div class="navbar navbar-static-top navbar-inverse">
    <div class="navbar-inner">
       <a class="brand" href="/">MegabusAid</a>
          <button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -105,29 +105,27 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
 	    <span class="icon-bar"></span>
          </button>
 	<div class="nav-collapse" style="height: auto;">
-	<ul class="nav nav-tabs">
- 	<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><b>Navigation</b><b class="caret"></b></a>
-	   <ul class="dropdown-menu">
+	<ul class="nav">
+
 	      <li><a href="/"><i class="icon-home"></i> Home</a></li>
               <li><a href="/plantrip"><i class="icon-pencil"></i> Trip Planner</a></li>
               <li><a href="/choicepage"><i class="icon-map-marker"></i> Riding or Waiting - Bus Tracker</a></li>
 	      <li><a href="/updates"><i class="icon-check"></i> Updates Page</a></li>
+	<!--
 	      <li><a href="/aboutme"><i class="icon-male"></i> About Me</a></li>
-	   </ul>
-	</li>
-	
+	/!-->
 	{% if user %}
 		<p class="navbar-text pull-right">Logged in: <a href="{{logout}}">{{user}}</a></p>
 	{% else %}
-		<p class="navbar-text pull-right">Guest: <a href="/login">Log In</a></p>
+		<p class="navbar-text pull-right">Guest: <a href="/login">Login</a></p>
 	{% endif %}
 	</ul>
 	</div>
    </div>
 </div>
 
-<div class="content">
- 
+<div class="content pagination-centered">
+<hr> 
 {% block body %}
 
 
@@ -135,7 +133,7 @@ var pos = new google.maps.LatLng( {{ latitude | safe }},
 
 
 	{% block footer %}
-		<div class="navbar navbar-static-bottom" style="margin-top:10px;">
+		<div class="navbar navbar-fixed-bottom" style="margin-top:10px;">
                         &copy; Copyright 2013 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
 			<span class='st_facebook_large' displayText='Facebook'></span>
 			<span class='st_fblike_large' displayText='Facebook Like'></span>

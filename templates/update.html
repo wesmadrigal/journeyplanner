@@ -86,11 +86,12 @@ $(document).ready(function(){
 {% endblock %}
 
 {% block body %}
+<div class="row-fluid">
 
 {% if user %}
-<p id="welcome">Welcome to the {{update_type}} updates page {{user}}</p>
+<p id="welcome" style="padding:15px;">Welcome to the {{update_type}} updates page {{user}}</p>
 {% else %}
-<p id="welcome">Welcome to the {{update_type}} updates page guest</p>
+<p id="welcome" style="padding:15px;">Welcome to the {{update_type}} updates page guest</p>
 {% endif %}
 
 <br>
@@ -172,6 +173,9 @@ $(document).ready(function(){
 <br>
 <hr>
 {% endfor %}
+
+<!-- end of row-fluid /!-->
+</div>
 
 <form type="hidden">
 <input id="json" type="hidden" value="{{data}}">

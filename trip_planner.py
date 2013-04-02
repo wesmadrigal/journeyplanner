@@ -190,7 +190,16 @@ def make_formatted(trip, m, day):
             trip_dict_formatted[i][leg] = {}
             trip_dict_formatted[i][leg][key] = times
         trip_hours[i] = hours_so_far
-    return trip_dict_formatted, trip_hours, link_trip_dict
+    hours = sorted([trip_hours[i] for i in trip_hours.keys()])
+    new_trip_dict, new_trip_hours, new_links = {}, {}, {}
+    for hour in range(len(hours)):
+        for key in trip_hours.keys():
+	    if trip_hours[key] == hours[hour]:
+		new_key = str(hour+1)
+		new_trip_dict[new_key] = trip_dict_formatted[key]
+		new_trip_hours[new_key] = trip_hours[key]
+		new_links[new_key] = link_trip_dict[key]
+    return new_trip_dict, new_trip_hours, new_links
 
 
 # this algorithm uses the above "make_formatted" algorithm and takes all of 
@@ -199,7 +208,7 @@ def make_formatted(trip, m, day):
 
 def generate_response(trip_dict, trip_hours, link_trip_dict):
     response = ''
-    response += '<div class="tripOptions">'
+    response += '<div>'
     #trips = sorted([int(i) for i in trip_dict.keys()])
     trip_dict_keys = sorted([int(i) for i in trip_dict.keys()])
     for trip_dict_key in trip_dict_keys:
@@ -235,7 +244,7 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
 		to_c = route[first+1:second]
 		new_route = from_c + '  ----->  ' + to_c + ' on %s' % route[second+1:] 
                 response += '<p><h4><b>%s</b></h4></p>' % new_route
-                response += '<ul>'
+                response += '<ul style="list-style-type:none;">'
                 for time, price in trip_dict[str(trip_dict_key)][the_leg][route]:
 		    if len(time) > 1 and len(price) > 1:
                         response += '<li style="border:10px; margin:10px;"><h5>%s<p style="margin-left:10px; color:blue;">%s</p></h5></li>' % (time,price)
@@ -245,7 +254,7 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
             response += '<br><br>'
         #response += '<a href="http://us.megabus.com" target="_blank" onclick="%s">Click for official site links</a><br><hr>' % link_trip_dict[str(trip_dict_key)]
     	response += '<br><hr>'
-	response += '</div>'
+    response += '</div>'
     return response
 
 
