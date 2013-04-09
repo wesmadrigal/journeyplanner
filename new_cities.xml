@@ -2,15 +2,6 @@
 
 <dropdown>
 	<menuitem>
-		<titlecity>Abilene, TX</titlecity>
-			<values>
-				<cityitem>El Paso, TX</cityitem>
-				<cityitem>Midland, TX</cityitem>
-				<cityitem>Big Spring, TX</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>Albany, NY</titlecity>
 			<values>
 				<cityitem>New York, NY</cityitem>
@@ -26,23 +17,11 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Angola, IN</titlecity>
-			<values>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Elkhart, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Kenton, OH</cityitem>
-				<cityitem>South Bend, IN</cityitem>
-				<cityitem>Van Wert, OH</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>Ann Arbor, MI</titlecity>
 			<values>
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Cleveland, OH</cityitem>
+				<cityitem>Detroit, MI</cityitem>
 				<cityitem>New York, NY</cityitem>
 				<cityitem>Pittsburgh, PA</cityitem>
 				<cityitem>State College, PA</cityitem>
@@ -86,8 +65,6 @@
 				<cityitem>Brenham, TX</cityitem>
 				<cityitem>Dallas/Fort Worth, TX</cityitem>
 				<cityitem>Houston, TX</cityitem>
-				<cityitem>Giddings, TX</cityitem>
-				<cityitem>La Grange, TX</cityitem>
 				<cityitem>Prairie View, TX</cityitem>
 				<cityitem>San Antonio, TX</cityitem>
 			</values>
@@ -105,18 +82,6 @@
 				<cityitem>Secaucus, NJ</cityitem>
 				<cityitem>Washington, DC</cityitem>
 				<cityitem>Toronto, ON</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Big Spring, TX</titlecity>
-			<values>
-				<cityitem>Abilene, TX</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>El Paso, TX</cityitem>
-				<cityitem>Lubbock, TX</cityitem>
-				<cityitem>Midland, TX</cityitem>
-				<cityitem>San Angelo, TX</cityitem>
-				<cityitem>San Antonio, TX</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -154,7 +119,6 @@
 		<titlecity>Brenham, TX</titlecity>
 			<values>
 				<cityitem>Austin, TX</cityitem>
-				<cityitem>Giddings, TX</cityitem>
 				<cityitem>Prairie View, TX</cityitem>
 				<cityitem>Houston, TX</cityitem>
 			</values>
@@ -192,24 +156,15 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Carthage, TX</titlecity>
-			<values>
-				<cityitem>Houston, TX</cityitem>
-				<cityitem>Humble, TX</cityitem>
-				<cityitem>Livingston, TX</cityitem>
-				<cityitem>Lufkin, TX</cityitem>
-				<cityitem>Nacogdoches, TX</cityitem>
-				<cityitem>Shreveport, LA</cityitem>
-				<cityitem>Texarkana, AR</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>Champaign, IL</titlecity>
 			<values>
 				<cityitem>Atlanta, GA</cityitem>
 				<cityitem>Birmingham, AL</cityitem>
 				<cityitem>Chicago, IL</cityitem>
+				<cityitem>Dallas/Fort Worth, TX</cityitem>
+				<cityitem>Little Rock, AR</cityitem>
 				<cityitem>Memphis, TN</cityitem>
+				<cityitem>Texarkana, AR</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -236,59 +191,40 @@
 	<menuitem>
 		<titlecity>Chicago, IL</titlecity>
 			<values>
-				<cityitem>Angola, IN</cityitem>
 				<cityitem>Ann Arbor, MI</cityitem>
 				<cityitem>Atlanta, GA</cityitem>
 				<cityitem>Birmingham, AL</cityitem>
 				<cityitem>Champaign, IL</cityitem>
 				<cityitem>Cincinnati, OH</cityitem>
 				<cityitem>Cleveland, OH</cityitem>
-				<cityitem>Columbia City, IN</cityitem>
 				<cityitem>Columbia, MO</cityitem>
 				<cityitem>Columbus, OH</cityitem>
 				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Dayton-Trotwood, OH</cityitem>
 				<cityitem>Detroit, MI</cityitem>
 				<cityitem>Des Moines, IA</cityitem>
 				<cityitem>East Lansing, MI</cityitem>
-				<cityitem>Elkhart, IN</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
 				<cityitem>Grand Rapids, MI</cityitem>
 				<cityitem>Indianapolis, IN</cityitem>
 				<cityitem>Iowa City, IA</cityitem>
 				<cityitem>Kansas City, MO</cityitem>
-				<cityitem>Kenton, OH</cityitem>
+				<cityitem>Little Rock, AR</cityitem>
 				<cityitem>Madison, U of Wisc, WI</cityitem>
 				<cityitem>Louisville, KY</cityitem>
 				<cityitem>Madison, WI</cityitem>
 				<cityitem>Memphis, TN</cityitem>
 				<cityitem>Milwaukee, WI</cityitem>
 				<cityitem>Minneapolis, MN</cityitem>
-				<cityitem>Muncie, IN</cityitem>
 				<cityitem>Nashville , TN</cityitem>
-				<cityitem>Norman, OK</cityitem>
-				<cityitem>Oklahoma City, OK</cityitem>
 				<cityitem>Omaha, NE</cityitem>
-				<cityitem>Plymouth, IN</cityitem>
-				<cityitem>Richmond, IN</cityitem>
-				<cityitem>South Bend, IN</cityitem>
-				<cityitem>Springfield, MO</cityitem>
 				<cityitem>St Louis, MO</cityitem>
+				<cityitem>Texarkana, AR</cityitem>
 				<cityitem>Toledo, OH</cityitem>
-				<cityitem>Valparaiso, IN</cityitem>
-				<cityitem>Van Wert, OH</cityitem>
-				<cityitem>Warsaw, IN</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
 		<titlecity>Christiansburg, VA</titlecity>
 			<values>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
 				<cityitem>Knoxville, TN</cityitem>
-				<cityitem>Little Rock, AR</cityitem>
-				<cityitem>Memphis, TN</cityitem>
-				<cityitem>Nashville , TN</cityitem>
 				<cityitem>New York, NY</cityitem>
 				<cityitem>Washington, DC</cityitem>
 			</values>
@@ -318,21 +254,6 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Columbia City, IN</titlecity>
-			<values>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Dayton-Trotwood, OH</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Muncie, IN</cityitem>
-				<cityitem>Plymouth, IN</cityitem>
-				<cityitem>Richmond, IN</cityitem>
-				<cityitem>Valparaiso, IN</cityitem>
-				<cityitem>Warsaw, IN</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>Columbia, MO</titlecity>
 			<values>
 				<cityitem>Chicago, IL</cityitem>
@@ -343,78 +264,28 @@
 	<menuitem>
 		<titlecity>Columbus, OH</titlecity>
 			<values>
-				<cityitem>Angola, IN</cityitem>
 				<cityitem>Atlanta, GA</cityitem>
 				<cityitem>Buffalo, NY</cityitem>
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Chattanooga, TN</cityitem>
-				<cityitem>Columbia City, IN</cityitem>
-				<cityitem>Dayton-Trotwood, OH</cityitem>
-				<cityitem>Elkhart, IN</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
+				<cityitem>Cincinnati, OH</cityitem>
 				<cityitem>Indianapolis, IN</cityitem>
-				<cityitem>Kenton, OH</cityitem>
 				<cityitem>Knoxville, TN</cityitem>
-				<cityitem>Muncie, IN</cityitem>
-				<cityitem>Plymouth, IN</cityitem>
-				<cityitem>Richmond, IN</cityitem>
-				<cityitem>Valparaiso, IN</cityitem>
-				<cityitem>South Bend, IN</cityitem>
-				<cityitem>Van Wert, OH</cityitem>
-				<cityitem>Warsaw, IN</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
 		<titlecity>Dallas/Fort Worth, TX</titlecity>
 			<values>
-				<cityitem>Abilene, TX</cityitem>
 				<cityitem>Atlanta, GA</cityitem>
 				<cityitem>Austin, TX</cityitem>
-				<cityitem>Big Spring, TX</cityitem>
 				<cityitem>Birmingham, AL</cityitem>
+				<cityitem>Champaign, IL</cityitem>
 				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Christiansburg, VA</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>El Paso, TX</cityitem>
 				<cityitem>Houston, TX</cityitem>
-				<cityitem>Knoxville, TN</cityitem>
 				<cityitem>Little Rock, AR</cityitem>
 				<cityitem>Memphis, TN</cityitem>
-				<cityitem>Midland, TX</cityitem>
-				<cityitem>Nashville , TN</cityitem>
-				<cityitem>New York, NY</cityitem>
-				<cityitem>Norman, OK</cityitem>
-				<cityitem>Oklahoma City, OK</cityitem>
 				<cityitem>San Antonio, TX</cityitem>
-				<cityitem>Shreveport, LA</cityitem>
-				<cityitem>Springfield, MO</cityitem>
-				<cityitem>St Louis, MO</cityitem>
 				<cityitem>Texarkana, AR</cityitem>
-				<cityitem>Washington, DC</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Dayton-Trotwood, OH</titlecity>
-			<values>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbia City, IN</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Muncie, IN</cityitem>
-				<cityitem>Plymouth, IN</cityitem>
-				<cityitem>Richmond, IN</cityitem>
-				<cityitem>Valparaiso, IN</cityitem>
-				<cityitem>Warsaw, IN</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Del Rio, TX</titlecity>
-			<values>
-				<cityitem>Eagle Pass, TX</cityitem>
-				<cityitem>San Antonio, TX</cityitem>
-				<cityitem>Uvalde, TX</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -428,6 +299,7 @@
 	<menuitem>
 		<titlecity>Detroit, MI</titlecity>
 			<values>
+				<cityitem>Ann Arbor, MI</cityitem>
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Cleveland, OH</cityitem>
 				<cityitem>East Lansing, MI</cityitem>
@@ -448,41 +320,11 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Eagle Pass, TX</titlecity>
-			<values>
-				<cityitem>Del Rio, TX</cityitem>
-				<cityitem>San Antonio, TX</cityitem>
-				<cityitem>Uvalde, TX</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>East Lansing, MI</titlecity>
 			<values>
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Detroit, MI</cityitem>
 				<cityitem>Grand Rapids, MI</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>El Paso, TX</titlecity>
-			<values>
-				<cityitem>Abilene, TX</cityitem>
-				<cityitem>Big Spring, TX</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Midland, TX</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Elkhart, IN</titlecity>
-			<values>
-				<cityitem>Angola, IN</cityitem>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Kenton, OH</cityitem>
-				<cityitem>South Bend, IN</cityitem>
-				<cityitem>Van Wert, OH</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -493,74 +335,10 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Frederick, MD</titlecity>
-			<values>
-				<cityitem>Pittsburgh, PA</cityitem>
-				<cityitem>Washington, DC</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Ft. Wayne, IN</titlecity>
-			<values>
-				<cityitem>Angola, IN</cityitem>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbia City, IN</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Dayton-Trotwood, OH</cityitem>
-				<cityitem>Elkhart, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Kenton, OH</cityitem>
-				<cityitem>Lima, OH</cityitem>
-				<cityitem>Muncie, IN</cityitem>
-				<cityitem>Plymouth, IN</cityitem>
-				<cityitem>Richmond, IN</cityitem>
-				<cityitem>South Bend, IN</cityitem>
-				<cityitem>Valparaiso, IN</cityitem>
-				<cityitem>Van Wert, OH</cityitem>
-				<cityitem>Warsaw, IN</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>Gainesville, FL</titlecity>
 			<values>
 				<cityitem>Atlanta, GA</cityitem>
 				<cityitem>Orlando, FL</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Galveston, TX</titlecity>
-			<values>
-				<cityitem>Houston, TX</cityitem>
-				<cityitem>La Marque, TX</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Gary, IN</titlecity>
-			<values>
-				<cityitem>Angola, IN</cityitem>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbia City, IN</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Dayton-Trotwood, OH</cityitem>
-				<cityitem>Elkhart, IN</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Kenton, OH</cityitem>
-				<cityitem>Muncie, IN</cityitem>
-				<cityitem>Plymouth, IN</cityitem>
-				<cityitem>Richmond, IN</cityitem>
-				<cityitem>South Bend, IN</cityitem>
-				<cityitem>Valparaiso, IN</cityitem>
-				<cityitem>Van Wert, OH</cityitem>
-				<cityitem>Warsaw, IN</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Giddings, TX</titlecity>
-			<values>
-				<cityitem>Austin, TX</cityitem>
-				<cityitem>Brenham, TX</cityitem>
-				<cityitem>Houston, TX</cityitem>
-				<cityitem>Prairie View, TX</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -576,6 +354,7 @@
 			<values>
 				<cityitem>Baltimore, MD</cityitem>
 				<cityitem>New York, NY</cityitem>
+				<cityitem>Newark, DE</cityitem>
 				<cityitem>Philadelphia, PA</cityitem>
 				<cityitem>Richmond, VA</cityitem>
 				<cityitem>Washington, DC</cityitem>
@@ -605,33 +384,10 @@
 			<values>
 				<cityitem>Austin, TX</cityitem>
 				<cityitem>Brenham, TX</cityitem>
-				<cityitem>Carthage, TX</cityitem>
 				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Galveston, TX</cityitem>
-				<cityitem>Giddings, TX</cityitem>
-				<cityitem>Humble, TX</cityitem>
-				<cityitem>La Grange, TX</cityitem>
-				<cityitem>La Marque, TX</cityitem>
-				<cityitem>Livingston, TX</cityitem>
-				<cityitem>Lufkin, TX</cityitem>
-				<cityitem>Nacogdoches, TX</cityitem>
 				<cityitem>New Orleans, LA</cityitem>
 				<cityitem>Prairie View, TX</cityitem>
 				<cityitem>San Antonio, TX</cityitem>
-				<cityitem>Shreveport, LA</cityitem>
-				<cityitem>Texarkana, AR</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Humble, TX</titlecity>
-			<values>
-				<cityitem>Carthage, TX</cityitem>
-				<cityitem>Houston, TX</cityitem>
-				<cityitem>Livingston, TX</cityitem>
-				<cityitem>Lufkin, TX</cityitem>
-				<cityitem>Nacogdoches, TX</cityitem>
-				<cityitem>Shreveport, LA</cityitem>
-				<cityitem>Texarkana, AR</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -668,20 +424,6 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Kenton, OH</titlecity>
-			<values>
-				<cityitem>Angola, IN</cityitem>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Elkhart, IN</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Lima, OH</cityitem>
-				<cityitem>South Bend, IN</cityitem>
-				<cityitem>Van Wert, OH</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>Knoxville, TN</titlecity>
 			<values>
 				<cityitem>Atlanta, GA</cityitem>
@@ -690,26 +432,8 @@
 				<cityitem>Christiansburg, VA</cityitem>
 				<cityitem>Cincinnati, OH</cityitem>
 				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Little Rock, AR</cityitem>
-				<cityitem>Memphis, TN</cityitem>
-				<cityitem>Nashville , TN</cityitem>
 				<cityitem>New York, NY</cityitem>
 				<cityitem>Washington, DC</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>La Grange, TX</titlecity>
-			<values>
-				<cityitem>Austin, TX</cityitem>
-				<cityitem>Houston, TX</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>La Marque, TX</titlecity>
-			<values>
-				<cityitem>Galveston, TX</cityitem>
-				<cityitem>Houston, TX</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -720,35 +444,14 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Lima, OH</titlecity>
-			<values>
-				<cityitem>Ft. Wayne, IN</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>Little Rock, AR</titlecity>
 			<values>
 				<cityitem>Atlanta, GA</cityitem>
 				<cityitem>Birmingham, AL</cityitem>
-				<cityitem>Christiansburg, VA</cityitem>
+				<cityitem>Champaign, IL</cityitem>
+				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Knoxville, TN</cityitem>
 				<cityitem>Memphis, TN</cityitem>
-				<cityitem>Nashville , TN</cityitem>
-				<cityitem>New York, NY</cityitem>
-				<cityitem>Washington, DC</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Livingston, TX</titlecity>
-			<values>
-				<cityitem>Carthage, TX</cityitem>
-				<cityitem>Houston, TX</cityitem>
-				<cityitem>Humble, TX</cityitem>
-				<cityitem>Lufkin, TX</cityitem>
-				<cityitem>Nacogdoches, TX</cityitem>
-				<cityitem>Shreveport, LA</cityitem>
-				<cityitem>Texarkana, AR</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -766,26 +469,6 @@
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Indianapolis, IN</cityitem>
 				<cityitem>Nashville , TN</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Lubbock, TX</titlecity>
-			<values>
-				<cityitem>Big Spring, TX</cityitem>
-				<cityitem>San Angelo, TX</cityitem>
-				<cityitem>San Antonio, TX</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Lufkin, TX</titlecity>
-			<values>
-				<cityitem>Carthage, TX</cityitem>
-				<cityitem>Houston, TX</cityitem>
-				<cityitem>Humble, TX</cityitem>
-				<cityitem>Livingston, TX</cityitem>
-				<cityitem>Nacogdoches, TX</cityitem>
-				<cityitem>Shreveport, LA</cityitem>
-				<cityitem>Texarkana, AR</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -809,24 +492,10 @@
 				<cityitem>Birmingham, AL</cityitem>
 				<cityitem>Champaign, IL</cityitem>
 				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Christiansburg, VA</cityitem>
 				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Knoxville, TN</cityitem>
 				<cityitem>Little Rock, AR</cityitem>
-				<cityitem>Nashville , TN</cityitem>
-				<cityitem>New York, NY</cityitem>
 				<cityitem>St Louis, MO</cityitem>
 				<cityitem>Texarkana, AR</cityitem>
-				<cityitem>Washington, DC</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Midland, TX</titlecity>
-			<values>
-				<cityitem>Abilene, TX</cityitem>
-				<cityitem>Big Spring, TX</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>El Paso, TX</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -869,47 +538,14 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Muncie, IN</titlecity>
-			<values>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbia City, IN</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Dayton-Trotwood, OH</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Plymouth, IN</cityitem>
-				<cityitem>Richmond, IN</cityitem>
-				<cityitem>Valparaiso, IN</cityitem>
-				<cityitem>Warsaw, IN</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Nacogdoches, TX</titlecity>
-			<values>
-				<cityitem>Carthage, TX</cityitem>
-				<cityitem>Houston, TX</cityitem>
-				<cityitem>Humble, TX</cityitem>
-				<cityitem>Livingston, TX</cityitem>
-				<cityitem>Lufkin, TX</cityitem>
-				<cityitem>Shreveport, LA</cityitem>
-				<cityitem>Texarkana, AR</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>Nashville , TN</titlecity>
 			<values>
 				<cityitem>Atlanta, GA</cityitem>
 				<cityitem>Chattanooga, TN</cityitem>
 				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Christiansburg, VA</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
 				<cityitem>Indianapolis, IN</cityitem>
-				<cityitem>Knoxville, TN</cityitem>
-				<cityitem>Little Rock, AR</cityitem>
 				<cityitem>Louisville, KY</cityitem>
 				<cityitem>Memphis, TN</cityitem>
-				<cityitem>New York, NY</cityitem>
-				<cityitem>Washington, DC</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -950,16 +586,12 @@
 				<cityitem>Charlotte, NC</cityitem>
 				<cityitem>Christiansburg, VA</cityitem>
 				<cityitem>Cleveland, OH</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
 				<cityitem>Detroit, MI</cityitem>
 				<cityitem>Durham, NC</cityitem>
 				<cityitem>Fairhaven, MA</cityitem>
 				<cityitem>Hampton, VA</cityitem>
 				<cityitem>Hartford, CT</cityitem>
 				<cityitem>Knoxville, TN</cityitem>
-				<cityitem>Little Rock, AR</cityitem>
-				<cityitem>Memphis, TN</cityitem>
-				<cityitem>Nashville , TN</cityitem>
 				<cityitem>New Brunswick, NJ</cityitem>
 				<cityitem>New Haven, CT</cityitem>
 				<cityitem>Newark, DE</cityitem>
@@ -982,32 +614,17 @@
 		<titlecity>Newark, DE</titlecity>
 			<values>
 				<cityitem>Baltimore, MD</cityitem>
+				<cityitem>Hampton, VA</cityitem>
 				<cityitem>New York, NY</cityitem>
+				<cityitem>Philadelphia, PA</cityitem>
+				<cityitem>Richmond, VA</cityitem>
 				<cityitem>Washington, DC</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Norman, OK</titlecity>
-			<values>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Springfield, MO</cityitem>
-				<cityitem>St Louis, MO</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
 		<titlecity>Oakland, CA</titlecity>
 			<values>
 				<cityitem>Los Angeles, CA</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Oklahoma City, OK</titlecity>
-			<values>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Springfield, MO</cityitem>
-				<cityitem>St Louis, MO</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -1035,6 +652,7 @@
 				<cityitem>Hampton, VA</cityitem>
 				<cityitem>Harrisburg, PA</cityitem>
 				<cityitem>New York, NY</cityitem>
+				<cityitem>Newark, DE</cityitem>
 				<cityitem>Pittsburgh, PA</cityitem>
 				<cityitem>Richmond, VA</cityitem>
 				<cityitem>Secaucus, NJ</cityitem>
@@ -1049,7 +667,6 @@
 				<cityitem>Ann Arbor, MI</cityitem>
 				<cityitem>Cleveland, OH</cityitem>
 				<cityitem>Detroit, MI</cityitem>
-				<cityitem>Frederick, MD</cityitem>
 				<cityitem>Harrisburg, PA</cityitem>
 				<cityitem>Morgantown, WV</cityitem>
 				<cityitem>New York, NY</cityitem>
@@ -1057,21 +674,6 @@
 				<cityitem>State College, PA</cityitem>
 				<cityitem>Toledo, OH</cityitem>
 				<cityitem>Washington, DC</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Plymouth, IN</titlecity>
-			<values>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbia City, IN</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Dayton-Trotwood, OH</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Muncie, IN</cityitem>
-				<cityitem>Richmond, IN</cityitem>
-				<cityitem>Valparaiso, IN</cityitem>
-				<cityitem>Warsaw, IN</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -1085,7 +687,6 @@
 			<values>
 				<cityitem>Austin, TX</cityitem>
 				<cityitem>Brenham, TX</cityitem>
-				<cityitem>Giddings, TX</cityitem>
 				<cityitem>Houston, TX</cityitem>
 			</values>
 	</menuitem>
@@ -1103,18 +704,10 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Richmond, IN</titlecity>
+		<titlecity>Reno, NV</titlecity>
 			<values>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbia City, IN</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Dayton-Trotwood, OH</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Muncie, IN</cityitem>
-				<cityitem>Plymouth, IN</cityitem>
-				<cityitem>Valparaiso, IN</cityitem>
-				<cityitem>Warsaw, IN</cityitem>
+				<cityitem>Sacramento, CA</cityitem>
+				<cityitem>San Francisco, CA</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -1125,6 +718,7 @@
 				<cityitem>Durham, NC</cityitem>
 				<cityitem>Hampton, VA</cityitem>
 				<cityitem>New York, NY</cityitem>
+				<cityitem>Newark, DE</cityitem>
 				<cityitem>Philadelphia, PA</cityitem>
 				<cityitem>Washington, DC</cityitem>
 			</values>
@@ -1144,7 +738,6 @@
 	<menuitem>
 		<titlecity>Rochester, NY</titlecity>
 			<values>
-				<cityitem>Buffalo, NY</cityitem>
 				<cityitem>New York, NY</cityitem>
 				<cityitem>Syracuse, NY</cityitem>
 			</values>
@@ -1152,36 +745,24 @@
 	<menuitem>
 		<titlecity>Sacramento, CA</titlecity>
 			<values>
+				<cityitem>Reno, NV</cityitem>
 				<cityitem>San Francisco, CA</cityitem>
 				<cityitem>Sparks, NV</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>San Angelo, TX</titlecity>
-			<values>
-				<cityitem>Big Spring, TX</cityitem>
-				<cityitem>Lubbock, TX</cityitem>
-				<cityitem>San Antonio, TX</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
 		<titlecity>San Antonio, TX</titlecity>
 			<values>
 				<cityitem>Austin, TX</cityitem>
-				<cityitem>Big Spring, TX</cityitem>
 				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Del Rio, TX</cityitem>
-				<cityitem>Eagle Pass, TX</cityitem>
 				<cityitem>Houston, TX</cityitem>
-				<cityitem>Lubbock, TX</cityitem>
-				<cityitem>San Angelo, TX</cityitem>
-				<cityitem>Uvalde, TX</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
 		<titlecity>San Francisco, CA</titlecity>
 			<values>
 				<cityitem>Los Angeles, CA</cityitem>
+				<cityitem>Reno, NV</cityitem>
 				<cityitem>Sacramento, CA</cityitem>
 				<cityitem>Sparks, NV</cityitem>
 			</values>
@@ -1209,32 +790,6 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Shreveport, LA</titlecity>
-			<values>
-				<cityitem>Carthage, TX</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Houston, TX</cityitem>
-				<cityitem>Humble, TX</cityitem>
-				<cityitem>Livingston, TX</cityitem>
-				<cityitem>Lufkin, TX</cityitem>
-				<cityitem>Nacogdoches, TX</cityitem>
-				<cityitem>Texarkana, AR</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>South Bend, IN</titlecity>
-			<values>
-				<cityitem>Angola, IN</cityitem>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Elkhart, IN</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Kenton, OH</cityitem>
-				<cityitem>Van Wert, OH</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>Sparks, NV</titlecity>
 			<values>
 				<cityitem>Sacramento, CA</cityitem>
@@ -1242,26 +797,12 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Springfield, MO</titlecity>
-			<values>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Norman, OK</cityitem>
-				<cityitem>Oklahoma City, OK</cityitem>
-				<cityitem>St Louis, MO</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>St Louis, MO</titlecity>
 			<values>
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Columbia, MO</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
 				<cityitem>Kansas City, MO</cityitem>
 				<cityitem>Memphis, TN</cityitem>
-				<cityitem>Norman, OK</cityitem>
-				<cityitem>Oklahoma City, OK</cityitem>
-				<cityitem>Springfield, MO</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -1287,7 +828,6 @@
 	<menuitem>
 		<titlecity>Syracuse, NY</titlecity>
 			<values>
-				<cityitem>Buffalo, NY</cityitem>
 				<cityitem>New York, NY</cityitem>
 				<cityitem>Rochester, NY</cityitem>
 			</values>
@@ -1295,15 +835,10 @@
 	<menuitem>
 		<titlecity>Texarkana, AR</titlecity>
 			<values>
-				<cityitem>Carthage, TX</cityitem>
+				<cityitem>Champaign, IL</cityitem>
+				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Dallas/Fort Worth, TX</cityitem>
-				<cityitem>Houston, TX</cityitem>
-				<cityitem>Humble, TX</cityitem>
-				<cityitem>Livingston, TX</cityitem>
-				<cityitem>Lufkin, TX</cityitem>
 				<cityitem>Memphis, TN</cityitem>
-				<cityitem>Nacogdoches, TX</cityitem>
-				<cityitem>Shreveport, LA</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -1330,57 +865,6 @@
 			</values>
 	</menuitem>
 	<menuitem>
-		<titlecity>Uvalde, TX</titlecity>
-			<values>
-				<cityitem>Del Rio, TX</cityitem>
-				<cityitem>Eagle Pass, TX</cityitem>
-				<cityitem>San Antonio, TX</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Valparaiso, IN</titlecity>
-			<values>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbia City, IN</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Dayton-Trotwood, OH</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Muncie, IN</cityitem>
-				<cityitem>Plymouth, IN</cityitem>
-				<cityitem>Richmond, IN</cityitem>
-				<cityitem>Warsaw, IN</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Van Wert, OH</titlecity>
-			<values>
-				<cityitem>Angola, IN</cityitem>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Elkhart, IN</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Kenton, OH</cityitem>
-				<cityitem>South Bend, IN</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Warsaw, IN</titlecity>
-			<values>
-				<cityitem>Chicago, IL</cityitem>
-				<cityitem>Columbia City, IN</cityitem>
-				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Dayton-Trotwood, OH</cityitem>
-				<cityitem>Ft. Wayne, IN</cityitem>
-				<cityitem>Gary, IN</cityitem>
-				<cityitem>Muncie, IN</cityitem>
-				<cityitem>Plymouth, IN</cityitem>
-				<cityitem>Richmond, IN</cityitem>
-				<cityitem>Valparaiso, IN</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
 		<titlecity>Washington, DC</titlecity>
 			<values>
 				<cityitem>Baltimore, MD</cityitem>
@@ -1388,15 +872,10 @@
 				<cityitem>Buffalo, NY</cityitem>
 				<cityitem>Charlotte, NC</cityitem>
 				<cityitem>Christiansburg, VA</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
 				<cityitem>Durham, NC</cityitem>
-				<cityitem>Frederick, MD</cityitem>
 				<cityitem>Hampton, VA</cityitem>
 				<cityitem>Knoxville, TN</cityitem>
-				<cityitem>Little Rock, AR</cityitem>
-				<cityitem>Memphis, TN</cityitem>
 				<cityitem>Morgantown, WV</cityitem>
-				<cityitem>Nashville , TN</cityitem>
 				<cityitem>New York, NY</cityitem>
 				<cityitem>Newark, DE</cityitem>
 				<cityitem>Philadelphia, PA</cityitem>
@@ -1405,7 +884,5 @@
 				<cityitem>Secaucus, NJ</cityitem>
 				<cityitem>Toronto, ON</cityitem>
 			</values>
-	</menuitem>
-
-				
+	</menuitem>			
 </dropdown>

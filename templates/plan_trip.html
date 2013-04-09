@@ -13,7 +13,7 @@
 <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 /!-->
 <script>
-
+/*
 	$(document).ready(function(){
 		var myArr = new Array();
 		$.ajax({
@@ -42,6 +42,27 @@
 	$j(document).ready(function(){
 		$j('#date').datepicker();
 	});
+*/
+	$(document).ready(function(){
+		var departure=$('#start'); var arrival=$('#end'); var times=$('#date');
+        	$.ajax({
+			type:"GET", 
+			url:"static/xml/new_cities.xml", 
+			dataType:"xml", 
+			success: function(xml){
+			$(xml).find('menuitem').each(function(){
+				var titlecity=$(this).find('titlecity').text();
+				departure.append('<option>' + titlecity + '</option>');
+				arrival.append('<option>' + titlecity + '</option>');
+				});
+			}
+		});
+	});
+
+	var $j = jQuery.noConflict();
+	$j(document).ready(function(){
+		$j('#date').datepicker();
+	});
 
 
 
@@ -51,9 +72,29 @@
 
 {% block body %}
 <body>
-<p style="padding:15px;">With our trip planning system not only does the city you depart from not have to be directly connected with the city you're going to, you also don't have to compare multi-leg trip times across multiple pages.  We have provided a system to mitigate the booking confusion involved with the conventional methods of doing so with Megabus.  Although we aren't allowed to add trips to your basket on your behalf at this time due to legal issues and internet standards, we will be working to make the process as efficient and simple as possible.  We will be working gain Megabus's compliance on the matter in the near future.</p>
+<p style="padding:15px;">With our trip planning system not only does the city you depart from not have to be directly connected with the city you're going to, you also don't have to compare multi-leg trip times across multiple pages.  We have provided a system to mitigate the booking confusion involved with the conventional methods of doing so with Megabus.  Although we aren't allowed to add trips to your basket on your behalf at this time due to legal issues and internet standards, we will be working to make the process as efficient and simple as possible.  We will be working to gain Megabus's compliance on the matter in the near future.</p>
 
 
+	<form method="POST" id="searchForm" class="well">
+		<label>Start:
+		<select name="start" id="start">
+			<option>City, State</option>
+		</select>
+		</label>
+		<label>End:
+		<select name="end" id="end">
+			<option>City, State</option>
+		</select>
+		</label>
+		<label>Date of Departure:
+		<input type="dropdown" size="10" name="date" id="date" />
+		</label>
+		<div class="error">
+		<p style="color:red">{{error}}</p>
+		</div>
+		<input type="submit" value="Generate Options">
+	</form>
+<!--
 	<form method="POST" id="searchForm" class="well">
 		<label>Start:
 		<input type="text" name="start" id="start" data-provide="typeahead" />
@@ -71,7 +112,7 @@
 		</div>
 		<input type="submit" value="Generate Options">
 	</form>
-
+/!-->
 
 <br>
 {% autoescape false %}

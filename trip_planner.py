@@ -10,7 +10,7 @@ def plan_trip(start, finish, routes):
         	hops[start] = {}
         	journey[start] = {}
                 open_list = []
-                for i in routes[start]:
+		for i in routes[start]:
                         hops[start][i] = 1
                         journey[start][i] = {'1': [start, i]}
                         open_list.append(i)
@@ -28,7 +28,6 @@ def plan_trip(start, finish, routes):
                                         if hops[start][cityitem] > hops[start][titlecity]+1:
                                                 hops[start][cityitem] = hops[start][titlecity]+1
                                                 keys = [int(i) for i in journey[start][titlecity].keys()]
-                    #the_title_key = str(max(keys))
                                                 the_new_item_key = str(max([int(i) for i in journey[start][cityitem].keys()])+1)
                                                 journey[start][cityitem][the_new_item_key] = journey[start][titlecity][the_title_key] + [cityitem]
                                         elif hops[start][cityitem] == hops[start][titlecity]+1:
@@ -252,7 +251,6 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
   			response += '<li style="border:10px; margin:10px;"><h5><p style="color:red">No trips available</p></h5></li>'
                 response += '</ul>'
             response += '<br><br>'
-        #response += '<a href="http://us.megabus.com" target="_blank" onclick="%s">Click for official site links</a><br><hr>' % link_trip_dict[str(trip_dict_key)]
     	response += '<br><hr>'
     response += '</div>'
     return response

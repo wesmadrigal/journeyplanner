@@ -8,35 +8,32 @@
 <script>
 
 $(document).ready(function(){var departure=$('#departure'); var arrival=$('#arrival'); var times=$('#times');
-$.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: function(xml){$(xml).find('menuitem').each(function(){var titlecity=$(this).find('titlecity').text();departure.append("<option>"+titlecity+"</option>");});$('#departure').change(function()
-{
-$('#arrival').empty();
-arrival.append('<option>'+'choose wisely'+'</option>');
-var selectedIndex = $('#departure option').index($('#departure option:selected'))-1;
-
-var newOpt = $(xml).find('values').eq(selectedIndex).find('cityitem').each(function(){
-
-var value = $(this).text();
-
-arrival.append('<option>'+value+'</option>');
-$('#arrival').change(function(){
-$('#times').empty();
-times.append('<option>'+'choose pertinent bus time'+'</option>');
-var dep = $('#departure option:selected').text();
-var arr = $('#arrival option:selected').text();
-var the_dater = document.getElementById("json").value;
-var the_json = jQuery.parseJSON(the_dater);
-var d = new Date();
-var month = d.getMonth() + 1;
-var day= d.getDate();
-var query_key = dep + '-' + arr + '-' + month + '-' + day;
-var the_times = the_json[query_key];
-for (i=0;i<the_times.length;i++){
-times.append('<option>'+the_times[i]+'</option>');
-}
-});
-});
-});}
+	$.ajax({type:"GET", url:"static/xml/new_cities.xml", dataType:"xml", success: function(xml){$(xml).find('menuitem').each(function(){var titlecity=$(this).find('titlecity').text();departure.append("<option>"+titlecity+"</option>");});$('#departure').change(function()
+	{
+		$('#arrival').empty();
+		arrival.append('<option>'+'choose wisely'+'</option>');
+		var selectedIndex = $('#departure option').index($('#departure option:selected'))-1;
+		var newOpt = $(xml).find('values').eq(selectedIndex).find('cityitem').each(function(){
+		var value = $(this).text();
+		arrival.append('<option>'+value+'</option>');
+		$('#arrival').change(function(){
+			$('#times').empty();
+			times.append('<option>'+'choose pertinent bus time'+'</option>');
+			var dep = $('#departure option:selected').text();
+			var arr = $('#arrival option:selected').text();
+			var the_dater = document.getElementById("json").value;
+			var the_json = jQuery.parseJSON(the_dater);
+			var d = new Date();
+			var month = d.getMonth() + 1;
+			var day= d.getDate();
+			var query_key = dep + '-' + arr + '-' + month + '-' + day;
+			var the_times = the_json[query_key];
+			for (i=0;i<the_times.length;i++){
+				times.append('<option>'+the_times[i]+'</option>');
+			}			
+		});
+		});
+	});}
 });});
 
 
