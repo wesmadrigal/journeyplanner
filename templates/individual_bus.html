@@ -1,9 +1,52 @@
-{% extends "layout.html" %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Megabus Aid | Courtesy. Insight. Preparation | Providing bus updates and journey planning</title>
+
+<meta name="viewport" content="width=divice-width, height=device-height, target-density=device-dpi, initial-scale=1.0">
+<link href="/twitter-bootstrap-37d0a30/docs/assets/css/bootstrap.css" rel="stylesheet" media="screen">
+<link href="/twitter-bootstrap-37d0a30/docs/assets/css/bootstrap-responsive.css" rel="stylesheet" media="screen">
+<link href="/twitter-bootstrap-37d0a30/elusive-iconfont-master/css/elusive-webfont.css">
+
+<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">stLight.options({publisher: "0fb214aa-191e-4643-9458-c3158b66fbf8", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>
+
+</head>
+<body>
+<div class="container">
+<h2>Preparation for the rest of U.S.</h2>
+
+	<div class="navbar navbar-static-top navbar-inverse">
+   		<div class="navbar-inner">
+      			<a class="brand" href="/">MegabusAid</a>
+        	 	<button class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            		<span class="icon-bar"></span>
+            		<span class="icon-bar"></span>
+            		<span class="icon-bar"></span>
+            		<span class="icon-bar"></span>
+         		</button>
+        		<div class="nav-collapse" style="height: auto;">
+        			<ul class="nav">
+
+              				<li><a href="/"><i class="icon-home"></i> Home</a></li>
+              				<li><a href="/plantrip"><i class="icon-pencil"></i> Trip Planner</a></li>
+              				<li><a href="/choicepage"><i class="icon-map-marker"></i> Riding or Waiting - Bus Tracker</a></li>
+              				<li><a href="/updates"><i class="icon-check"></i> Updates Page</a></li>
+        {% if user %}
+                	<p class="navbar-text pull-right">Logged in: <a href="{{logout}}">{{user}}</a></p>
+        {% else %}
+                	<p class="navbar-text pull-right">Guest: <a href="/login">Login</a></p>
+        {% endif %}
+        			</ul>
+        		</div>
+   		</div>
+	</div>
+
+<div class="content pagination-centered">
 
 
-{% block body %}
-
-<p id="welcome">Bus {{bus}} updates</p>
+<p style="padding: 10px;"><b>Bus updates for: {{bus}}</b></p>
+<hr>
 <br><br><br>
 	{% for update in this_bus %}
 
@@ -13,7 +56,7 @@
 		<div style="font-family: Arial Black, Gadget, sans-serif; font-weight:bold;">{{update.bus}}</div>
 		<br>
 		<div style="color:#808080;">Delay Time: <b>{{update.entry}}</b></div>
-		<pre>Coordinates: {{update.latitude}} , {{update.longitude}}</pre>
+		<div>Coordinates: {{update.latitude}} , {{update.longitude}}</div>
 		<a href="{{update.user_api_link}}"><img class="map-holder" src="{{update.user_map}}"></a>
 		<div style="font-weight:bold;">{{update.created}}</div>
 
@@ -37,4 +80,34 @@
 	{% endif %}
 	{% endfor %}
 
-{% endblock %}
+		<div class="footer-wrapper" style="margin-top:10px;">
+                        &copy; Copyright 2013 by <a href="http://www.wesmadrigal.blogspot.com">Wesley Madrigal</a>
+                        <span class='st_facebook_large' displayText='Facebook'></span>
+                        <span class='st_fblike_large' displayText='Facebook Like'></span>
+                        <span class='st_plusone_large' displayText='Google +1'></span>
+                        <span class='st_reddit_large' displayText='Reddit'></span>
+                        <span class='st_twitter_large' displayText='Tweet'></span>
+                        <span class='st_linkedin_large' displayText='LinkedIn'></span>
+                </div>
+
+
+
+</div>
+
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/jquery.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-transition.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-alert.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-modal.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-dropdown.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-scrollspy.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-tab.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-tooltip.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-popover.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-button.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-collapse.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-carousel.js"></script>
+<script src="/twitter-bootstrap-37d0a30/docs/assets/js/bootstrap-typeahead.js"></script>
+
+</div>
+</body>
+</html>

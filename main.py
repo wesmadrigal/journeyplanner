@@ -289,15 +289,8 @@ class IndividualBus(Handler):
 		if name:
 			user = name.nickname()
 		logout = users.create_logout_url(self.request.uri)
-	
+
 		self.render("individual_bus.html", bus=bus, user=user, this_bus=this_bus, logout=logout)
-		#if self.format == 'html':	
-		#	if this_bus:
-		#		self.render("individual_bus.html", bus=bus, this_bus=this_bus)
-		#	else:
-		#		self.write("There is a freaking error!")		
-		#else:
-		#	self.render_json([j.as_dict() for j in this_bus])
 
 
 response = ''

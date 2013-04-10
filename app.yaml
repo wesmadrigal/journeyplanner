@@ -5,16 +5,15 @@ api_version: 1
 threadsafe: no
 
 
-
 handlers:
 - url: /favicon\.ico
   static_files: favicon.ico
   upload: favicon\.ico
 
 
-
 - url: /static/stylesheets
   static_dir: static/stylesheets
+
 
 - url: /twitter-bootstrap-37d0a30
   static_dir: twitter-bootstrap-37d0a30
@@ -22,10 +21,10 @@ handlers:
 
 - url: /static/xml
   static_dir: static/xml
-  #upload: static/xml
 
 - url: .*
   script: main.app
+
 
 builtins:
 - remote_api: on

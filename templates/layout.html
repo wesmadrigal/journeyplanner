@@ -26,24 +26,17 @@ See: https://developers.google.com/apis/maps/documentation/javascript/basics#Spe
         };
         map = new google.maps.Map(document.getElementById('map_canvas'),
             mapOptions);
+	var pos = new google.maps.LatLng( {{ latitude | safe }},
+	{{ longitude | safe }};
 
-        // Try HTML5 geolocation
-       /* if(navigator.geolocation) {
-navigator.geolocation.getCurrentPosition(function(position) {
-var pos = new google.maps.LatLng(position.coords.latitude,
-position.coords.longitude);
-*/
-var pos = new google.maps.LatLng( {{ latitude | safe }},
-{{ longitude | safe }};
-
-            var infowindow = new google.maps.InfoWindow({
-              map: map,
-              position: pos,
-              content: 'Location found using HTML5.'
+        var infowindow = new google.maps.InfoWindow({
+        	map: map,
+        	position: pos,
+        	content: 'Location found using HTML5.'
             });
 
-            map.setCenter(pos);
-          }, function() {
+        map.setCenter(pos);
+        }, function() {
             handleNoGeolocation(true);
           });
         } else {
