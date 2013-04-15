@@ -14,7 +14,7 @@ from get_route import make_or_get_day2, update_data, get_data_from_future
 from get_route import get_future_data2test, months
 from get_route import get_locations, get_cared_about, find_times2, get_doc, get_title_locations, generate_routes2, get_future_data, mb_api, update_data2
 from get_route import send_request_email
-from trip_planner import plan_trip, find_hours, generate_proper_routes, make_displayable_options2, make_formatted, generate_response
+from trip_planner import *
 from google.appengine.ext import db
 from google.appengine.api import users
 from google.appengine.api import memcache
@@ -141,7 +141,7 @@ def top_bus(update=False):
 		global queried
 		queried = int(time.time())
 		logging.error("DATABASE QUERY")
-		bus_info = BusUpdates.all().order('-timestamp').fetch(limit=50)
+		bus_info = BusUpdates.all().order('-timestamp').fetch(limit=25)
 		memcache.set(key, bus_info)
 	return bus_info
 
@@ -319,7 +319,7 @@ class TimesChoices(Handler):
 		response = ''
 		for route in keys:
 			#response += '<div><p name="route">' + route + '</p><ul>/n'
-			response += '<div><input type="radio" name="route" value="%s"' % route + '><b>%s</b><ul>' % route
+			response += '<div><input type="radio" name="route" value="%s"' % route + '><b>%s</b><ul style="list-style-type:none;">' % route
 			for time in routes_library[route]:
 				arrival_time = 'Arriving at ' + time[time.find('-')+1:]
 				#response += '<li><input type="submit" name="time" value="%s"' % time + '>%s</li>'
@@ -337,7 +337,8 @@ class TimesChoices(Handler):
 	def post(self):
 		route = self.request.get("route")	
 		the_chosen_time = self.request.get("time")
-		if route:
+		# insures that the time selected is actually part of the route selected
+		if route and the_chosen_time in routes_library[route]:
 			the_route = route + '-' + the_chosen_time
 			user = 'guest'
 			user_email = ''
@@ -375,7 +376,7 @@ class TimesChoices(Handler):
 			self.redirect('/updates/%s' % b.bus)
 		else:
 			global response
-			error = "You must select a route before selecting a route-specific time."
+			error = "You must select a route and a time pertaining to the selected route."
 			self.render("times_choice.html", the_response=response, error=error)
 		
 		
@@ -404,12 +405,10 @@ class PlanTrip(Handler):
 		if dep != 'City, State' and end != 'City, State' and len(date) >= 1 and dep in routes.keys() and end in routes.keys() and dep != end:
 			try:
 				trip = plan_trip(dep, end, routes)
-				trip_options, trip_times, trip_links = make_formatted(trip, month, day)
-				response = generate_response(trip_options, trip_times, trip_links)
-			#	self.render("plan_trip.html", response=response, user=user, logout=logout)
+				trip_options, trip_times, trip_links = make_formatted2(trip, month, day)
+				response = generate_response2(trip_options, trip_times, trip_links)
 			except:
 				response = '<p style="color:red"><b>The requested route is impossible with megabus.</b></p>'
-			#	self.render("plan_trip.html", response=response, user=user, logout=logout)
 			self.render("plan_trip.html", response=response, user=user, logout=logout)		
 		else:
 		

@@ -199,7 +199,6 @@
 				<cityitem>Cleveland, OH</cityitem>
 				<cityitem>Columbia, MO</cityitem>
 				<cityitem>Columbus, OH</cityitem>
-				<cityitem>Dallas/Fort Worth, TX</cityitem>
 				<cityitem>Detroit, MI</cityitem>
 				<cityitem>Des Moines, IA</cityitem>
 				<cityitem>East Lansing, MI</cityitem>
@@ -217,7 +216,6 @@
 				<cityitem>Nashville , TN</cityitem>
 				<cityitem>Omaha, NE</cityitem>
 				<cityitem>St Louis, MO</cityitem>
-				<cityitem>Texarkana, AR</cityitem>
 				<cityitem>Toledo, OH</cityitem>
 			</values>
 	</menuitem>
@@ -279,7 +277,6 @@
 				<cityitem>Atlanta, GA</cityitem>
 				<cityitem>Austin, TX</cityitem>
 				<cityitem>Birmingham, AL</cityitem>
-				<cityitem>Champaign, IL</cityitem>
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Houston, TX</cityitem>
 				<cityitem>Little Rock, AR</cityitem>
@@ -836,7 +833,6 @@
 		<titlecity>Texarkana, AR</titlecity>
 			<values>
 				<cityitem>Champaign, IL</cityitem>
-				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Dallas/Fort Worth, TX</cityitem>
 				<cityitem>Memphis, TN</cityitem>
 			</values>
