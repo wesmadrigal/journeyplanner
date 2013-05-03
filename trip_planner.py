@@ -242,6 +242,50 @@ def make_formatted2(trip, m, day):
     return new_trip_dict, new_trip_hours, new_links
 
 
+
+def make_formatted3(trip, m, day):
+    y = '2013'
+    link_trip_dict = {}
+    trip_dict_formatted = {}
+    trip_hours = {}
+    for i in trip.keys():
+        trip_dict_formatted[i] = {}
+        hours_so_far = 0
+        link_trip_dict[i] = ''
+        for e in range(len(trip[i])-1):
+            leg = 'leg ' + str(e+1)
+            cared_about = get_cared_about(mb_api, trip[i][e], trip[i][e+1], day, m, y)
+            times = find_times_and_price2(cared_about, trip[i][e])
+            if hours_so_far < 12:
+                link_trip_dict[i] += "window.open('%s');" % mb_api.format(Buses[trip[i][e]], Buses[trip[i][e+1]], m, day, y)
+                key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + day
+                hours_so_far += float(find_hours(cared_about, trip[i][e]))
+            elif hours_so_far > 12 and hours_so_far < 24:
+                link_trip_dict[i] += "window.open('%s');" % mb_api.format(Buses[trip[i][e]], Buses[trip[i][e+1]], m, str(int(day)+1), y)
+                key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+1)
+                hours_so_far += float(find_hours(cared_about, trip[i][e]))
+            elif hours_so_far > 24:
+                link_trip_dict[i] += "window.open('%s');" % mb_api.format(Buses[trip[i][e]], Buses[trip[i][e+1]], m, str(int(day)+2), y)
+                key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+2)
+                hours_so_far += float(find_hours(cared_about, trip[i][e]))
+            trip_dict_formatted[i][leg] = {}
+            trip_dict_formatted[i][leg][key] = {}
+            hours_key = str(float(find_hours(cared_about, trip[i][e])))
+            trip_dict_formatted[i][leg][key][hours_key] = times
+        trip_hours[i] = hours_so_far
+    hours = sorted([trip_hours[i] for i in trip_hours.keys()])
+    new_trip_dict, new_trip_hours, new_links = {}, {}, {}
+    for hour in range(len(hours)):
+        for key in trip_hours.keys():
+            if trip_hours[key] == hours[hour]:
+                new_key = str(hour+1)
+                new_trip_dict[new_key] = trip_dict_formatted[key]
+                new_trip_hours[new_key] = trip_hours[key]
+                new_links[new_key] = link_trip_dict[key]
+    return new_trip_dict, new_trip_hours, new_links
+
+
+
 # this algorithm uses the above "make_formatted" algorithm and takes all of 
 # make_formatted's responses as inputs to generate a proper html response
 # to render
@@ -295,6 +339,68 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
     	response += '<br><hr>'
     response += '</div>'
     return response
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+# generate_response2 is different in that it was written for version 2 of the application
+# it employs trip values in order to achieve the functionality I am adding that will allow
+# users to book trips on my app, without ever touching megabus's website
+
+
+def generate_response3(trip_dict, trip_hours, link_trip_dict):
+    response = ''
+    response += '<div>'
+    #trips = sorted([int(i) for i in trip_dict.keys()])
+    trip_dict_keys = sorted([int(i) for i in trip_dict.keys()])
+    for trip_dict_key in trip_dict_keys:
+        current_links = link_trip_dict[str(trip_dict_key)]
+        windows = []
+        windows.append(current_links.find('window'))
+        while current_links.find('window', windows[len(windows)-1]+1) != -1:
+           windows.append(current_links.find('window', windows[len(windows)-1]+1))
+        if len(windows) == 1:
+            start = current_links.find("'")
+            stop = current_links.find("'", start+1)
+            link = current_links[start+1:stop]
+            response += '<a href="{0}" target="_blank"><h3><b>Option {1} Link</b></h3></a>'.format(link, str(trip_dict_key))
+        else:
+            last_link_start = windows[len(windows)-1]
+            last_link = current_links[last_link_start:]
+            start = last_link.find("'")
+            stop = last_link.find("'", start+1)
+            last_L = last_link[start+1:stop]
+            other_links = current_links[0: last_link_start]
+            response += '<a href="{0}" target="_blank" onclick="{1}"><h3><b>Option {2} Links</b></h3></a>'.format(last_L, other_links, str(trip_dict_key))
+
+        response += '<p>Total on-bus hours: <b>%s</b></p>' % trip_hours[str(trip_dict_key)]
+        # to sort the legs
+        legs = sorted([int(i[i.find(' ')+1:]) for i in trip_dict[str(trip_dict_key)].keys()])
+        for leg in legs:
+            the_leg = 'leg ' + str(leg)
+            response += '<p>%s</p><br>' % the_leg
+            for route in trip_dict[str(trip_dict_key)][the_leg].keys():
+                first = route.find('-')
+                second = route.find('-', first+1)
+                from_c = route[0:first]
+                to_c = route[first+1:second]
+                new_route = from_c + '  ----->  ' + to_c + ' on %s' % route[second+1:]
+                response += '<p><h4><b>%s</b></h4></p>' % new_route
+                response += '<ul style="list-style-type:none;">'
+		for hour_key in trip_dict[str(trip_dict_key)][the_leg][route]:
+	            for time, price, value in trip_dict[str(trip_dict_key)][the_leg][route][hour_key]:
+                        if len(time) > 1 and len(price) > 1 and len(value) > 1:
+			    name = 'leg%s' % str(leg)
+                            response += '<li><input type="radio" name="{0}" id="{0}" value="{1}"><h5><p>{2}</p><p style="margin-left:10px; color:blue;">{3}</p></h5></li>'.format(name, value, time, price)
+                        else:
+                            response += '<li style="border:10px; margin:10px;"><h5><p style="color:red">No trips available</p></h5></li>'
+                response += '</ul>'
+            response += '<br><br>'
+        response += '<br><hr>'
+    response += '</div>'
+    return response
+
+
+
 
 
 def make_trip_buttons_dict(trip):

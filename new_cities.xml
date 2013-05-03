@@ -22,7 +22,6 @@
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Cleveland, OH</cityitem>
 				<cityitem>Detroit, MI</cityitem>
-				<cityitem>New York, NY</cityitem>
 				<cityitem>Pittsburgh, PA</cityitem>
 				<cityitem>State College, PA</cityitem>
 				<cityitem>Toledo, OH</cityitem>
@@ -62,10 +61,8 @@
 	<menuitem>
 		<titlecity>Austin, TX</titlecity>
 			<values>
-				<cityitem>Brenham, TX</cityitem>
 				<cityitem>Dallas/Fort Worth, TX</cityitem>
 				<cityitem>Houston, TX</cityitem>
-				<cityitem>Prairie View, TX</cityitem>
 				<cityitem>San Antonio, TX</cityitem>
 			</values>
 	</menuitem>
@@ -113,14 +110,6 @@
 				<cityitem>Portland, ME</cityitem>
 				<cityitem>Secaucus, NJ</cityitem>
 				<cityitem>Washington, DC</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Brenham, TX</titlecity>
-			<values>
-				<cityitem>Austin, TX</cityitem>
-				<cityitem>Prairie View, TX</cityitem>
-				<cityitem>Houston, TX</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -245,7 +234,6 @@
 				<cityitem>Ann Arbor, MI</cityitem>
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Detroit, MI</cityitem>
-				<cityitem>New York, NY</cityitem>
 				<cityitem>Pittsburgh, PA</cityitem>
 				<cityitem>State College, PA</cityitem>
 				<cityitem>Toledo, OH</cityitem>
@@ -301,7 +289,6 @@
 				<cityitem>Cleveland, OH</cityitem>
 				<cityitem>East Lansing, MI</cityitem>
 				<cityitem>Grand Rapids, MI</cityitem>
-				<cityitem>New York, NY</cityitem>
 				<cityitem>Pittsburgh, PA</cityitem>
 				<cityitem>State College, PA</cityitem>
 				<cityitem>Toledo, OH</cityitem>
@@ -380,10 +367,8 @@
 		<titlecity>Houston, TX</titlecity>
 			<values>
 				<cityitem>Austin, TX</cityitem>
-				<cityitem>Brenham, TX</cityitem>
 				<cityitem>Dallas/Fort Worth, TX</cityitem>
 				<cityitem>New Orleans, LA</cityitem>
-				<cityitem>Prairie View, TX</cityitem>
 				<cityitem>San Antonio, TX</cityitem>
 			</values>
 	</menuitem>
@@ -573,7 +558,6 @@
 			<values>
 				<cityitem>Albany, NY</cityitem>
 				<cityitem>Amherst, MA</cityitem>
-				<cityitem>Ann Arbor, MI</cityitem>
 				<cityitem>Baltimore, MD</cityitem>
 				<cityitem>Binghamton, NY</cityitem>
 				<cityitem>Boston, MA</cityitem>
@@ -582,8 +566,6 @@
 				<cityitem>Burlington, VT</cityitem>
 				<cityitem>Charlotte, NC</cityitem>
 				<cityitem>Christiansburg, VA</cityitem>
-				<cityitem>Cleveland, OH</cityitem>
-				<cityitem>Detroit, MI</cityitem>
 				<cityitem>Durham, NC</cityitem>
 				<cityitem>Fairhaven, MA</cityitem>
 				<cityitem>Hampton, VA</cityitem>
@@ -602,7 +584,6 @@
 				<cityitem>State College, PA</cityitem>
 				<cityitem>Storrs, CT</cityitem>
 				<cityitem>Syracuse, NY</cityitem>
-				<cityitem>Toledo, OH</cityitem>
 				<cityitem>Toronto, ON</cityitem>
 				<cityitem>Washington, DC</cityitem>
 			</values>
@@ -677,14 +658,6 @@
 		<titlecity>Portland, ME</titlecity>
 			<values>
 				<cityitem>Boston, MA</cityitem>
-			</values>
-	</menuitem>
-	<menuitem>
-		<titlecity>Prairie View, TX</titlecity>
-			<values>
-				<cityitem>Austin, TX</cityitem>
-				<cityitem>Brenham, TX</cityitem>
-				<cityitem>Houston, TX</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -812,7 +785,6 @@
 				<cityitem>New York, NY</cityitem>
 				<cityitem>Philadelphia, PA</cityitem>
 				<cityitem>Pittsburgh, PA</cityitem>
-				<cityitem>Toledo, OH</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -844,9 +816,7 @@
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Cleveland, OH</cityitem>
 				<cityitem>Detroit, MI</cityitem>
-				<cityitem>New York, NY</cityitem>
 				<cityitem>Pittsburgh, PA</cityitem>
-				<cityitem>State College, PA</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
