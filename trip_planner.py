@@ -67,6 +67,43 @@ def find_hours(cared_about, from_c):
     return trip_time
 
 
+# we need this second version of find_hours to handle the dynamics of using get_cared_about and get_cared_about2
+# the only difference is a line of code to handle the erroneously listed location returned by get_locations
+# when we're using get_cared_about2
+
+
+def find_hours2(cared_about, from_c):
+    locs = get_locations(cared_about, from_c)
+    # the necessary line
+    del locs[0]
+    region = None
+    if len(locs) > 0:
+        region = cared_about[locs[0]:]
+    if len(locs) > 1:
+        region = cared_about[locs[0]:locs[1]]
+    trip_time = ''
+    if region != None:
+        for i in region:
+                for e in i:
+                        if 'hrs' and 'mins' in e:
+                                for f in e[0: e.find('hrs')]:
+                                        if f.isdigit():
+                                                trip_time += f
+                                sec_digs = ''
+                                for l in e[e.find('hrs')+1:]:
+                                        if l.isdigit():
+                                                sec_digs += l
+                                sec_digs2 = str(float(int(sec_digs))/float(60))
+                                to_add = sec_digs2[sec_digs2.find('.'):sec_digs2.find('.')+3]
+                                trip_time += to_add
+    if trip_time == '':
+        return '0.0'
+    return trip_time
+
+
+
+
+
 # To utilize the tools above, we can combine them into an even better algorithm to give us 
 # all the link options for our users
 
@@ -254,6 +291,8 @@ def make_formatted3(trip, m, day):
         link_trip_dict[i] = ''
         for e in range(len(trip[i])-1):
             leg = 'leg ' + str(e+1)
+	    # generate cared_about and the url with get_cared_about2
+            #cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], day, m, y)
             cared_about = get_cared_about(mb_api, trip[i][e], trip[i][e+1], day, m, y)
             times = find_times_and_price2(cared_about, trip[i][e])
             if hours_so_far < 12:
@@ -396,6 +435,8 @@ def generate_response3(trip_dict, trip_hours, link_trip_dict):
                 response += '</ul>'
             response += '<br><br>'
         response += '<br><hr>'
+    response += '<a href="javascript: getID()">Get Leg 1 ID</a><br>'
+    response += '<a href="javascript: get_radio_vals()">Get all checked vals</a>'
     response += '</div>'
     return response
 

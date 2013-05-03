@@ -35,11 +35,43 @@
 		$j('#date').datepicker();
 	});
 
-	$(document).ready(function(){
-		//var selected = $("input[type='radio']:checked");
-		//alert(selected.val());
-		alert("Hello world");
-	});
+</script>
+
+<script type="text/javascript">
+
+function getID()
+{
+	var radios = document.getElementsByName('leg1');
+	for (var i = 0, length = radios.length; i < length; i++)
+	{
+		if (radios[i].checked)	{
+			alert(radios[i].value);
+		}
+	}
+}
+
+// a function to iterate through all input elements and get the values of the radio buttons that are selected
+
+function get_radio_vals()
+{
+	var inputs = document.getElementsByTagName("input");
+	var results = ""
+	for (var i = 0, length = inputs.length; i < length; i++)
+	{
+		if (inputs[i].checked)
+		{
+			if (i < inputs.length - 1)
+			{
+				results = results + inputs[i].value + ';';
+			} else {
+				results = results + inputs[i].value;
+			}
+		}
+	}
+	alert(results);
+}
+			
+
 
 </script>
 

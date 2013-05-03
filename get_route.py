@@ -156,6 +156,29 @@ def get_cared_about(mb_api, from_city, to_city, d, m, y):
     return new_data[start:stop]
 
 
+# get_cared_about2 is for the new trip purchasing functionality.  We need it to not only return what we care about,
+# but also return the URL we got what we care about from so we can pass the URL on to our other functions for use.
+# In the end, the URL get_cared_about2 returns will the what the Browser() instance will utilize on the backend to
+# literally select and add a trip to a user's basket.
+
+def get_cared_about2(mb_api, from_city, to_city, d, m, y):
+	import urllib2
+	f = urllib2.urlopen(mb_api.format(Buses[from_city], Buses[to_city], m, d, y))
+	data = f.read().split('\n')
+	new_data = [i.split('\r') for i in data]
+	actual_url = f.geturl()
+	start = 0
+	stop = 0
+	for i in new_data:
+    		for e in i:
+			if 'JouneyResylts_OutboundList_GridViewResults_ctl00_row_item' in e:
+				start = new_data.index(i)
+			elif 'footer' in e:
+				stop = new_data.index(i)
+    	cared = new_data[start:stop]
+	return cared, actual_url
+
+
 
 
 
@@ -281,6 +304,8 @@ def find_times_and_price(cared_about, from_city):
 
 def find_times_and_price2(cared_about, from_city):
     city_indices = get_locations(cared_about, from_city)
+    # when using get_cared_about2 we need the next line
+    #del city_indices[0]
     times = {}
     prices = {}
     IDS = {}
