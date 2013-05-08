@@ -108,8 +108,7 @@ class PlanTrip(Handler):
 				except:
 					response = '<p style="color:red"><b>The requested route is impossible with megabus.</b></p>'
 				self.render("plan_trip.html", response=response, user=user, logout=logout)		
-			else:
-		
+			else:		
 				error = 'You must choose a valid departure city, arrival city, and a day of departure.'
 				self.render("plan_trip.html", user=user, logout=logout, error=error)
 		else:
@@ -124,8 +123,7 @@ class PlanTrip(Handler):
 			
 
 
-class Basket(Handler):
-	
+class Basket(Handler):	
 	def setup_browser(self):
 		self.br = mechanize.Browser()	
 		self.cj = cookielib.LWPCookieJar()
@@ -139,25 +137,24 @@ class Basket(Handler):
         	self.br.set_handle_gzip(True)
         	self.br.set_handle_redirect(True)
 	
-
 	def get(self):
 		self.setup_browser()
 		ip = self.request.remote_addr
 		ts = TripStuff.all().filter('ipid = ', ip).order('-created').fetch(limit=1)
 		# put the string value in a list and grab it
 		string = [i.query for i in ts]
-		proper = string[0].encode('utf-8')
-		
+		proper = string[0].encode('utf-8')	
+
 		# generate a dictionary for the emulated browser to parse through adding trips to basket
 		the_dict = decipher_query(proper)
+
 		# return the ViewBasket.aspx page with all trips added
 		#basket_response = get_trips_in_basket(the_dict)
 		#br = Basket.br
-
 		basket_response = get_trips_in_basket2(the_dict, self.br)
+
 		# scrape all the necessary data from the returned response
 		journey_dict, total_price = get_journey_info(basket_response)
-
 
 		# passing a json string to the frontend containing the necessary values to make cookies with in our post
 		# we need this to preserve users
@@ -165,7 +162,6 @@ class Basket(Handler):
 		new_dict = {}
 		d = 'us.megabus.com'
 		p = '/'
-
 		for i in cookie_dict[d][p].keys():
     			new_dict[i] = [cookie_dict[d][p][i].version, cookie_dict[d][p][i].name, cookie_dict[d][p][i].value, cookie_dict[d][p][i].port, cookie_dict[d][p][i].port_specified, cookie_dict[d][p][i].domain, cookie_dict[d][p][i].domain_specified, cookie_dict[d][p][i].domain_initial_dot, cookie_dict[d][p][i].path, cookie_dict[d][p][i].path_specified, cookie_dict[d][p][i].secure, cookie_dict[d][p][i].expires, cookie_dict[d][p][i].discard, cookie_dict[d][p][i].comment, cookie_dict[d][p][i].comment_url, cookie_dict[d][p][i]._rest, cookie_dict[d][p][i].rfc2109]
 
@@ -174,15 +170,14 @@ class Basket(Handler):
 
 
 	def post(self):
-		
 		self.setup_browser()
-		# decipher the cookie_dict string with json and make some cookies!
 
-		cookie_str = self.request.get("cookie_dict")
-		
+		# decipher the cookie_dict string with json and make some cookies!
+		cookie_str = self.request.get("cookie_dict")		
 		cookie_dict = json.loads(cookie_str)
 		for key in cookie_dict.keys():
 			current_cookie = cookielib.Cookie(version=cookie_dict[key][0], name=cookie_dict[key][1], value=cookie_dict[key][2], port=cookie_dict[key][3], port_specified=cookie_dict[key][4], domain=cookie_dict[key][5], domain_specified=cookie_dict[key][6], domain_initial_dot=cookie_dict[key][7], path=cookie_dict[key][8], path_specified=cookie_dict[key][9], secure=cookie_dict[key][10], expires=cookie_dict[key][11], discard=cookie_dict[key][12], comment=cookie_dict[key][13], comment_url=cookie_dict[key][14], rest=cookie_dict[key][15], rfc2109=cookie_dict[key][16])
+
 			self.cj.set_cookie(current_cookie)		
 
 		agree = self.request.get('agree')
@@ -193,15 +188,11 @@ class Basket(Handler):
 			self.br.find_control('BasketView$cbTerms').items[0].selected = True
 			self.br.form['__EVENTTARGET'] = 'BasketView$btnPay'
 			self.br.submit(name='BasketView$btnPay')
-		
 			self.write(self.br.response().read())		
 		else:
 			self.redirect('/mytrips')
 
 	
-		
-	
-
 
 class AboutMe(Handler):
 	def get(self):
@@ -229,6 +220,7 @@ class AboutMe(Handler):
 			message.send()
 			message_sent = 'Your message was sent to the administrator.'
 			self.render("aboutme.html", user=user, logout=logout, user_email=user_email, message_sent=message_sent)
+
 
 app = webapp2.WSGIApplication([('/', PlanTrip),
 			       ('/mytrips', Basket),
