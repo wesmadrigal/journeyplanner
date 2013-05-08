@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block links %}
+{% endblock %}
+
+	{% block script %}
+
+		<script type="text/javascript">
+		/*
+			var checkbox = document.getElementById("agree");
+			var submit = document.getElementById("PayControl");
+			checkbox.onchange = function()	{
+				if(this.checked)
+				{
+					submit.type="submit";
+				}
+			}
+
+		*/
+			function change_hidden_to_submit()	{
+				var submit = document.getElementById("PayControl");
+				var checkbox = document.getElementById("agree");
+				if (checkbox.checked)
+				{
+					submit.type = "submit";
+				}
+			}
+				
+
+		</script>
+
+	{% endblock %}
+
+{% block body %}
+<body>
+
+   <div style="margin-top:50px" class="content pagination-left">
+	{% for each in journey_dict %}
+	<p style="color:#708090;"><b>{{journey_dict[each][4]}}</b></p>
+	<p>Departure City: <b>{{journey_dict[each][0]}}</b></p>
+		<p>Departure Address: {{journey_dict[each][1]}}</p>
+			<p>Departure Time: {{journey_dict[each][5]}}</p>
+	<br>
+	<p>Arrival City: <b>{{journey_dict[each][2]}}</b></p>
+		<p>Arrival Address: {{journey_dict[each][3]}}</p>
+			<p>Arrival Time: {{journey_dict[each][6]}}</p>
+	<p style="color:blue">Price: {{journey_dict[each][7]}}</p>
+	<br><br><hr>
+	{% endfor %}
+	<br>
+	<br>
+	<p>Total: <h5 style="color:blue">${{total_price}}</h5></p>
+   </div>
+   
+			
+   <form method="POST">
+      <input type="checkbox" onchange="change_hidden_to_submit()" id="agree" name="agree" value="agree">Is the itenerary correct?<br>
+      <div name="error" style="color:red">{{error}}</div>
+      <input type="hidden" id="PayControl" name="PayControl" value="Buy Trips">
+      <input type="hidden" id="cookie_dict" name="cookie_dict" value="{{string_cookies}}">
+   </form>
+
+
+
+</body>
+
+{% endblock %}

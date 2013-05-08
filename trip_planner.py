@@ -1,5 +1,6 @@
 from get_route import *
-
+import mechanize
+import cookielib
 
 
 
@@ -292,21 +293,32 @@ def make_formatted3(trip, m, day):
         for e in range(len(trip[i])-1):
             leg = 'leg ' + str(e+1)
 	    # generate cared_about and the url with get_cared_about2
-            #cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], day, m, y)
-            cared_about = get_cared_about(mb_api, trip[i][e], trip[i][e+1], day, m, y)
+            cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], day, m, y)
+            #cared_about = get_cared_about(mb_api, trip[i][e], trip[i][e+1], day, m, y)
             times = find_times_and_price2(cared_about, trip[i][e])
-            if hours_so_far < 12:
+	    #for t in times:
+	    #    t.append(cur_url)
+            if hours_so_far <= 8:
                 link_trip_dict[i] += "window.open('%s');" % mb_api.format(Buses[trip[i][e]], Buses[trip[i][e+1]], m, day, y)
+		#cur_url = mb_api.format(Buses[trip[i][e]], Buses[trip[i][e+1]], m, day, y)
                 key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + day
                 hours_so_far += float(find_hours(cared_about, trip[i][e]))
-            elif hours_so_far > 12 and hours_so_far < 24:
+            elif hours_so_far > 8 and hours_so_far < 16:
                 link_trip_dict[i] += "window.open('%s');" % mb_api.format(Buses[trip[i][e]], Buses[trip[i][e+1]], m, str(int(day)+1), y)
+		#cur_url = mb_api.format(Buses[trip[i][e]], Buses[trip[i][e+1]], m, str(int(day)+1), y)
+		cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+1), m, y)
+		times = find_times_and_price2(cared_about, trip[i][e])
                 key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+1)
                 hours_so_far += float(find_hours(cared_about, trip[i][e]))
-            elif hours_so_far > 24:
+            elif hours_so_far > 16:
                 link_trip_dict[i] += "window.open('%s');" % mb_api.format(Buses[trip[i][e]], Buses[trip[i][e+1]], m, str(int(day)+2), y)
+		#cur_url = mb_api.format(Buses[trip[i][e]], Buses[trip[i][e+1]], m, str(int(day)+2), y)
+		cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+2), m, y)
+		times = find_times_and_price2(cared_about, trip[i][e])
                 key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+2)
                 hours_so_far += float(find_hours(cared_about, trip[i][e]))
+	    for t in times:
+		t.append(cur_url)
             trip_dict_formatted[i][leg] = {}
             trip_dict_formatted[i][leg][key] = {}
             hours_key = str(float(find_hours(cared_about, trip[i][e])))
@@ -386,31 +398,13 @@ def generate_response(trip_dict, trip_hours, link_trip_dict):
 # users to book trips on my app, without ever touching megabus's website
 
 
-def generate_response3(trip_dict, trip_hours, link_trip_dict):
+def generate_response3(trip_dict, trip_hours, link_trip_dict, from_c, to_c):
     response = ''
     response += '<div>'
     #trips = sorted([int(i) for i in trip_dict.keys()])
     trip_dict_keys = sorted([int(i) for i in trip_dict.keys()])
     for trip_dict_key in trip_dict_keys:
-        current_links = link_trip_dict[str(trip_dict_key)]
-        windows = []
-        windows.append(current_links.find('window'))
-        while current_links.find('window', windows[len(windows)-1]+1) != -1:
-           windows.append(current_links.find('window', windows[len(windows)-1]+1))
-        if len(windows) == 1:
-            start = current_links.find("'")
-            stop = current_links.find("'", start+1)
-            link = current_links[start+1:stop]
-            response += '<a href="{0}" target="_blank"><h3><b>Option {1} Link</b></h3></a>'.format(link, str(trip_dict_key))
-        else:
-            last_link_start = windows[len(windows)-1]
-            last_link = current_links[last_link_start:]
-            start = last_link.find("'")
-            stop = last_link.find("'", start+1)
-            last_L = last_link[start+1:stop]
-            other_links = current_links[0: last_link_start]
-            response += '<a href="{0}" target="_blank" onclick="{1}"><h3><b>Option {2} Links</b></h3></a>'.format(last_L, other_links, str(trip_dict_key))
-
+        response += '<p style="font-size:25px;padding:30px;color:#708090;">Depart from:  <b>{0}</b>     Arrive in:  <b>{1}</b></p>'.format(from_c, to_c)
         response += '<p>Total on-bus hours: <b>%s</b></p>' % trip_hours[str(trip_dict_key)]
         # to sort the legs
         legs = sorted([int(i[i.find(' ')+1:]) for i in trip_dict[str(trip_dict_key)].keys()])
@@ -426,17 +420,16 @@ def generate_response3(trip_dict, trip_hours, link_trip_dict):
                 response += '<p><h4><b>%s</b></h4></p>' % new_route
                 response += '<ul style="list-style-type:none;">'
 		for hour_key in trip_dict[str(trip_dict_key)][the_leg][route]:
-	            for time, price, value in trip_dict[str(trip_dict_key)][the_leg][route][hour_key]:
-                        if len(time) > 1 and len(price) > 1 and len(value) > 1:
+	            for each in trip_dict[str(trip_dict_key)][the_leg][route][hour_key]:
+                        if len(each[0]) > 1 and len(each[1]) > 1 and len(each[2]) > 1:
 			    name = 'leg%s' % str(leg)
-                            response += '<li><input type="radio" name="{0}" id="{0}" value="{1}"><h5><p>{2}</p><p style="margin-left:10px; color:blue;">{3}</p></h5></li>'.format(name, value, time, price)
+			    id_and_url = each[2] + '+' + each[3]
+                            response += '<li><input type="radio" name="{0}" id="{0}" value="{1}"><h5><p>{2}</p><p style="margin-left:10px; color:blue;">{3}</p></h5></li>'.format(name, id_and_url, each[0], each[1])
                         else:
                             response += '<li style="border:10px; margin:10px;"><h5><p style="color:red">No trips available</p></h5></li>'
                 response += '</ul>'
             response += '<br><br>'
         response += '<br><hr>'
-    response += '<a href="javascript: getID()">Get Leg 1 ID</a><br>'
-    response += '<a href="javascript: get_radio_vals()">Get all checked vals</a>'
     response += '</div>'
     return response
 
@@ -510,3 +503,124 @@ def generate_response2(trip_dict, trip_hours, link_trip_dict):
     return response
 
 
+
+############################################################################################################################
+
+# the dictionary necessary to put user's trips in a basket
+
+def decipher_query(string):
+	deciphered_dict = {}
+        id_ends = [string.find('+')]
+        url_ends = [string.find(';')]
+        while string.find('+', id_ends[len(id_ends)-1]+1) != -1:
+        	id_ends.append(string.find('+', id_ends[len(id_ends)-1]+1))
+        while string.find(';', url_ends[len(url_ends)-1]+1) != -1:
+        	url_ends.append(string.find(';', url_ends[len(url_ends)-1]+1))
+        for i in range(len(id_ends)):
+        	if i == 0:
+                	id_key = string[0:id_ends[i]]
+                        url_val = string[id_ends[i]+1:url_ends[i]]
+                else:
+                        id_key = string[url_ends[i-1]+1:id_ends[i]]
+                        url_val = string[id_ends[i]+1:url_ends[i]]
+                deciphered_dict[id_key] = url_val
+        return deciphered_dict
+
+
+# get the trips in a user's basket based on the dictionary returned by their selections
+
+
+def get_trips_in_basket(the_dict):
+	br = mechanize.Browser()
+	cj = cookielib.LWPCookieJar()
+	br.set_cookiejar(cj)
+	br.addheaders = [('User-Agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
+	br.set_debug_http(True)
+	br.set_debug_redirects(True)
+	br.set_debug_responses(True)
+	br.set_handle_robots(False)
+	br.set_handle_equiv(True)
+	br.set_handle_gzip(True)
+	br.set_handle_redirect(True)
+	for id_key in the_dict.keys():
+		the_url = the_dict[id_key]
+		br.open(the_url)
+		br.select_form(nr=0)
+		br.set_all_readonly(False)
+		br.form['__EVENTTARGET'] = 'JourneyResylts$btnAdd'
+		br.form['JourneyResylts_OutboundList_rbl'] = [id_key]
+		br.submit(name='JourneyResylts$btnAdd')
+	br.open('http://us.megabus.com/ViewBasket.aspx')
+	response = br.response().read().split('\n')
+	return response	
+
+def get_trips_in_basket2(the_dict, br):
+	for id_key in the_dict.keys():
+		the_url = the_dict[id_key]
+		br.open(the_url)
+		br.select_form(nr=0)
+		br.set_all_readonly(False)
+		br.form['__EVENTTARGET'] = 'JourneyResylts$btnAdd'
+		br.form['JourneyResylts_OutboundList_rbl'] = [id_key]
+		br.submit(name='JourneyResylts$btnAdd')
+	br.open('http://us.megabus.com/ViewBasket.aspx')
+	response = br.response().read().split('\n')
+	return response
+
+
+# This algorithm alone takes care of all the data we need from the ViewBasket.aspx page on Megabus.  The algorithm mines
+# for each trip:
+# departure and arrival city
+# addresses of each, respectfully
+# times of departure and arrival
+# price of trip
+
+
+def get_journey_info(response):
+    the_journey = {}
+    price_total = 0
+    locs = [response.index([e for e in response if '<div class="detail_info">' in e][0])]
+    while len([e for e in response[locs[len(locs)-1]+1:] if '<div class="detail_info">' in e]) > 0:
+        locs.append(response.index([e for e in response if '<div class="detail_info">' in e][0], locs[len(locs)-1]+1))
+    for index in locs:
+        #departure city and departure address
+        departure = response[index+6]
+        sdc = departure.find('-->')+3
+        stdc = departure.find('<!--', sdc)
+        sadc = departure.find('mp_trans -->', stdc)+12
+        stadc = departure.find('<!--', sadc)
+        departure_city = departure[sdc:stdc]
+        departure_address = departure[sadc:stadc]
+
+        #arrival city and arrival address
+        arrival = response[index + 8]
+        sac = arrival.find('-->')+3
+        stac = arrival.find('<!--', sac)
+        saac = arrival.find('mp_trans -->', stac)+12
+        staac = arrival.find('<!--', saac)
+        arrival_city = arrival[sac:stac]
+        arrival_address = arrival[saac: staac]
+
+        #date of trip
+        date = response[index+13]
+        start_date = date.index([e for e in date if e.isupper()][0])
+        end_date = date.find('</p>')
+        the_date = date[start_date:end_date]
+
+        #time of departure
+        time_str = response[index+28]
+        departure_time = ''.join([e for e in time_str if e.isdigit() or e.isupper()])
+
+        #time of arrival
+        time_str2 = response[index+33]
+        arrival_time = ''.join([i for i in time_str2 if i.isdigit() or i.isupper()])
+
+        #price of trip
+        price_str = response[index+38]
+        start = price_str.find('$')
+        stop = price_str.find('</span>')
+        price = price_str[start:stop]
+        price_total += float(price[1:])
+        # dictionary
+        the_journey[str(index)] = [departure_city, departure_address, arrival_city, arrival_address, the_date, departure_time, arrival_time, price]
+    return the_journey, price_total

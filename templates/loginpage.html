@@ -7,11 +7,11 @@
       <div class="span3">
          <div class="well sidebar-nav">
             <ul class="nav nav-list">
-{% for item in new_providers.keys() %}
+		{% for item in new_providers.keys() %}
 
-<li><h2><a href="{{new_providers[item]}}"><b>{{item}}</b></a></h2></li>
-<br>
-{% endfor %}
+		<li><h3><a href="{{new_providers[item]}}"><b>{{item}}</b></a></h3></li>
+		<br>
+		{% endfor %}
             </ul>
          </div>
       </div>

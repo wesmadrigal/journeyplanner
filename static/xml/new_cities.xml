@@ -23,7 +23,6 @@
 				<cityitem>Cleveland, OH</cityitem>
 				<cityitem>Detroit, MI</cityitem>
 				<cityitem>Pittsburgh, PA</cityitem>
-				<cityitem>State College, PA</cityitem>
 				<cityitem>Toledo, OH</cityitem>
 			</values>
 	</menuitem>
@@ -46,6 +45,7 @@
 				<cityitem>Cincinnati, OH</cityitem>
 				<cityitem>Columbus, OH</cityitem>
 				<cityitem>Dallas/Fort Worth, TX</cityitem>
+				<cityitem>Erie, PA</cityitem>
 				<cityitem>Gainesville, FL</cityitem>
 				<cityitem>Jacksonville, FL</cityitem>
 				<cityitem>Knoxville, TN</cityitem>
@@ -127,6 +127,7 @@
 				<cityitem>Chattanooga, TN</cityitem>
 				<cityitem>Cincinnati, OH</cityitem>
 				<cityitem>Columbus, OH</cityitem>
+				<cityitem>Erie, PA</cityitem>
 				<cityitem>Knoxville, TN</cityitem>
 				<cityitem>New York, NY</cityitem>
 				<cityitem>Philadelphia, PA</cityitem>
@@ -173,6 +174,7 @@
 				<cityitem>Buffalo, NY</cityitem>
 				<cityitem>Cincinnati, OH</cityitem>
 				<cityitem>Columbus, OH</cityitem>
+				<cityitem>Erie, PA</cityitem>
 				<cityitem>Knoxville, TN</cityitem>
 				<cityitem>Nashville , TN</cityitem>
 			</values>
@@ -202,6 +204,7 @@
 				<cityitem>Memphis, TN</cityitem>
 				<cityitem>Milwaukee, WI</cityitem>
 				<cityitem>Minneapolis, MN</cityitem>
+				<cityitem>Minneapolis/St. Paul, MN</cityitem>
 				<cityitem>Nashville , TN</cityitem>
 				<cityitem>Omaha, NE</cityitem>
 				<cityitem>St Louis, MO</cityitem>
@@ -224,6 +227,7 @@
 				<cityitem>Chattanooga, TN</cityitem>
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Columbus, OH</cityitem>
+				<cityitem>Erie, PA</cityitem>
 				<cityitem>Indianapolis, IN</cityitem>
 				<cityitem>Knoxville, TN</cityitem>
 			</values>
@@ -235,7 +239,6 @@
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Detroit, MI</cityitem>
 				<cityitem>Pittsburgh, PA</cityitem>
-				<cityitem>State College, PA</cityitem>
 				<cityitem>Toledo, OH</cityitem>
 			</values>
 	</menuitem>
@@ -255,6 +258,7 @@
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Chattanooga, TN</cityitem>
 				<cityitem>Cincinnati, OH</cityitem>
+				<cityitem>Erie, PA</cityitem>
 				<cityitem>Indianapolis, IN</cityitem>
 				<cityitem>Knoxville, TN</cityitem>
 			</values>
@@ -290,7 +294,6 @@
 				<cityitem>East Lansing, MI</cityitem>
 				<cityitem>Grand Rapids, MI</cityitem>
 				<cityitem>Pittsburgh, PA</cityitem>
-				<cityitem>State College, PA</cityitem>
 				<cityitem>Toledo, OH</cityitem>
 			</values>
 	</menuitem>
@@ -309,6 +312,17 @@
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Detroit, MI</cityitem>
 				<cityitem>Grand Rapids, MI</cityitem>
+			</values>
+	</menuitem>
+	<menuitem>
+		<titlecity>Erie, PA</titlecity>
+			<values>
+				<cityitem>Atlanta, GA</cityitem>
+				<cityitem>Buffalo, NY</cityitem>
+				<cityitem>Chattanooga, TN</cityitem>
+				<cityitem>Cincinnati, OH</cityitem>
+				<cityitem>Columbus, OH</cityitem>
+				<cityitem>Knoxville, TN</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -414,6 +428,7 @@
 				<cityitem>Christiansburg, VA</cityitem>
 				<cityitem>Cincinnati, OH</cityitem>
 				<cityitem>Columbus, OH</cityitem>
+				<cityitem>Erie, PA</cityitem>
 				<cityitem>New York, NY</cityitem>
 				<cityitem>Washington, DC</cityitem>
 			</values>
@@ -458,6 +473,7 @@
 			<values>
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Minneapolis, MN</cityitem>
+				<cityitem>Minneapolis/St. Paul, MN</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -465,6 +481,7 @@
 			<values>
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Minneapolis, MN</cityitem>
+				<cityitem>Minneapolis/St. Paul, MN</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -485,6 +502,7 @@
 			<values>
 				<cityitem>Chicago, IL</cityitem>
 				<cityitem>Minneapolis, MN</cityitem>
+				<cityitem>Minneapolis/St. Paul, MN</cityitem>
 			</values>
 	</menuitem>
 	<menuitem>
@@ -496,6 +514,15 @@
 				<cityitem>Milwaukee, WI</cityitem>
 			</values>
 	</menuitem>
+	<menuitem>
+		<titlecity>Minneapolis/St. Paul, MN</titlecity>
+			<values>
+				<cityitem>Chicago, IL</cityitem>
+				<cityitem>Madison, U of Wisc, WI</cityitem>
+				<cityitem>Madison, WI</cityitem>
+				<cityitem>Milwaukee, WI</cityitem>
+			</values>
+	</menuitem>	
 	<menuitem>
 		<titlecity>Mobile, AL</titlecity>
 			<values>
@@ -778,9 +805,6 @@
 	<menuitem>
 		<titlecity>State College, PA</titlecity>
 			<values>
-				<cityitem>Ann Arbor, MI</cityitem>
-				<cityitem>Cleveland, OH</cityitem>
-				<cityitem>Detroit, MI</cityitem>
 				<cityitem>Harrisburg, PA</cityitem>
 				<cityitem>New York, NY</cityitem>
 				<cityitem>Philadelphia, PA</cityitem>

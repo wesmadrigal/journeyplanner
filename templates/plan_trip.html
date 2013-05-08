@@ -68,7 +68,9 @@ function get_radio_vals()
 			}
 		}
 	}
-	alert(results);
+	//alert(results);
+	var hidden_data = document.getElementById("trips");
+	hidden_data.value = results;
 }
 			
 
@@ -79,7 +81,8 @@ function get_radio_vals()
 
 {% block body %}
 <body>
-
+   <div class="content pagination-centered">
+	{% if not response %}
 		<p style="padding:30px;"><h4 style="color:#708090;">Complexity doesn't need to be complicated.  With our planning system we've taken an unnecessarily complicated task and made it simple, yet comprehensive enough to take care of all the complexities involved.</h4></p>
 		<br><br>
 
@@ -104,14 +107,21 @@ function get_radio_vals()
 			<input type="submit" value="Generate Options">
 		</form>
 
-<br>
-{% autoescape false %}
-{% if response %}
+	<br>	
+	{% endif %}
 
-{{response}}
-	
-{% endif %}
-{% endautoescape %}
+	{% autoescape false %}
+	{% if response %}
 
+		{{response}}
+
+		<form onsubmit="get_radio_vals()" method="POST">
+			<input name="trips" id="trips" type="hidden" value="" />
+			<input type="submit" value="Add to Basket" />
+		</form>
+
+	{% endif %}
+	{% endautoescape %}
+   </div>
 {% endblock %}
 </body>

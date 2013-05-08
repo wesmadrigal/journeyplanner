@@ -22,6 +22,12 @@ indexes:
   - name: timestamp
     direction: desc
 
+- kind: TripStuff
+  properties:
+  - name: ipid
+  - name: created
+    direction: desc
+
 - kind: User
   properties:
   - name: userid
