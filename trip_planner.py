@@ -710,14 +710,16 @@ def generate_response4(trip_dict, trip_hours, from_c, to_c):
         legs = sorted([int(i[i.find(' ')+1:]) for i in trip_dict[str(trip_dict_key)].keys()])
         for leg in legs:
             the_leg = 'leg ' + str(leg)
-            response += '<p>%s</p><br>' % the_leg
+            #response += '<p>%s</p><br>' % the_leg
             for route in trip_dict[str(trip_dict_key)][the_leg][0].keys():
                 first = route.find('-')
                 second = route.find('-', first+1)
                 from_c = route[0:first]
                 to_c = route[first+1:second]
                 new_route = from_c + '  ----->  ' + to_c + ' on %s' % route[second+1:]
-		response += '<div id="{0}">'.format(the_leg)
+		response += '<button class="btn btn-mini btn-primary" style="margin-right:50px;" onclick="move_down(this.value)" value="{0}-{1}">- date</button>'.format(the_leg, str(trip_dict_key))
+		response += '<button class="btn btn-mini btn-primary" style="margin-left:50px;" onclick="move_up(this.value)" value="{0}-{1}">+ date</button>'.format(the_leg, str(trip_dict_key))
+		response += '<div id="{0}-{1}">'.format(the_leg, str(trip_dict_key))
 		response += '<input type="hidden" value="{0}">'.format(route)
                 response += '<p><h4><b>{0}</b></h4></p>'.format(new_route)
                 response += '<ul style="list-style-type:none;">'
@@ -727,6 +729,7 @@ def generate_response4(trip_dict, trip_hours, from_c, to_c):
                             name = 'leg %s' % str(leg)
                             id_and_url = each[2] + '+' + each[3]
                             response += '<li><input type="radio" name="{0}" id="{0}" value="{1}"><h5>{2}<br><div style="margin-left:10px; color:blue;">{3}</div</h5></li>'.format(name, id_and_url, each[0], each[1])
+#			    response += '<li><input type="radio" name="{0}" id="{0}" value="{1}"><h5>{2}<br><div style="margin-left:10px; color:blue;">{3}</div></h5></li>'.format(name, id_and_url, each[0], each[1])
                         else:
                             response += '<li style="border:10px; margin:10px;"><h5><p style="color:red">No trips available</p></h5></li>'
                 response += '</ul>'
