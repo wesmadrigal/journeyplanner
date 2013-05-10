@@ -92,16 +92,21 @@ function stringSub(the_string, p1, p2, p3, p4)
 
 
 // this is a function to grab and parse the formatted options
-	function test()
+	function move_up(clicked_val)
 	{
-		var the_object = document.getElementById("leg 1");
+		alert(clicked_val);
+		
+
+		var the_object = document.getElementById(clicked_val);
+		// the hidden input element with the route as it's value
 		var the_trip_key = the_object.firstChild.value;
 			
 		var the_data = document.getElementById("trip_options").value;
 		// turn the trip_options value into a JSON object
 		var json_data = JSON.parse(the_data);
 
-		var object_list = the_object.getElementsByTagName("li");	
+		var object_list = the_object.getElementsByTagName("li");
+		var h4_list = the_object.getElementsByTagName("h4");	
 		//alert(the_trip_key);
 
 		// grab the portion of they key that contains the day
@@ -112,58 +117,160 @@ function stringSub(the_string, p1, p2, p3, p4)
 		new_day = parseInt(the_day, 10) + 1;
 		// create a new key based upon the new day
 		new_key = the_trip_key.substring(0, start_val) + '-' + new_day;
+		// update the_trip_key with new_key
+		the_object.firstChild.value = new_key;
 		
-		alert(json_data['1']['leg 1'].length);
+		//alert(json_data['1'][clicked_val].length);
+
+		var the_item = 0;                       
+                for(i=0; i < json_data['1'][clicked_val].length; i++)
+                {
+                        if(new_key == Object.keys(json_data['1'][clicked_val][i]))
+                        {
+                                the_item = i;
+                        }
+                }
+
 		
-		for(i = 0; i < json_data['1']['leg 1'].length; i++)
-		{
-			alert(Object.keys(json_data['1']['leg 1'][i]));
+		//alert(Object.keys(json_data['1'][clicked_val][the_item][new_key]));
+
+		function generate(new_key){
+			var first = new_key.indexOf('-');
+			var start = new_key.substring(0, first);
+			var second = new_key.indexOf('-', first+1);
+			var end_city = new_key.substring(first+1, second);
+			var third = new_key.indexOf('-', second+1);
+			var month = new_key.substring(second+1, third);
+			var day = new_key.substring(third+1, new_key.length);
+
+			var the_title = start + ' -----> ' + end_city + ' on ' + month + '-' + day;
+			return the_title;
 		}
 		
-		alert(new_key);
-		needed_json = json_object['1']['leg 1'][3][new_key];
+		// this is the city ----> city on date string
+		var display = generate(new_key);
 
-		for(var option in needed_json)
-		{
-			alert(option);
-		}
+		//alert(display);
 
-		//needed_json_key = Object.keys(needed_json);
-		//alert(needed_json_key);
-		/*
-		for(i = 0; i < needed_json[needed_json_key].length; i++)
-		{
-			alert(needed_json[needed_json_key][i]);
-		}
-		*/
+		
 
-		/* once the json is properly accessible we can do something like this:
-		var the_leg = the_leg;
-		var to_change = document.getElementById(the_leg);
-		var the_lis_to_fill = to_change.getElementsByTagName("li");
-		for (i = 0; i < the_lis_to_fill.length; i++)
-		{
-			var new_inner = ""
-			for(j = 0; j < needed_json[needed_json_key][hours].length; j++)
+		// getting the new_key value stuff and dynamically filling it in on the html page
+		var this_key = Object.keys(json_data['1'][clicked_val][the_item][new_key]);
+		//alert(json_data['1'][clicked_val][the_item][new_key][this_key].length);
+		//alert(json_data['1'][clicked_val][the_item][new_key][this_key][0]);
+		var the_new_lis = json_data['1'][clicked_val][the_item][new_key][this_key];
+
+		// this changes the city -----> city on 5-13 string
+		h4_list[0].innerHTML = '<b>{0}</b>'.replace('{0}', display);
+
+		for(i = 0; i < object_list.length; i++){
+			if(i < the_new_lis.length)
 			{
-				var cur_list = needed_json[needed_json_key][hours][j]
-			
-				var name_and_id = cur_list[2] + '-' + cur_list[3]
-				inner_no_format = '<input type="radio" name="{0}" value="{1}"><h5>{2}<br><div style="margin-left:10px; color:blue;">{3}</div></h5>'
-				inner_formatted = stringSub(inner_no_format, the_leg, name_and_id, each[0], each[1]);
-				cur_list[j].innerHTML = inner_formatted;
+				var name = clicked_val;
+				var id_and_url = the_new_lis[i][2] + '+' + the_new_lis[i][3];
+				var time = the_new_lis[i][0];
+				var price = the_new_lis[i][1];
+				var unformatted = '<input type="radio" name="{0}" value="{1}"><h5>{2}<br><div style="margin-left:10px;color:blue;">{3}</div></h5>';
+				var formatted = stringSub(unformatted, name, id_and_url, time, price);
+				object_list[i].innerHTML = formatted;
+			} else {
+				object_list[i].innerHTML = '';
 			}
 		}
-
-
-		*/
-		
-		
 		
 	}
 
 
 
+	function move_down(clicked_val)
+	{
+		alert(clicked_val);
+		
+
+		var the_object = document.getElementById(clicked_val);
+		// the hidden input element with the route as it's value
+		var the_trip_key = the_object.firstChild.value;
+			
+		var the_data = document.getElementById("trip_options").value;
+		// turn the trip_options value into a JSON object
+		var json_data = JSON.parse(the_data);
+
+		var object_list = the_object.getElementsByTagName("li");
+		var h4_list = the_object.getElementsByTagName("h4");	
+		//alert(the_trip_key);
+
+		// grab the portion of they key that contains the day
+		start_val = the_trip_key.indexOf('-', the_trip_key.indexOf('-', the_trip_key.indexOf('-')+1)+1);
+		the_day = the_trip_key.substring(start_val+1, the_trip_key.length);
+
+		// convert the day into an integer or base 10
+		new_day = parseInt(the_day, 10) - 1;
+		// create a new key based upon the new day
+		new_key = the_trip_key.substring(0, start_val) + '-' + new_day;
+		// replace the trip_key with the new_key
+		the_object.firstChild.value = new_key;
+		
+		//alert(json_data['1'][clicked_val].length);
+		
+		var the_item = 0;			
+		for(i=0; i < json_data['1'][clicked_val].length; i++)
+		{
+			if(new_key == Object.keys(json_data['1'][clicked_val][i]))
+			{
+				the_item = i;
+			}
+		}
+		
+
+		//alert(the_item);	
+		
+		//alert(Object.keys(json_data['1'][clicked_val][the_item][new_key]));
+
+		function generate(new_key){
+			var first = new_key.indexOf('-');
+			var start = new_key.substring(0, first);
+			var second = new_key.indexOf('-', first+1);
+			var end_city = new_key.substring(first+1, second);
+			var third = new_key.indexOf('-', second+1);
+			var month = new_key.substring(second+1, third);
+			var day = new_key.substring(third+1, new_key.length);
+
+			var the_title = start + ' -----> ' + end_city + ' on ' + month + '-' + day;
+			return the_title;
+		}
+		
+		// this is the city ----> city on date string
+		var display = generate(new_key);
+
+		//alert(display);
+
+		
+
+		// getting the new_key value stuff and dynamically filling it in on the html page
+		var this_key = Object.keys(json_data['1'][clicked_val][the_item][new_key]);
+		//alert(json_data['1'][clicked_val][the_item][new_key][this_key].length);
+		//alert(json_data['1'][clicked_val][the_item][new_key][this_key][0]);
+		var the_new_lis = json_data['1'][clicked_val][the_item][new_key][this_key];
+
+		// this changes the city -----> city on 5-13 string
+		h4_list[0].innerHTML = '<b>{0}</b>'.replace('{0}', display);
+
+		for(i = 0; i < object_list.length; i++){
+			if(i < the_new_lis.length)
+			{
+				var name = clicked_val;
+				var id_and_url = the_new_lis[i][2] + '+' + the_new_lis[i][3];
+				var time = the_new_lis[i][0];
+				var price = the_new_lis[i][1];
+				var unformatted = '<input type="radio" name="{0}" value="{1}"><h5>{2}<br><div style="margin-left:10px;color:blue;">{3}</div></h5>';
+				var formatted = stringSub(unformatted, name, id_and_url, time, price);
+				object_list[i].innerHTML = formatted;
+			} else {
+				object_list[i].innerHTML = '';
+			}
+		}
+		
+	}
 
 </script>
 
@@ -214,6 +321,7 @@ function stringSub(the_string, p1, p2, p3, p4)
 	{% endautoescape %}
    </div>
 	<input type="hidden" id="trip_options" value="{{trip_options_str}}">
-	<button onclick="test()">A button</button>
+	<button onclick="move_up(this.value)" value="leg 1">Forward day</button>
+	<button onclick="move_down(this.value)" value="leg 1">Back day</button>
 {% endblock %}
 </body>
