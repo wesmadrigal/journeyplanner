@@ -424,7 +424,8 @@ def generate_response3(trip_dict, trip_hours, link_trip_dict, from_c, to_c):
                         if len(each[0]) > 1 and len(each[1]) > 1 and len(each[2]) > 1:
 			    name = 'leg%s' % str(leg)
 			    id_and_url = each[2] + '+' + each[3]
-                            response += '<li><input type="radio" name="{0}" id="{0}" value="{1}"><h5><p>{2}</p><p style="margin-left:10px; color:blue;">{3}</p></h5></li>'.format(name, id_and_url, each[0], each[1])
+                            #response += '<li><input type="radio" name="{0}" id="{0}" value="{1}"><h5><p>{2}</p><p style="margin-left:10px; color:blue;">{3}</p></h5></li>'.format(name, id_and_url, each[0], each[1])
+			    response += '<li><input type="radio" name="{0}" id="{0}" value="{1}"><h5>{2}<br><div style="margin-left:10px; color:blue;">{3}</div</h5></li>'.format(name, id_and_url, each[0], each[1])
                         else:
                             response += '<li style="border:10px; margin:10px;"><h5><p style="color:red">No trips available</p></h5></li>'
                 response += '</ul>'
@@ -624,3 +625,114 @@ def get_journey_info(response):
         # dictionary
         the_journey[str(index)] = [departure_city, departure_address, arrival_city, arrival_address, the_date, departure_time, arrival_time, price]
     return the_journey, price_total
+
+
+
+
+# a make formatted to enable dynamic day selection on the trip options page.  
+# will create buttons for the user to go left = down days and right = up days 
+# the extra trips I have mined with this algorithm will be passed as a JSON object
+# to the template and upon the button click the pertinent key will be selected
+
+def make_formatted4(trip, m, day):
+    y = '2013'
+    trip_dict_formatted = {}
+    trip_hours = {}
+    for i in trip.keys():
+        trip_dict_formatted[i] = {}
+        hours_so_far = 0
+        for e in range(len(trip[i])-1):
+            leg = 'leg ' + str(e+1)
+            # generate cared_about and the url with get_cared_about2
+            cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], day, m, y)
+            #cared_about = get_cared_about(mb_api, trip[i][e], trip[i][e+1], day, m, y)
+            times = find_times_and_price2(cared_about, trip[i][e])
+            if hours_so_far <= 8:
+                key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + day
+                hours_so_far += float(find_hours(cared_about, trip[i][e]))
+            elif hours_so_far > 8 and hours_so_far < 16:
+                cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+1), m, y)
+                times = find_times_and_price2(cared_about, trip[i][e])
+                key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+1)
+                hours_so_far += float(find_hours(cared_about, trip[i][e]))
+            elif hours_so_far > 16:
+                cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+2), m, y)
+                times = find_times_and_price2(cared_about, trip[i][e])
+                key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+2)
+                hours_so_far += float(find_hours(cared_about, trip[i][e]))
+            for t in times:
+                t.append(cur_url)
+            trip_dict_formatted[i][leg] = {}
+            trip_dict_formatted[i][leg] = [{}]
+            #trip_dict_formatted[i][leg][key] = {}
+            hours_key = str(float(find_hours(cared_about, trip[i][e])))
+            #trip_dict_formatted[i][leg][key][hours_key]= times
+            trip_dict_formatted[i][leg][0][key] = {}
+            trip_dict_formatted[i][leg][0][key][hours_key] = times
+            nums = [-2, -1, 1, 2]
+            # mining the cushion days
+            for x in nums:
+                this_dict = {}
+                this_day = key[key.find('-', key.find('-', key.find('-')+1) + 1)+1:]
+                new_this_day = str(int(this_day)+x)
+                new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + new_this_day
+                this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], new_this_day, m, y)
+                this_times = find_times_and_price2(this_cared_about, trip[i][e])
+                this_hours = find_hours(this_cared_about, trip[i][e])
+                for T in this_times:
+                    T.append(this_cur_url)
+                this_dict[new_this_key] = {}
+                this_dict[new_this_key][this_hours] = this_times
+                trip_dict_formatted[i][leg].append(this_dict)
+
+        trip_hours[i] = hours_so_far
+    hours = sorted([trip_hours[i] for i in trip_hours.keys()])
+    new_trip_dict, new_trip_hours = {}, {}
+    for hour in range(len(hours)):
+        for key in trip_hours.keys():
+            if trip_hours[key] == hours[hour]:
+                new_key = str(hour+1)
+                new_trip_dict[new_key] = trip_dict_formatted[key]
+                new_trip_hours[new_key] = trip_hours[key]
+    return new_trip_dict, new_trip_hours
+
+
+
+# generate response to handle the changes made in make_formatted4
+def generate_response4(trip_dict, trip_hours, from_c, to_c):
+    response = ''
+    response += '<div>'
+    #trips = sorted([int(i) for i in trip_dict.keys()])
+    trip_dict_keys = sorted([int(i) for i in trip_dict.keys()])
+    for trip_dict_key in trip_dict_keys:
+        response += '<p style="font-size:25px;padding:30px;color:#708090;">Depart from:  <b>{0}</b>     Arrive in:  <b>{1}</b></p>'.format(from_c, to_c)
+        response += '<p>Total on-bus hours: <b>%s</b></p>' % trip_hours[str(trip_dict_key)]
+        legs = sorted([int(i[i.find(' ')+1:]) for i in trip_dict[str(trip_dict_key)].keys()])
+        for leg in legs:
+            the_leg = 'leg ' + str(leg)
+            response += '<p>%s</p><br>' % the_leg
+            for route in trip_dict[str(trip_dict_key)][the_leg][0].keys():
+                first = route.find('-')
+                second = route.find('-', first+1)
+                from_c = route[0:first]
+                to_c = route[first+1:second]
+                new_route = from_c + '  ----->  ' + to_c + ' on %s' % route[second+1:]
+		response += '<div id="{0}">'.format(the_leg)
+		response += '<input type="hidden" value="{0}">'.format(route)
+                response += '<p><h4><b>{0}</b></h4></p>'.format(new_route)
+                response += '<ul style="list-style-type:none;">'
+                for hour_key in trip_dict[str(trip_dict_key)][the_leg][0][route]:
+                    for each in trip_dict[str(trip_dict_key)][the_leg][0][route][hour_key]:
+                        if len(each[0]) > 1 and len(each[1]) > 1 and len(each[2]) > 1:
+                            name = 'leg %s' % str(leg)
+                            id_and_url = each[2] + '+' + each[3]
+                            response += '<li><input type="radio" name="{0}" id="{0}" value="{1}"><h5>{2}<br><div style="margin-left:10px; color:blue;">{3}</div</h5></li>'.format(name, id_and_url, each[0], each[1])
+                        else:
+                            response += '<li style="border:10px; margin:10px;"><h5><p style="color:red">No trips available</p></h5></li>'
+                response += '</ul>'
+		response += '</div>'
+            response += '<br><br>'
+        response += '<br><hr>'
+    response += '</div>'
+    return response
+

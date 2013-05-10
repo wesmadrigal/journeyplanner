@@ -37,6 +37,7 @@
 
 </script>
 
+
 <script type="text/javascript">
 
 function getID()
@@ -73,6 +74,95 @@ function get_radio_vals()
 	hidden_data.value = results;
 }
 			
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+// a necessary function to do string substition, since JavaScript has no built-in
+
+function stringSub(the_string, p1, p2, p3, p4)
+	{
+	var new_string = the_string;
+	new_string = new_string.replace("{0}", p1);
+	new_string = new_string.replace("{1}", p2);
+	new_string = new_string.replace("{2}", p3);
+	new_string = new_string.replace("{3}", p4);
+	return new_string;
+	}
+
+
+// this is a function to grab and parse the formatted options
+	function test()
+	{
+		var the_object = document.getElementById("leg 1");
+		var the_trip_key = the_object.firstChild.value;
+			
+		var the_data = document.getElementById("trip_options").value;
+		// turn the trip_options value into a JSON object
+		var json_data = JSON.parse(the_data);
+
+		var object_list = the_object.getElementsByTagName("li");	
+		//alert(the_trip_key);
+
+		// grab the portion of they key that contains the day
+		start_val = the_trip_key.indexOf('-', the_trip_key.indexOf('-', the_trip_key.indexOf('-')+1)+1);
+		the_day = the_trip_key.substring(start_val+1, the_trip_key.length);
+
+		// convert the day into an integer or base 10
+		new_day = parseInt(the_day, 10) + 1;
+		// create a new key based upon the new day
+		new_key = the_trip_key.substring(0, start_val) + '-' + new_day;
+		
+		alert(json_data['1']['leg 1'].length);
+		
+		for(i = 0; i < json_data['1']['leg 1'].length; i++)
+		{
+			alert(Object.keys(json_data['1']['leg 1'][i]));
+		}
+		
+		alert(new_key);
+		needed_json = json_object['1']['leg 1'][3][new_key];
+
+		for(var option in needed_json)
+		{
+			alert(option);
+		}
+
+		//needed_json_key = Object.keys(needed_json);
+		//alert(needed_json_key);
+		/*
+		for(i = 0; i < needed_json[needed_json_key].length; i++)
+		{
+			alert(needed_json[needed_json_key][i]);
+		}
+		*/
+
+		/* once the json is properly accessible we can do something like this:
+		var the_leg = the_leg;
+		var to_change = document.getElementById(the_leg);
+		var the_lis_to_fill = to_change.getElementsByTagName("li");
+		for (i = 0; i < the_lis_to_fill.length; i++)
+		{
+			var new_inner = ""
+			for(j = 0; j < needed_json[needed_json_key][hours].length; j++)
+			{
+				var cur_list = needed_json[needed_json_key][hours][j]
+			
+				var name_and_id = cur_list[2] + '-' + cur_list[3]
+				inner_no_format = '<input type="radio" name="{0}" value="{1}"><h5>{2}<br><div style="margin-left:10px; color:blue;">{3}</div></h5>'
+				inner_formatted = stringSub(inner_no_format, the_leg, name_and_id, each[0], each[1]);
+				cur_list[j].innerHTML = inner_formatted;
+			}
+		}
+
+
+		*/
+		
+		
+		
+	}
+
+
 
 
 </script>
@@ -123,5 +213,7 @@ function get_radio_vals()
 	{% endif %}
 	{% endautoescape %}
    </div>
+	<input type="hidden" id="trip_options" value="{{trip_options_str}}">
+	<button onclick="test()">A button</button>
 {% endblock %}
 </body>

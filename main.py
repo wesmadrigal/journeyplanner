@@ -82,7 +82,12 @@ class TripStuff(db.Model):
 
 class PlanTrip(Handler):
 	def get(self):
-		self.render("plan_trip.html")
+		u = users.get_current_user()
+		user = None
+		if u:
+			user = u.nickname()
+		logout = users.create_logout_url(self.request.uri)
+		self.render("plan_trip.html", user = user, logout = logout)
 	
 	def post(self):
 		u = users.get_current_user()
@@ -103,11 +108,17 @@ class PlanTrip(Handler):
 			if dep != 'City, State' and end != 'City, State' and len(date) >= 1 and dep in routes.keys() and end in routes.keys() and dep != end:
 				try:
 					trip = plan_trip(dep, end, routes)
-					trip_options, trip_times, trip_links = make_formatted3(trip, month, day)
-					response = generate_response3(trip_options, trip_times, trip_links, dep, end)
+					#trip_options, trip_times, trip_links = make_formatted3(trip, month, day)
+					trip_options, trip_times = make_formatted4(trip, month, day)
+
+					# a test
+					trip_options_str = json.dumps(trip_options)
+					#response = generate_response3(trip_options, trip_times, trip_links, dep, end)
+					response = generate_response4(trip_options, trip_times, dep, end)
+					self.render("plan_trip.html", response=response, user=user, logout=logout, trip_options_str=trip_options_str)
 				except:
 					response = '<p style="color:red"><b>The requested route is impossible with megabus.</b></p>'
-				self.render("plan_trip.html", response=response, user=user, logout=logout)		
+					self.render("plan_trip.html", response=response, user=user, logout=logout)		
 			else:		
 				error = 'You must choose a valid departure city, arrival city, and a day of departure.'
 				self.render("plan_trip.html", user=user, logout=logout, error=error)
