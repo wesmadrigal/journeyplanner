@@ -717,11 +717,11 @@ def generate_response4(trip_dict, trip_hours, from_c, to_c):
                 from_c = route[0:first]
                 to_c = route[first+1:second]
                 new_route = from_c + '  ----->  ' + to_c + ' on %s' % route[second+1:]
-		response += '<button class="btn btn-mini btn-primary" style="margin-right:50px;" onclick="move_down(this.value)" value="{0}-{1}">- date</button>'.format(the_leg, str(trip_dict_key))
-		response += '<button class="btn btn-mini btn-primary" style="margin-left:50px;" onclick="move_up(this.value)" value="{0}-{1}">+ date</button>'.format(the_leg, str(trip_dict_key))
+		move_up = '<button class="btn btn-small btn-primary" style="margin-right:50px;" onclick="move_down(this.value)" value="{0}-{1}">- date</button>'.format(the_leg, str(trip_dict_key))
+		move_down = '<button class="btn btn-small btn-primary" style="margin-left:50px;" onclick="move_up(this.value)" value="{0}-{1}">+ date</button>'.format(the_leg, str(trip_dict_key))
 		response += '<div id="{0}-{1}">'.format(the_leg, str(trip_dict_key))
 		response += '<input type="hidden" value="{0}">'.format(route)
-                response += '<p><h4><b>{0}</b></h4></p>'.format(new_route)
+                response += '<p><h4>{1} <b>{0}</b> {2}</h4></p>'.format(new_route, move_up, move_down)
                 response += '<ul style="list-style-type:none;">'
                 for hour_key in trip_dict[str(trip_dict_key)][the_leg][0][route]:
                     for each in trip_dict[str(trip_dict_key)][the_leg][0][route][hour_key]:

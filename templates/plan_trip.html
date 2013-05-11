@@ -90,6 +90,16 @@ function stringSub(the_string, p1, p2, p3, p4)
 	return new_string;
 	}
 
+function stringSub2(the_string, p1, p2, p3)
+	{
+	var new_string = the_string;
+	new_string = new_string.replace("{0}", p1);
+	new_string = new_string.replace("{1}", p2);
+	new_string = new_string.replace("{2}", p3);
+	return new_string;
+	}
+
+
 
 // this is a function to grab and parse the formatted options
 	function move_up(clicked_val)
@@ -141,8 +151,29 @@ function stringSub(the_string, p1, p2, p3, p4)
 			the_object.firstChild.value = new_key;
 		}
 		var the_new_lis = json_data[option][leg][the_item][new_key][this_key];
-		// this changes the city -----> city on 5-13 string
-		h4_list[0].innerHTML = '<b>{0}</b>'.replace('{0}', display);
+
+		string1 = '{0}<b>{1}</b>{2}';
+		var string2 = function(string1, display, leg, option){
+                        
+                        var new_string = string1;
+                        var stringsub1 = '<button class="btn btn-small btn-primary" style="margin-right:50px;" onclick="move_down(this.value)" value="{0}-{1}">- date</button>';
+                        stringsub1 = stringsub1.replace('{0}', leg);
+                        stringsub1 = stringsub1.replace('{1}', option);
+                        
+                        new_string = new_string.replace('{0}', stringsub1);
+                        new_string = new_string.replace('{1}', display);
+                
+                        stringsub2 = '<button class="btn btn-small btn-primary" style="margin-left:50px;" onclick="move_up(this.value)" value="{0}-{1}">+ date</button>';
+                        stringsub2 = stringsub2.replace('{0}', leg);
+                        stringsub2 = stringsub2.replace('{1}', option);
+                
+                        new_string = new_string.replace('{2}', stringsub2);
+                        return new_string;
+                        };
+
+                var the_string = string2(string1, display, leg, option);
+
+		h4_list[0].innerHTML = the_string;
 		for(i = 0; i < object_list.length; i++){
 			if(i < the_new_lis.length)
 			{
@@ -211,7 +242,27 @@ function stringSub(the_string, p1, p2, p3, p4)
 
 		var the_new_lis = json_data[option][leg][the_item][new_key][this_key];
 		// this changes the city -----> city on 5-13 string
-		h4_list[0].innerHTML = '<b>{0}</b>'.replace('{0}', display);
+		string1 = '{0}<b>{1}</b>{2}';
+		var string2 = function(string1, display, leg, option){
+			
+			var new_string = string1;
+			var stringsub1 = '<button class="btn btn-small btn-primary" style="margin-right:50px;" onclick="move_down(this.value)" value="{0}-{1}">- date</button>';
+			stringsub1 = stringsub1.replace('{0}', leg);
+			stringsub1 = stringsub1.replace('{1}', option);
+			
+			new_string = new_string.replace('{0}', stringsub1);
+			new_string = new_string.replace('{1}', display);
+		
+			stringsub2 = '<button class="btn btn-small btn-primary" style="margin-left:50px;" onclick="move_up(this.value)" value="{0}-{1}">+ date</button>';
+			stringsub2 = stringsub2.replace('{0}', leg);
+			stringsub2 = stringsub2.replace('{1}', option);
+		
+			new_string = new_string.replace('{2}', stringsub2);
+			return new_string;
+			};
+
+		var the_string = string2(string1, display, leg, option);
+                h4_list[0].innerHTML = the_string;
 
 		for(i = 0; i < object_list.length; i++){
 			if(i < the_new_lis.length)
@@ -260,7 +311,7 @@ function stringSub(the_string, p1, p2, p3, p4)
 			<div class="error">
 			<p style="color:red">{{error}}</p>
 			</div>
-			<input type="submit" value="Generate Options">
+			<button type="submit" class="btn btn-large btn-primary">Generate options</button>
 		</form>
 
 	<br>	
