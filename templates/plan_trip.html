@@ -322,10 +322,17 @@ function stringSub2(the_string, p1, p2, p3)
 
 		{{response}}
 
+		{% if trip_options_str %}
 		<form onsubmit="get_radio_vals()" method="POST">
 			<input name="trips" id="trips" type="hidden" value="" />
 			<input type="submit" value="Add to Basket" />
 		</form>
+		<br><br><br><br>
+
+		{% else %}
+		<a href="/">Search Again</a>
+		<br><br><br><br>
+		{% endif %}
 
 	{% endif %}
 	{% endautoescape %}

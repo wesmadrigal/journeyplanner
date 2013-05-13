@@ -704,8 +704,10 @@ def generate_response4(trip_dict, trip_hours, from_c, to_c):
     response += '<div>'
     #trips = sorted([int(i) for i in trip_dict.keys()])
     trip_dict_keys = sorted([int(i) for i in trip_dict.keys()])
+    main_heading = '<p style="font-size:25px;padding:30px;color:#708090;">Depart from:  <b>{0}</b>	Arrive in:  <b>{1}</b></p>'.format(from_c, to_c)
     for trip_dict_key in trip_dict_keys:
-        response += '<p style="font-size:25px;padding:30px;color:#708090;">Depart from:  <b>{0}</b>     Arrive in:  <b>{1}</b></p>'.format(from_c, to_c)
+        #response += '<p style="font-size:25px;padding:30px;color:#708090;">Depart from:  <b>{0}</b>     Arrive in:  <b>{1}</b></p>'.format(from_c, to_c)
+        response += main_heading
         response += '<p>Total on-bus hours: <b>%s</b></p>' % trip_hours[str(trip_dict_key)]
         legs = sorted([int(i[i.find(' ')+1:]) for i in trip_dict[str(trip_dict_key)].keys()])
         for leg in legs:
