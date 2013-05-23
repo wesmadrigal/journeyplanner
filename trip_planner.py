@@ -555,6 +555,8 @@ def get_trips_in_basket(the_dict):
 	response = br.response().read().split('\n')
 	return response	
 
+#############################################
+
 def get_trips_in_basket2(the_dict, br):
 	for id_key in the_dict.keys():
 		the_url = the_dict[id_key]

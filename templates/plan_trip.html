@@ -283,6 +283,30 @@ function stringSub2(the_string, p1, p2, p3)
 
 </script>
 
+<script>
+function loadWaiting()
+{
+	var xmlhttp;
+	if(window.XMLHttpRequest)
+	{
+		xmlhttp = new XMLHttpRequest();
+	} else {
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	xmlhttp.onreadystatechange = function(){
+		while(xmlhttp.readyState != 4)
+		{
+			alert("Waiting");
+		}
+	}
+}
+
+$(document).ajaxStart(function(){
+	$("#loadingmessage").show();
+	});
+
+</script>
+
 
 {% endblock %}
 
@@ -339,4 +363,5 @@ function stringSub2(the_string, p1, p2, p3)
    </div>
 	<input type="hidden" id="trip_options" value="{{trip_options_str}}">
 {% endblock %}
+
 </body>

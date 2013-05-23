@@ -134,7 +134,8 @@ class PlanTrip(Handler):
 			
 
 
-class Basket(Handler):	
+class Basket(Handler):
+	# A method utilized for the entirety of this handler	
 	def setup_browser(self):
 		self.br = mechanize.Browser()	
 		self.cj = cookielib.LWPCookieJar()
@@ -173,6 +174,9 @@ class Basket(Handler):
 		new_dict = {}
 		d = 'us.megabus.com'
 		p = '/'
+		
+		# extract all the cookie information needed to create new cookies in POST to revisit this current session
+		# for the preservation of a user's trips
 		for i in cookie_dict[d][p].keys():
     			new_dict[i] = [cookie_dict[d][p][i].version, cookie_dict[d][p][i].name, cookie_dict[d][p][i].value, cookie_dict[d][p][i].port, cookie_dict[d][p][i].port_specified, cookie_dict[d][p][i].domain, cookie_dict[d][p][i].domain_specified, cookie_dict[d][p][i].domain_initial_dot, cookie_dict[d][p][i].path, cookie_dict[d][p][i].path_specified, cookie_dict[d][p][i].secure, cookie_dict[d][p][i].expires, cookie_dict[d][p][i].discard, cookie_dict[d][p][i].comment, cookie_dict[d][p][i].comment_url, cookie_dict[d][p][i]._rest, cookie_dict[d][p][i].rfc2109]
 
@@ -183,7 +187,8 @@ class Basket(Handler):
 	def post(self):
 		self.setup_browser()
 
-		# decipher the cookie_dict string with json and make some cookies!
+		# decipher the cookie_dict string with json and make some cookies to revisit the previous session
+		# without this cookie JSON string we would not be able to maintain perceived user state between HTTP GET and POST
 		cookie_str = self.request.get("cookie_dict")		
 		cookie_dict = json.loads(cookie_str)
 		for key in cookie_dict.keys():
@@ -193,15 +198,30 @@ class Basket(Handler):
 
 		agree = self.request.get('agree')
 		if agree:
+
+			# revisit the basket with all of our user's trips and proceed to the checkout page 1 of 2
 			self.br.open('http://us.megabus.com/ViewBasket.aspx')
 			self.br.select_form(nr=0)
 			self.br.set_all_readonly(False)
 			self.br.find_control('BasketView$cbTerms').items[0].selected = True
 			self.br.form['__EVENTTARGET'] = 'BasketView$btnPay'
 			self.br.submit(name='BasketView$btnPay')
-			self.write(self.br.response().read())		
+			self.write(self.br.response().read())
+			# now we are on the payment page
+			#self.br.select_form(nr=0)
+			#self.br.set_all_readonly(False)
+			#self.br.submit()
+			#response = self.br.response().read()
+			#self.render("checkout.html", response=response)
+			#self.write(self.br.response().read())
+			#self.render("checkout.html")		
 		else:
 			self.redirect('/mytrips')
+
+
+
+class CheckoutPage(Handler):
+	pass
 
 	
 
