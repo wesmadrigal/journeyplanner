@@ -636,56 +636,110 @@ def get_journey_info(response):
 # the extra trips I have mined with this algorithm will be passed as a JSON object
 # to the template and upon the button click the pertinent key will be selected
 
-def make_formatted4(trip, m, day):
+import re
+
+def make_formatted4(trip, m, day, initial_trip_response=None):
     y = '2013'
     trip_dict_formatted = {}
     trip_hours = {}
     for i in trip.keys():
         trip_dict_formatted[i] = {}
         hours_so_far = 0
-        for e in range(len(trip[i])-1):
-            leg = 'leg ' + str(e+1)
-            # generate cared_about and the url with get_cared_about2
-            cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], day, m, y)
-            #cared_about = get_cared_about(mb_api, trip[i][e], trip[i][e+1], day, m, y)
-            times = find_times_and_price2(cared_about, trip[i][e])
-            if hours_so_far <= 8:
-                key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + day
-                hours_so_far += float(find_hours(cared_about, trip[i][e]))
-            elif hours_so_far > 8 and hours_so_far < 16:
-                cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+1), m, y)
+        
+        # condition for roundtrip
+        if not initial_trip_response:
+         
+            for e in range(len(trip[i])-1):
+                leg = 'leg ' + str(e+1)
+                # generate cared_about and the url with get_cared_about2
+                cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], day, m, y)
+                #cared_about = get_cared_about(mb_api, trip[i][e], trip[i][e+1], day, m, y)
                 times = find_times_and_price2(cared_about, trip[i][e])
-                key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+1)
-                hours_so_far += float(find_hours(cared_about, trip[i][e]))
-            elif hours_so_far > 16:
-                cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+2), m, y)
+                if hours_so_far <= 8:
+                    key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + day
+                    hours_so_far += float(find_hours(cared_about, trip[i][e]))
+                elif hours_so_far > 8 and hours_so_far < 16:
+                    cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+1), m, y)
+                    times = find_times_and_price2(cared_about, trip[i][e])
+                    key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+1)
+                    hours_so_far += float(find_hours(cared_about, trip[i][e]))
+                elif hours_so_far > 16:
+                    cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+2), m, y)
+                    times = find_times_and_price2(cared_about, trip[i][e])
+                    key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+2)
+                    hours_so_far += float(find_hours(cared_about, trip[i][e]))
+                for t in times:
+                    t.append(cur_url)
+                trip_dict_formatted[i][leg] = {}
+                trip_dict_formatted[i][leg] = [{}]
+                #trip_dict_formatted[i][leg][key] = {}
+                hours_key = str(float(find_hours(cared_about, trip[i][e])))
+                #trip_dict_formatted[i][leg][key][hours_key]= times
+                trip_dict_formatted[i][leg][0][key] = {}
+                trip_dict_formatted[i][leg][0][key][hours_key] = times
+                nums = [-2, -1, 1, 2]
+                # mining the cushion days
+                for x in nums:
+                    this_dict = {}
+                    this_day = key[key.find('-', key.find('-', key.find('-')+1) + 1)+1:]
+                    new_this_day = str(int(this_day)+x)
+                    new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + new_this_day
+                    this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], new_this_day, m, y)
+                    this_times = find_times_and_price2(this_cared_about, trip[i][e])
+                    this_hours = find_hours(this_cared_about, trip[i][e])
+                    for T in this_times:
+                        T.append(this_cur_url)
+                    this_dict[new_this_key] = {}
+                    this_dict[new_this_key][this_hours] = this_times
+                    trip_dict_formatted[i][leg].append(this_dict)
+
+        else:
+            seq = re.compile(r'leg [0-9]+')
+            max_leg = max([ int(l.split(' ')[1]) for l in re.findall(seq, initial_trip_response) ])
+            these_legs = range(max_leg, max_leg + (len(trip[i])-1))
+            for e in range(len(these_legs)): 
+                leg = 'leg ' + str(these_legs[e]+1)
+                # generate cared_about and the url with get_cared_about2
+                cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], day, m, y)
+                #cared_about = get_cared_about(mb_api, trip[i][e], trip[i][e+1], day, m, y)
                 times = find_times_and_price2(cared_about, trip[i][e])
-                key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+2)
-                hours_so_far += float(find_hours(cared_about, trip[i][e]))
-            for t in times:
-                t.append(cur_url)
-            trip_dict_formatted[i][leg] = {}
-            trip_dict_formatted[i][leg] = [{}]
-            #trip_dict_formatted[i][leg][key] = {}
-            hours_key = str(float(find_hours(cared_about, trip[i][e])))
-            #trip_dict_formatted[i][leg][key][hours_key]= times
-            trip_dict_formatted[i][leg][0][key] = {}
-            trip_dict_formatted[i][leg][0][key][hours_key] = times
-            nums = [-2, -1, 1, 2]
-            # mining the cushion days
-            for x in nums:
-                this_dict = {}
-                this_day = key[key.find('-', key.find('-', key.find('-')+1) + 1)+1:]
-                new_this_day = str(int(this_day)+x)
-                new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + new_this_day
-                this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], new_this_day, m, y)
-                this_times = find_times_and_price2(this_cared_about, trip[i][e])
-                this_hours = find_hours(this_cared_about, trip[i][e])
-                for T in this_times:
-                    T.append(this_cur_url)
-                this_dict[new_this_key] = {}
-                this_dict[new_this_key][this_hours] = this_times
-                trip_dict_formatted[i][leg].append(this_dict)
+                if hours_so_far <= 8:
+                    key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + day
+                    hours_so_far += float(find_hours(cared_about, trip[i][e]))
+                elif hours_so_far > 8 and hours_so_far < 16:
+                    cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+1), m, y)
+                    times = find_times_and_price2(cared_about, trip[i][e])
+                    key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+1)
+                    hours_so_far += float(find_hours(cared_about, trip[i][e]))
+                elif hours_so_far > 16:
+                    cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+2), m, y)
+                    times = find_times_and_price2(cared_about, trip[i][e])
+                    key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+2)
+                    hours_so_far += float(find_hours(cared_about, trip[i][e]))
+                for t in times:
+                    t.append(cur_url)
+                trip_dict_formatted[i][leg] = {}
+                trip_dict_formatted[i][leg] = [{}]
+                #trip_dict_formatted[i][leg][key] = {}
+                hours_key = str(float(find_hours(cared_about, trip[i][e])))
+                #trip_dict_formatted[i][leg][key][hours_key]= times
+                trip_dict_formatted[i][leg][0][key] = {}
+                trip_dict_formatted[i][leg][0][key][hours_key] = times
+                nums = [-2, -1, 1, 2]
+                # mining the cushion days
+                for x in nums:
+                    this_dict = {}
+                    this_day = key[key.find('-', key.find('-', key.find('-')+1) + 1)+1:]
+                    new_this_day = str(int(this_day)+x)
+                    new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + new_this_day
+                    this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], new_this_day, m, y)
+                    this_times = find_times_and_price2(this_cared_about, trip[i][e])
+                    this_hours = find_hours(this_cared_about, trip[i][e])
+                    for T in this_times:
+                        T.append(this_cur_url)
+                    this_dict[new_this_key] = {}
+                    this_dict[new_this_key][this_hours] = this_times
+                    trip_dict_formatted[i][leg].append(this_dict)
 
         trip_hours[i] = hours_so_far
     hours = sorted([trip_hours[i] for i in trip_hours.keys()])

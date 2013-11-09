@@ -35,6 +35,11 @@
 		$j('#date').datepicker();
 	});
 
+    var $j2 = jQuery.noConflict();
+    $j2(document).ready(function(){
+        $j2('#date2').datepicker();
+    });
+
 </script>
 
 
@@ -305,6 +310,7 @@ $(document).ajaxStart(function(){
 	$("#loadingmessage").show();
 	});
 
+
 </script>
 
 
@@ -332,6 +338,12 @@ $(document).ajaxStart(function(){
 			<label>Date of Departure:
 			<input type="dropdown" size="10" name="date" id="date" />
 			</label>
+            
+            <input type="checkbox" onchange="function exec(){var el = document.getElementById('date2');var label=document.getElementById('returnlabel'); if(el.hidden == true){el.hidden=false;label.hidden=false;}else if(el.hidden == false){el.hidden=true;label.hidden=false;}};exec()" name="round" id="round" />Rountrip?<br>
+            <label id="returnlabel" hidden=true>Date of return:
+            <input type="dropdown" hidden=true size="10" name="date2" id="date2" />
+            </label>
+
 			<div class="error">
 			<p style="color:red">{{error}}</p>
 			</div>
@@ -345,6 +357,11 @@ $(document).ajaxStart(function(){
 	{% if response %}
 
 		{{response}}
+        
+        {% if response2 %}
+        <br><hr><h2>Return Trip Options</h2><br>
+            {{response2}}
+        {% endif %}
 
 		{% if trip_options_str %}
 		<form onsubmit="get_radio_vals()" method="POST">

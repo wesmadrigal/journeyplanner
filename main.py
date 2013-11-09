@@ -27,29 +27,29 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir), a
 
 
 class Handler(webapp2.RequestHandler):
-	def write(self, *a, **kw):
-		self.response.out.write(*a, **kw)
+    def write(self, *a, **kw):
+ 	    self.response.out.write(*a, **kw)
 
-	def render_str(self, template, **params):
-		t = jinja_env.get_template(template)
-		return t.render(params)
+    def render_str(self, template, **params):
+ 	    t = jinja_env.get_template(template)
+ 	    return t.render(params)
 
-	def render(self, template, **kw):
-		self.write(self.render_str(template, **kw))
+    def render(self, template, **kw):
+ 	    self.write(self.render_str(template, **kw))
 
 
-	def render_json(self, d):
-		json_text = json.dumps(d)
-		self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
-		self.write(json_text)
+    def render_json(self, d):
+ 	    json_text = json.dumps(d)
+ 	    self.response.headers['Content-Type'] = 'application/json; charset=UTF-8'
+ 	    self.write(json_text)
 
-	def initialize(self, *a, **kw):
-		webapp2.RequestHandler.initialize(self, *a, **kw)
-		if self.request.url.endswith('.json'):
-			self.format = 'json'
-		else:
-			self.format = 'html'
-	
+    def initialize(self, *a, **kw):
+ 	    webapp2.RequestHandler.initialize(self, *a, **kw)
+ 	    if self.request.url.endswith('.json'):
+ 		    self.format = 'json'
+ 	    else:
+ 		    self.format = 'html'
+ 
 
 
 federated = {
@@ -65,198 +65,217 @@ federated = {
 
 new_providers = {}
 for i in federated.keys():
-	new_providers[i] = users.create_login_url(federated_identity=federated[i])
+    new_providers[i] = users.create_login_url(federated_identity=federated[i])
 
 
 class LoginPage(Handler):
-        def get(self):
-                user = users.get_current_user()
-                self.render("loginpage.html", new_providers = new_providers)
+    def get(self):
+        user = users.get_current_user()
+        self.render("loginpage.html", new_providers = new_providers)
 
 
 class TripStuff(db.Model):
-	ipid = db.StringProperty(required = True)
-	query = db.TextProperty()
-	created = db.DateTimeProperty(auto_now_add=True)
+    ipid = db.StringProperty(required = True)
+    query = db.TextProperty()
+    created = db.DateTimeProperty(auto_now_add=True)
 
 
 class PlanTrip(Handler):
-	def get(self):
-		u = users.get_current_user()
-		user = None
-		if u:
-			user = u.nickname()
-		logout = users.create_logout_url(self.request.uri)
-		self.render("plan_trip.html", user = user, logout = logout)
-	
-	def post(self):
-		u = users.get_current_user()
-		user = None
-		if u:
-			user = u.nickname()
-		logout = users.create_logout_url(self.request.uri)
-		if not self.request.get("trips"):
-			xml = get_doc("new_cities.xml")
-			locs = get_title_locations(xml)
-			routes = generate_routes2(xml, locs)
-			dep = self.request.get("start")
-			end = self.request.get("end")
-			date = self.request.get("date")
-			if len(date) > 0:
-				month = str(int(date[0:date.find('/')]))
-				day = str(int(date[date.find('/')+1:date.find('/',date.find('/')+1)]))
-			if dep != 'City, State' and end != 'City, State' and len(date) >= 1 and dep in routes.keys() and end in routes.keys() and dep != end:
-				try:
-					trip = plan_trip(dep, end, routes)
-					#trip_options, trip_times, trip_links = make_formatted3(trip, month, day)
-					trip_options, trip_times = make_formatted4(trip, month, day)
+    def get(self):
+        u = users.get_current_user()
+        user = None
+        if u:
+            user = u.nickname()
+        logout = users.create_logout_url(self.request.uri)
+        self.render("plan_trip.html", user = user, logout = logout)
+ 
+    def post(self):
+        u = users.get_current_user()
+        user = None
+        if u:
+            user = u.nickname()
+        logout = users.create_logout_url(self.request.uri)
+        # ROUNDTRIP functionality
+        # if self.request.get('rountrip') == 'checked':
+        #     show roundtrip options
+        if not self.request.get("trips"):
+            xml = get_doc("new_cities.xml")
+            locs = get_title_locations(xml)
+            routes = generate_routes2(xml, locs)
+            dep = self.request.get("start")
+            end = self.request.get("end")
+            date = self.request.get("date") 
+            roundtrip = False
+            date2 = self.request.get("date2")
 
-					# a test
-					trip_options_str = json.dumps(trip_options)
-					#response = generate_response3(trip_options, trip_times, trip_links, dep, end)
-					response = generate_response4(trip_options, trip_times, dep, end)
-					self.render("plan_trip.html", response=response, user=user, logout=logout, trip_options_str=trip_options_str)
-				except:
-					response = '<p style="color:red"><b>The requested route is impossible with megabus.</b></p>'
-					self.render("plan_trip.html", response=response, user=user, logout=logout)		
-			else:		
-				error = 'You must choose a valid departure city, arrival city, and a day of departure.'
-				self.render("plan_trip.html", user=user, logout=logout, error=error)
-		else:
-			ip = self.request.remote_addr
-			query_string = self.request.get("trips")
-			ts = TripStuff(ipid = ip)
-			ts.query = query_string
-			ts.put()
-			logging.info("Posted query string to database")
-			self.redirect('/mytrips')
-			
-			
+            if len(date) > 0:
+                month = str(int(date[0:date.find('/')]))
+                day = str(int(date[date.find('/')+1:date.find('/',date.find('/')+1)]))
+            # this means we are dealing with a round trip
+                if len(date2) > 0:
+                    month2 = str(int(date2[0:date2.find('/')]))
+                    day2 = str(int(date2[date2.find('/')+1:date2.find('/',date2.find('/')+1)]))
+                    roundtrip = True
+
+            if dep != 'City, State' and end != 'City, State' and len(date) >= 1 and dep in routes.keys() and end in routes.keys() and dep != end:
+                try:
+                    trip = plan_trip(dep, end, routes)
+ 				#trip_options, trip_times, trip_links = make_formatted3(trip, month, day)
+                    trip_options, trip_times = make_formatted4(trip, month, day)
+
+ 				# a test
+                    trip_options_str = json.dumps(trip_options)
+ 				#response = generate_response3(trip_options, trip_times, trip_links, dep, end)
+                    response = generate_response4(trip_options, trip_times, end, dep)
+                     
+                    if roundtrip and 'month2' in locals().keys() and 'day2' in locals().keys():
+                        trip2 = plan_trip(end, dep, routes)
+                        trip_options2, trip_times2 = make_formatted4(trip, month2, day2, response)
+                        trip_options_str2 = json.dumps(trip_options2)
+                        response2 = generate_response4(trip_options2, trip_times2, dep, end)
+
+                        self.render("plan_trip.html", response=response, response2=response2, user=user, logout=logout, trip_options_str=trip_options_str, trip_options_str2=trip_options_str2)
+
+                    else:
+                        self.render("plan_trip.html", response=response, user=user, logout=logout, trip_options_str=trip_options_str)
+                except:
+                    response = '<p style="color:red"><b>The requested route is impossible with megabus.</b></p>'
+                    self.render("plan_trip.html", response=response, user=user, logout=logout)		
+            else:		
+                error = 'You must choose a valid departure city, arrival city, and a day of departure.'
+                self.render("plan_trip.html", user=user, logout=logout, error=error)
+        else:
+            ip = self.request.remote_addr
+            query_string = self.request.get("trips")
+            ts = TripStuff(ipid = ip)
+            ts.query = query_string
+            ts.put()
+            logging.info("Posted query string to database")
+            self.redirect('/mytrips')
+ 		
+ 		
 
 
 class Basket(Handler):
-	# A method utilized for the entirety of this handler	
-	def setup_browser(self):
-		self.br = mechanize.Browser()	
-		self.cj = cookielib.LWPCookieJar()
-        	self.br.set_cookiejar(self.cj)
-        	self.br.addheaders = [('User-Agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
-        	self.br.set_debug_http(True)
-	        self.br.set_debug_redirects(True)
-	        self.br.set_debug_responses(True)
-	        self.br.set_handle_robots(False)
-        	self.br.set_handle_equiv(True)
-        	self.br.set_handle_gzip(True)
-        	self.br.set_handle_redirect(True)
-	
-	def get(self):
-		self.setup_browser()
-		ip = self.request.remote_addr
-		ts = TripStuff.all().filter('ipid = ', ip).order('-created').fetch(limit=1)
-		# put the string value in a list and grab it
-		string = [i.query for i in ts]
-		proper = string[0].encode('utf-8')	
+ # A method utilized for the entirety of this handler	
+    def setup_browser(self):
+        self.br = mechanize.Browser()
+        self.cj = cookielib.LWPCookieJar()
+        self.br.set_cookiejar(self.cj)
+        self.br.addheaders = [('User-Agent', 'Mozilla/5.0(X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
+        self.br.set_debug_http(True)
+        self.br.set_debug_redirects(True)
+        self.br.set_debug_responses(True)
+        self.br.set_handle_robots(False)
+        self.br.set_handle_equiv(True)
+        self.br.set_handle_gzip(True)
+        self.br.set_handle_redirect(True)
+ 
+    def get(self):
+        self.setup_browser()
+        ip = self.request.remote_addr
+        ts = TripStuff.all().filter('ipid = ', ip).order('-created').fetch(limit=1)
+ 	# put the string value in a list and grab it
+        string = [i.query for i in ts]
+        proper = string[0].encode('utf-8')	
 
-		# generate a dictionary for the emulated browser to parse through adding trips to basket
-		the_dict = decipher_query(proper)
+        # generate a dictionary for the emulated browser to parse through adding trips to basket
+        the_dict = decipher_query(proper)
 
-		# return the ViewBasket.aspx page with all trips added
-		#basket_response = get_trips_in_basket(the_dict)
-		#br = Basket.br
-		basket_response = get_trips_in_basket2(the_dict, self.br)
+ 	# return the ViewBasket.aspx page with all trips added
+ 	#basket_response = get_trips_in_basket(the_dict)
+ 	#br = Basket.br
+        basket_response = get_trips_in_basket2(the_dict, self.br)
 
-		# scrape all the necessary data from the returned response
-		journey_dict, total_price = get_journey_info(basket_response)
+ 	# scrape all the necessary data from the returned response
+        journey_dict, total_price = get_journey_info(basket_response)
 
-		# passing a json string to the frontend containing the necessary values to make cookies with in our post
-		# we need this to preserve users
-		cookie_dict = self.cj._cookies
-		new_dict = {}
-		d = 'us.megabus.com'
-		p = '/'
-		
-		# extract all the cookie information needed to create new cookies in POST to revisit this current session
-		# for the preservation of a user's trips
-		for i in cookie_dict[d][p].keys():
-    			new_dict[i] = [cookie_dict[d][p][i].version, cookie_dict[d][p][i].name, cookie_dict[d][p][i].value, cookie_dict[d][p][i].port, cookie_dict[d][p][i].port_specified, cookie_dict[d][p][i].domain, cookie_dict[d][p][i].domain_specified, cookie_dict[d][p][i].domain_initial_dot, cookie_dict[d][p][i].path, cookie_dict[d][p][i].path_specified, cookie_dict[d][p][i].secure, cookie_dict[d][p][i].expires, cookie_dict[d][p][i].discard, cookie_dict[d][p][i].comment, cookie_dict[d][p][i].comment_url, cookie_dict[d][p][i]._rest, cookie_dict[d][p][i].rfc2109]
+ 	# passing a json string to the frontend containing the necessary values to make cookies with in our post
+ 	# we need this to preserve users
+        cookie_dict = self.cj._cookies
+        new_dict = {}
+        d = 'us.megabus.com'
+        p = '/'
+ 	
+ 	# extract all the cookie information needed to create new cookies in POST to revisit this current session
+ 	# for the preservation of a user's trips
+        for i in cookie_dict[d][p].keys():
+            new_dict[i] = [cookie_dict[d][p][i].version, cookie_dict[d][p][i].name, cookie_dict[d][p][i].value, cookie_dict[d][p][i].port, cookie_dict[d][p][i].port_specified, cookie_dict[d][p][i].domain, cookie_dict[d][p][i].domain_specified, cookie_dict[d][p][i].domain_initial_dot, cookie_dict[d][p][i].path, cookie_dict[d][p][i].path_specified, cookie_dict[d][p][i].secure, cookie_dict[d][p][i].expires, cookie_dict[d][p][i].discard, cookie_dict[d][p][i].comment, cookie_dict[d][p][i].comment_url, cookie_dict[d][p][i]._rest, cookie_dict[d][p][i].rfc2109]
 
-		string_cookies = json.dumps(new_dict)
-		self.render("mytrips.html", journey_dict = journey_dict, total_price = total_price, string_cookies = string_cookies)
+        string_cookies = json.dumps(new_dict)
+        self.render("mytrips.html", journey_dict = journey_dict, total_price = total_price, string_cookies = string_cookies)
 
 
-	def post(self):
-		self.setup_browser()
+    def post(self):
+        self.setup_browser()
 
-		# decipher the cookie_dict string with json and make some cookies to revisit the previous session
-		# without this cookie JSON string we would not be able to maintain perceived user state between HTTP GET and POST
-		cookie_str = self.request.get("cookie_dict")		
-		cookie_dict = json.loads(cookie_str)
-		for key in cookie_dict.keys():
-			current_cookie = cookielib.Cookie(version=cookie_dict[key][0], name=cookie_dict[key][1], value=cookie_dict[key][2], port=cookie_dict[key][3], port_specified=cookie_dict[key][4], domain=cookie_dict[key][5], domain_specified=cookie_dict[key][6], domain_initial_dot=cookie_dict[key][7], path=cookie_dict[key][8], path_specified=cookie_dict[key][9], secure=cookie_dict[key][10], expires=cookie_dict[key][11], discard=cookie_dict[key][12], comment=cookie_dict[key][13], comment_url=cookie_dict[key][14], rest=cookie_dict[key][15], rfc2109=cookie_dict[key][16])
-
-			self.cj.set_cookie(current_cookie)		
-
-		agree = self.request.get('agree')
-		if agree:
-
-			# revisit the basket with all of our user's trips and proceed to the checkout page 1 of 2
-			self.br.open('http://us.megabus.com/ViewBasket.aspx')
-			self.br.select_form(nr=0)
-			self.br.set_all_readonly(False)
-			self.br.find_control('BasketView$cbTerms').items[0].selected = True
-			self.br.form['__EVENTTARGET'] = 'BasketView$btnPay'
-			self.br.submit(name='BasketView$btnPay')
-			self.write(self.br.response().read())
-			# now we are on the payment page
-			#self.br.select_form(nr=0)
-			#self.br.set_all_readonly(False)
-			#self.br.submit()
-			#response = self.br.response().read()
-			#self.render("checkout.html", response=response)
-			#self.write(self.br.response().read())
-			#self.render("checkout.html")		
-		else:
-			self.redirect('/mytrips')
+        # decipher the cookie_dict string with json and make some cookies to revisit the previous session
+        # without this cookie JSON string we would not be able to maintain perceived user state between HTTP GET and POST
+        cookie_str = self.request.get("cookie_dict")		
+        cookie_dict = json.loads(cookie_str)
+        for key in cookie_dict.keys():
+            current_cookie = cookielib.Cookie(version=cookie_dict[key][0], name=cookie_dict[key][1], value=cookie_dict[key][2], port=cookie_dict[key][3], port_specified=cookie_dict[key][4], domain=cookie_dict[key][5], domain_specified=cookie_dict[key][6], domain_initial_dot=cookie_dict[key][7], path=cookie_dict[key][8], path_specified=cookie_dict[key][9], secure=cookie_dict[key][10], expires=cookie_dict[key][11], discard=cookie_dict[key][12], comment=cookie_dict[key][13], comment_url=cookie_dict[key][14], rest=cookie_dict[key][15], rfc2109=cookie_dict[key][16])
+            self.cj.set_cookie(current_cookie)
+        agree = self.request.get('agree')
+        if agree:
+            # revisit the basket with all of our user's trips and proceed to the checkout page 1 of 2
+            self.br.open('http://us.megabus.com/ViewBasket.aspx')
+            self.br.select_form(nr=0)
+            self.br.set_all_readonly(False)
+            self.br.find_control('BasketView$cbTerms').items[0].selected = True
+            self.br.form['__EVENTTARGET'] = 'BasketView$btnPay'
+            self.br.submit(name='BasketView$btnPay')
+            self.write(self.br.response().read())
+            # now we are on the payment page
+            #self.br.select_form(nr=0)
+            #self.br.set_all_readonly(False)
+            #self.br.submit()
+            #response = self.br.response().read()
+            #self.render("checkout.html", response=response)
+            #self.write(self.br.response().read())
+            #self.render("checkout.html")		
+        else:
+            self.redirect('/mytrips')
 
 
 
 class CheckoutPage(Handler):
-	pass
+    pass
 
-	
+ 
 
 class AboutMe(Handler):
-	def get(self):
-		user = users.get_current_user()
-		user_email = None
-		if user:
-			user_email = user.email()
-		logout = users.create_logout_url(self.request.uri)
-		self.render("aboutme.html", user=user, logout=logout,user_email=user_email)
+    def get(self):
+        user = users.get_current_user()
+        user_email = None
+        if user:
+            user_email = user.email()
+        logout = users.create_logout_url(self.request.uri)
+        self.render("aboutme.html", user=user, logout=logout,user_email=user_email)
 
-	def post(self):
-		user = users.get_current_user().nickname()
-		logout = users.create_logout_url(self.request.uri)
-		subject = self.request.get("subject")
-		content = self.request.get("content")
-		user_email = users.get_current_user().email()
-		if len(subject) < 1 and len(content) < 1:
-			error = 'Must have a subject and content'
-			self.render("aboutme.html", user=user, logout=logout, user_email=user_email, error=error)
-		else:
-			message = mail.EmailMessage(sender = user_email, subject=subject)
-			message.to = 'wesley7879@gmail.com'
-			app_identifier = '\nSent from a user through Megabusfinder.\n'
-			message.body = content + app_identifier
-			message.send()
-			message_sent = 'Your message was sent to the administrator.'
-			self.render("aboutme.html", user=user, logout=logout, user_email=user_email, message_sent=message_sent)
+    def post(self):
+        user = users.get_current_user().nickname()
+        logout = users.create_logout_url(self.request.uri)
+        subject = self.request.get("subject")
+        content = self.request.get("content")
+        user_email = users.get_current_user().email()
+        if len(subject) < 1 and len(content) < 1:
+            error = 'Must have a subject and content'
+            self.render("aboutme.html", user=user, logout=logout, user_email=user_email, error=error)
+        else:
+            message = mail.EmailMessage(sender = user_email, subject=subject)
+            message.to = 'wesley7879@gmail.com'
+            app_identifier = '\nSent from a user through Megabusfinder.\n'
+            message.body = content + app_identifier
+            message.send()
+            message_sent = 'Your message was sent to the administrator.'
+            self.render("aboutme.html", user=user, logout=logout, user_email=user_email, message_sent=message_sent)
 
 
 app = webapp2.WSGIApplication([('/', PlanTrip),
-			       ('/mytrips', Basket),
-			       ('/login', LoginPage),
-			       ('/aboutme', AboutMe)],
-			       debug=True)
+ 		       ('/mytrips', Basket),
+ 		       ('/login', LoginPage),
+ 		       ('/aboutme', AboutMe)],
+ 		       debug=True)
 
 
