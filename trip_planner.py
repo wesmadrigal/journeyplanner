@@ -642,6 +642,9 @@ def make_formatted4(trip, m, day, initial_trip_response=None):
     y = '2013'
     trip_dict_formatted = {}
     trip_hours = {}
+
+    months = [ 32, 29, 32, 31, 32, 31, 32, 32, 31, 32, 31, 32 ]
+    months = [ range(1, i) for i in months ]
     for i in trip.keys():
         trip_dict_formatted[i] = {}
         hours_so_far = 0
@@ -659,12 +662,18 @@ def make_formatted4(trip, m, day, initial_trip_response=None):
                     key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + day
                     hours_so_far += float(find_hours(cared_about, trip[i][e]))
                 elif hours_so_far > 8 and hours_so_far < 16:
-                    cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+1), m, y)
+                    if int(day)+1 in months[ int(m)-1 ]:
+                        cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+1), m, y)
+                    else:
+                        cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], '1', str(int(m)+1), y)
                     times = find_times_and_price2(cared_about, trip[i][e])
                     key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+1)
                     hours_so_far += float(find_hours(cared_about, trip[i][e]))
                 elif hours_so_far > 16:
-                    cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+2), m, y)
+                    if int(day)+2 in months[ int(m) -1 ]:
+                        cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+2), m, y)
+                    else:
+                        cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], '2', str(int(m)+1), y)
                     times = find_times_and_price2(cared_about, trip[i][e])
                     key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+2)
                     hours_so_far += float(find_hours(cared_about, trip[i][e]))
@@ -682,11 +691,31 @@ def make_formatted4(trip, m, day, initial_trip_response=None):
                 for x in nums:
                     this_dict = {}
                     this_day = key[key.find('-', key.find('-', key.find('-')+1) + 1)+1:]
-                    new_this_day = str(int(this_day)+x)
-                    new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + new_this_day
-                    this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], new_this_day, m, y)
-                    this_times = find_times_and_price2(this_cared_about, trip[i][e])
-                    this_hours = find_hours(this_cared_about, trip[i][e])
+                    # if the day isn't in the month
+                    if int(this_day)+x not in months[int(m)-1]:
+                        # if this is a positive
+                        if str(x).isdigit():
+                            day_in_new_month = int(this_day)+x - max(months[int(m)-1])
+                            new_this_day = str(day_in_new_month)
+                            new_month = str(int(m)+1)
+                            new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + new_month + '-' + new_this_day 
+                            this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], new_this_day, new_month, y)
+                            this_times = find_times_and_price2(this_cared_about, trip[i][e])
+                            this_hours = find_hours(this_cared_about, trip[i][e])
+                        else:
+                            day_in_new_month = str( max(months[int(m)-2]) - abs(int(this_day)+x) )
+                            new_month = str(int(m)-1)
+                            new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + new_month + '-' + day_in_new_month
+                            this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], day_in_new_month, new_month, y)
+                            this_times = find_times_and_price2(this_cared_about, trip[i][e])
+                            this_hours = find_hours(this_cared_about, trip[i][e])
+                    else:
+                    
+                        new_this_day = str(int(this_day)+x)
+                        new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + new_this_day
+                        this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], new_this_day, m, y)
+                        this_times = find_times_and_price2(this_cared_about, trip[i][e])
+                        this_hours = find_hours(this_cared_about, trip[i][e])
                     for T in this_times:
                         T.append(this_cur_url)
                     this_dict[new_this_key] = {}
@@ -697,9 +726,9 @@ def make_formatted4(trip, m, day, initial_trip_response=None):
             seq = re.compile(r'leg [0-9]+')
             max_leg = max([ int(l.split(' ')[1]) for l in re.findall(seq, initial_trip_response) ])
             these_legs = range(max_leg, max_leg + (len(trip[i])-1))
-            for e in range(len(these_legs)): 
+            for e in range(len(these_legs)):
                 leg = 'leg ' + str(these_legs[e]+1)
-                # generate cared_about and the url with get_cared_about2
+
                 cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], day, m, y)
                 #cared_about = get_cared_about(mb_api, trip[i][e], trip[i][e+1], day, m, y)
                 times = find_times_and_price2(cared_about, trip[i][e])
@@ -707,12 +736,18 @@ def make_formatted4(trip, m, day, initial_trip_response=None):
                     key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + day
                     hours_so_far += float(find_hours(cared_about, trip[i][e]))
                 elif hours_so_far > 8 and hours_so_far < 16:
-                    cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+1), m, y)
+                    if int(day)+1 in months[ int(m)-1 ]:
+                        cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+1), m, y)
+                    else:
+                        cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], '1', str(int(m)+1), y)
                     times = find_times_and_price2(cared_about, trip[i][e])
                     key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+1)
                     hours_so_far += float(find_hours(cared_about, trip[i][e]))
                 elif hours_so_far > 16:
-                    cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+2), m, y)
+                    if int(day)+2 in months[ int(m) -1 ]:
+                        cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+2), m, y)
+                    else:
+                        cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], '2', str(int(m)+1), y)
                     times = find_times_and_price2(cared_about, trip[i][e])
                     key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+2)
                     hours_so_far += float(find_hours(cared_about, trip[i][e]))
@@ -730,11 +765,31 @@ def make_formatted4(trip, m, day, initial_trip_response=None):
                 for x in nums:
                     this_dict = {}
                     this_day = key[key.find('-', key.find('-', key.find('-')+1) + 1)+1:]
-                    new_this_day = str(int(this_day)+x)
-                    new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + new_this_day
-                    this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], new_this_day, m, y)
-                    this_times = find_times_and_price2(this_cared_about, trip[i][e])
-                    this_hours = find_hours(this_cared_about, trip[i][e])
+                    # if the day isn't in the month
+                    if int(this_day)+x not in months[int(m)-1]:
+                        # if this is a positive
+                        if str(x).isdigit():
+                            day_in_new_month = int(this_day)+x - max(months[int(m)-1])
+                            new_this_day = str(day_in_new_month)
+                            new_month = str(int(m)+1)
+                            new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + new_month + '-' + new_this_day 
+                            this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], new_this_day, new_month, y)
+                            this_times = find_times_and_price2(this_cared_about, trip[i][e])
+                            this_hours = find_hours(this_cared_about, trip[i][e])
+                        else:
+                            day_in_new_month = str( max(months[int(m)-2]) - abs(int(this_day)+x) )
+                            new_month = str(int(m)-1)
+                            new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + new_month + '-' + day_in_new_month
+                            this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], day_in_new_month, new_month, y)
+                            this_times = find_times_and_price2(this_cared_about, trip[i][e])
+                            this_hours = find_hours(this_cared_about, trip[i][e])
+                    else:
+                    
+                        new_this_day = str(int(this_day)+x)
+                        new_this_key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + new_this_day
+                        this_cared_about, this_cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], new_this_day, m, y)
+                        this_times = find_times_and_price2(this_cared_about, trip[i][e])
+                        this_hours = find_hours(this_cared_about, trip[i][e])
                     for T in this_times:
                         T.append(this_cur_url)
                     this_dict[new_this_key] = {}

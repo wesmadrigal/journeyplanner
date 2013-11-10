@@ -126,13 +126,16 @@ class PlanTrip(Handler):
  				# a test
                     trip_options_str = json.dumps(trip_options)
  				#response = generate_response3(trip_options, trip_times, trip_links, dep, end)
-                    response = generate_response4(trip_options, trip_times, end, dep)
+                    response = generate_response4(trip_options, trip_times, dep, end)
                      
                     if roundtrip and 'month2' in locals().keys() and 'day2' in locals().keys():
                         trip2 = plan_trip(end, dep, routes)
-                        trip_options2, trip_times2 = make_formatted4(trip, month2, day2, response)
+                        trip_options2, trip_times2 = make_formatted4(trip2, month2, day2, response)
                         trip_options_str2 = json.dumps(trip_options2)
-                        response2 = generate_response4(trip_options2, trip_times2, dep, end)
+                        response2 = generate_response4(trip_options2, trip_times2, end, dep)
+                        # handle the buttons
+                        response2 = response2.replace('move_up', 'move_up2')
+                        response2 = response2.replace('move_down', 'move_down2')
 
                         self.render("plan_trip.html", response=response, response2=response2, user=user, logout=logout, trip_options_str=trip_options_str, trip_options_str2=trip_options_str2)
 
