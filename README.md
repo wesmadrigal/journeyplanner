@@ -19,8 +19,13 @@ An example
 </h1>
 <p> I'm trying to book travel from St. Louis, MO to Milwaukee, WI.  The closest first degree node
 that St. Louis, MO has to Milwaukee, WI is Chicago, IL.  I as a user must book, and plan this trip from
-St. Louis, MO to Chicago, IL in accordance with trips from Chicago, IL to Milwaukee, IL via a means of multiple
-tabs and all sorts of ugly stuff like that.  
+St. Louis, MO to Chicago, IL in a tab.  In a parallel tab I must check out the trips from Chicago, IL to Milwaukee, IL
+and make sure that the times are in accordance with one another acrosss these 2 tabs.  This number of tabs will
+grow as hops grows.  Say you're going even farther from St. Louis, MO to Orlando, FL, for example.  To do this trip 
+on megabus you have to go from St. Louis, MO to Memphis, TN; Memphis, TN to Atlanta, GA; Atlanta, GA to Orlando, FL
+That's 3 open tabs comparing multiple times over maybe even multiple days.  Sounds like a headache, and it is!
+This all assumes, of course, that the user knows as much about their routes as I do and knows that Memphis, TN
+has a route to Atlanta, GA....
 </p>
 
 <h1>Solution</h1>
