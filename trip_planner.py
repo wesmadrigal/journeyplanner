@@ -1,7 +1,7 @@
 from get_route import *
 import mechanize
 import cookielib
-
+import datetime
 
 
 
@@ -638,10 +638,12 @@ def get_journey_info(response):
 
 import re
 
-def make_formatted4(trip, m, day, initial_trip_response=None):
-    y = '2013'
+def make_formatted4(trip, y, m, day, initial_trip_response=None):
     trip_dict_formatted = {}
     trip_hours = {}
+
+    # make a datetime object to manipulate with timedeltas
+    start_date = datetime.datetime(int(y), int(m), int(day))
 
     months = [ 32, 29, 32, 31, 32, 31, 32, 32, 31, 32, 31, 32 ]
     months = [ range(1, i) for i in months ]
@@ -666,7 +668,9 @@ def make_formatted4(trip, m, day, initial_trip_response=None):
                         cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], str(int(day)+1), m, y)
                     else:
                         cared_about, cur_url = get_cared_about2(mb_api, trip[i][e], trip[i][e+1], '1', str(int(m)+1), y)
-                    times = find_times_and_price2(cared_about, trip[i][e])
+                    new_date = start_date + datetime.timedelta(days=1)
+                     
+                    #times = find_times_and_price2(cared_about, trip[i][e])
                     key = trip[i][e] + '-' + trip[i][e+1] + '-' + m + '-' + str(int(day)+1)
                     hours_so_far += float(find_hours(cared_about, trip[i][e]))
                 elif hours_so_far > 16:

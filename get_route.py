@@ -331,7 +331,7 @@ def find_times_and_price2(cared_about, from_city):
                 elif e.isupper():
                         arr_str += e
         times[str(iteration)] = [dep_str, arr_str]
-        price_string = cared_about[curr+27][0]
+        price_string = [ r for r in cared_about[curr+15:curr+40] if '$' in r[0] ][0][0]
         period = price_string.find('.')
         dollars_part = price_string[0:period]
         cents_part = price_string[period:]
